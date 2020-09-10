@@ -1,4 +1,4 @@
-package br.com.javahome.controller.produtos;
+package br.com.javahome.controller.product;
 
 import br.com.javahome.model.CrudRouteController;
 import org.springframework.stereotype.Controller;
