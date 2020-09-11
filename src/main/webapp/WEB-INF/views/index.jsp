@@ -1,5 +1,9 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java"
+  pageEncoding="UTF-8"
+%>
+
 <!DOCTYPE html>
-<html lang="en">
 
 <head>
   <meta charset="utf-8">
@@ -9,9 +13,9 @@
 
   <title>Java Home - Sua loja de jogos</title>
   <!-- Bootstrap core CSS -->
-  <link href="/webjars/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="<c:url value="/webjars/bootstrap/4.5.2/css/bootstrap.min.css"/>" rel="stylesheet">
   <!-- Custom styles for this template -->
-  <link href="/css/shop-homepage.css" rel="stylesheet">
+  <link href="css/shop-homepage.css" rel="stylesheet">
 
 </head>
 <!-- Navigation -->
@@ -209,8 +213,8 @@
   </footer>
 
   <!-- Bootstrap core JavaScript -->
-  <script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
-  <script src="/webjars/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+  <script src="<c:url value="/webjars/jquery/3.5.1/jquery.min.js"/>"></script>
+  <script src="<c:url value="/webjars/bootstrap/4.5.2/js/bootstrap.bundle.min.js"/>"></script>
 
 </body>
 
