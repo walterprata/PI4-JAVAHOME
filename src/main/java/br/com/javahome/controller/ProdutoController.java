@@ -28,13 +28,11 @@ public class ProdutoController {
 	
 	@GetMapping("/listar")
 	public List<Produto> listarProdutos(){
-		
 		return produtoRepository.findAll();
 	}
 	
 	@GetMapping("/{id}")
 	public Produto buscarProduto(@PathVariable Integer id){
-		
 		return produtoRepository.findById(id).orElse(null);
 	}
 	
