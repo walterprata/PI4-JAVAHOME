@@ -33,9 +33,6 @@ public class Produto {
 	@Column(name = "quantidade")
 	private int quantidade;
 
-	@Column(name = "especificacao")
-	private String especificacao;
-
 	@Column(name = "caracteristicas")
 	private String caracteristicas;
 
@@ -101,13 +98,6 @@ public class Produto {
 		this.categoria = categoria;
 	}
 
-	public String getEspecificacao() {
-		return especificacao;
-	}
-
-	public void setEspecificacao(String especificacao) {
-		this.especificacao = especificacao;
-	}
 
 	public String getCaracteristicas() {
 		return caracteristicas;

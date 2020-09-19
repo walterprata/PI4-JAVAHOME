@@ -1,9 +1,11 @@
 package br.com.javahome.controller;
 
-import java.util.List;
+
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.javahome.model.Produto;
 import br.com.javahome.repository.ProdutoRepository;
+import br.com.javahome.repository.filter.ProdutoFilter;
 
 @RestController
 @RequestMapping("/produto")
@@ -26,9 +29,11 @@ public class ProdutoController {
 	@Autowired
 	private ProdutoRepository produtoRepository;
 	
+	
+	
 	@GetMapping("/listar")
-	public List<Produto> listarProdutos(){
-		return produtoRepository.findAll();
+	public Page<Produto> listarProdutos(ProdutoFilter produtoFilter, Pageable pageable){
+		return produtoRepository.filtrar(produtoFilter, pageable);
 	}
 	
 	@GetMapping("/{id}")
