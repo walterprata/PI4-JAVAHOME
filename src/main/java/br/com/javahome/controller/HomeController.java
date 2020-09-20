@@ -15,4 +15,9 @@ public class HomeController {
         return "detalhes";
     }
 
+    @GetMapping("/upload")
+    public String uploadFile(){
+        return "upload";
+    }
+
 }

@@ -3,9 +3,6 @@
  * Copyright 2013-2020 Start Bootstrap
  * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-shop-homepage/blob/master/LICENSE)
  */
-body {
-  padding-top: 56px;
-}
 
 .fadeDown {
   opacity: 0;
@@ -518,7 +515,8 @@ summary {
 body {
   background-color: #fff;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale
+  -moz-osx-font-smoothing: grayscale;
+  padding-top: 56px;
 }
 img {
   max-width: 100%
