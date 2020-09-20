@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sun.el.stream.Optional;
+
 import br.com.javahome.model.Produto;
 import br.com.javahome.repository.ProdutoRepository;
 import br.com.javahome.repository.filter.ProdutoFilter;
@@ -36,8 +38,10 @@ public class ProdutoController {
 	}
 	
 	@GetMapping("/{id}")
-	public Produto buscarProduto( @PathVariable Integer id){
-		return produtoRepository.findById(id).orElse(null);
+	public ResponseEntity<Produto> buscarProduto( @PathVariable Integer id){
+		Produto produto = produtoRepository.findById(id).orElse(null);
+		
+		return produto != null ? ResponseEntity.ok(produto) : ResponseEntity.notFound().build() ;
 	}
 	
 	@PostMapping
@@ -49,7 +53,14 @@ public class ProdutoController {
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Integer id) {
-		produtoRepository.deleteById(id);
+		
+		Produto p = produtoRepository.findById(id).get();
+		if (p != null) {
+			p.setAtivo(false);
+			produtoRepository.save(p);
+
+		}
+		
 	}
 	
 	@PutMapping("/{id}")
