@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -32,18 +33,18 @@ public class ProdutoController {
 	
 	
 	@GetMapping("/listar")
-	public Page<Produto> listarProdutos(ProdutoFilter produtoFilter, Pageable pageable){
+	public Page<Produto> listarProdutos(@ModelAttribute("produto") ProdutoFilter produtoFilter, Pageable pageable){
 		return produtoRepository.filtrar(produtoFilter, pageable);
 	}
 	
 	@GetMapping("/{id}")
-	public Produto buscarProduto(@PathVariable Integer id){
+	public Produto buscarProduto(@ModelAttribute("produto") @PathVariable Integer id){
 		return produtoRepository.findById(id).orElse(null);
 	}
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public void cadastrarProduto(@RequestBody Produto produto) {
+	public void cadastrarProduto( @ModelAttribute("produto") @RequestBody Produto produto) {
 		produtoRepository.save(produto);
 	}
 	
