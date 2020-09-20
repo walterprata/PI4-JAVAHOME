@@ -49,10 +49,14 @@ public class ProdutoController {
 
 	@PostMapping("/salvar")
 	public String fileUpload(@RequestParam("file[]") MultipartFile[] file, @ModelAttribute Produto produto, RedirectAttributes redirectAttributes) {
-		String pathImg = UploadFiles.saveFiles(file,servletContext);
-		produto.setCaminhoDaImagem(pathImg);
-		produtoRepository.save(produto);
-		redirectAttributes.addFlashAttribute("messageSucces", "Produto foi Salvo!");
+		try {
+			String pathImg = UploadFiles.saveFiles(file,servletContext);
+			produto.setCaminhoDaImagem(pathImg);
+			produtoRepository.save(produto);
+			redirectAttributes.addFlashAttribute("messageSucces", "Produto foi Salvo!");
+		}catch (Exception e){
+			redirectAttributes.addFlashAttribute("error", "Erro ao salvar: "+e.getMessage());
+		}
 		return "redirect:/produto/cadastrar";
 	}
 

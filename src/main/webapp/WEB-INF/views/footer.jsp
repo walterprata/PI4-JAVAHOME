@@ -12,7 +12,7 @@
 <script src="<c:url value="/webjars/jquery/3.5.1/jquery.min.js"/>"></script>
 <script src="<c:url value="/webjars/bootstrap/4.5.2/js/bootstrap.bundle.min.js"/>"></script>
 <script src="<c:url value="/webjars/jquery-mask-plugin/1.14.15/src/jquery.mask.js"/>"></script>
-<script src="<c:url value="js/javaHome.js"/>"></script>
+<script src="<c:url value="/js/javaHome.js"/>"></script>
 </body>
 
 </html>

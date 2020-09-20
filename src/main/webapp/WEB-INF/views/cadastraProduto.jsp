@@ -9,25 +9,37 @@
             ${messageSucces}
         </div>
     </c:if>
+    <c:if test="${error != null}">
+        <div class="alert alert-danger" role="alert">
+                ${error}
+        </div>
+    </c:if>
     <h1>Cadastrar novo produto</h1>
     <form method="POST" action="/produto/salvar" enctype="multipart/form-data" class="form">
         <div class="form-group">
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="nome">Nome do produto</label>
-                    <input type="text" class="form-control" id="nome" placeholder="Nome do produto" name="nome">
+                    <input type="text" class="form-control" id="nome" placeholder="Nome do produto" name="nome" required>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="descricao">Descrição curta</label>
-                    <input type="text" class="form-control" id="descricao" name="descricao" maxlength="10">
+                    <input type="text" class="form-control" id="descricao" name="descricao" maxlength="50" required>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="caracteristicas">Descrição</label>
                     <textarea class="form-control" id="caracteristicas" rows="3" name="caracteristicas"></textarea>
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="categoria">Categoria</label>
-                    <input class="form-control" id="categoria"name="categoria">
+                    <div class="form-group">
+                        <label for="categoria">Categoria</label>
+                        <select class="form-control" id="categoria" name="categoria">
+                            <option value="Console">Console</option>
+                            <option value="Jogos">Jogos</option>
+                            <option value="Periféricos">Periféricos</option>
+                            <option value="Acessórios">Acessórios</option>
+                        </select>
+                    </div>
                 </div>
             </div>
             <div class="form-row">
@@ -47,7 +59,7 @@
                     <input type="number" class="form-control" id="quantidade" name="quantidade">
                 </div>
                 <div class="form-group col-md-4">
-                    <h1>Adicionar perguntas e resposta</h1>
+                    <h5>Adicionar perguntas e resposta</h5>
                 </div>
             </div>
 
