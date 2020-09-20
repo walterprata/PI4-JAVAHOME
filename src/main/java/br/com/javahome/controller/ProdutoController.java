@@ -1,13 +1,10 @@
 package br.com.javahome.controller;
 
-
 import br.com.javahome.model.Produto;
 import br.com.javahome.repository.ProdutoRepository;
 import br.com.javahome.repository.filter.ProdutoFilter;
 import br.com.javahome.utilities.UploadFiles;
-
 import javax.servlet.ServletContext;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,8 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-
 
 @Controller
 @RequestMapping("/produto")
@@ -43,7 +38,6 @@ public class ProdutoController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Produto> buscarProduto( @PathVariable Integer id){
 		Produto produto = produtoRepository.findById(id).orElse(null);
-		
 		return produto != null ? ResponseEntity.ok(produto) : ResponseEntity.notFound().build() ;
 	}
 
@@ -63,14 +57,12 @@ public class ProdutoController {
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Integer id) {
-		
 		Produto p = produtoRepository.findById(id).get();
 		if (p != null) {
 			p.setAtivo(false);
 			produtoRepository.save(p);
 
 		}
-		
 	}
 	
 	@PutMapping("/{id}")
