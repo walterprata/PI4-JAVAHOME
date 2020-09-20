@@ -58,7 +58,7 @@ public class ProdutoController {
 	@Controller
 	@RequestMapping("/produto")
 	public class CadastraProdutoControler{
-		
+
 		@GetMapping("/cadastrar")
 		public String uploadFile(){
 			return "cadastraProduto";

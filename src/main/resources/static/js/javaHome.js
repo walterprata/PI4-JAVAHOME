@@ -4,5 +4,15 @@ $(document).ready(function () {
     $('.alert').click(function () {
         $( ".alert" ).fadeOut();
     });
+
 });
 
+function requestListProdutos(){
+    $.get('/produto/listar',  // url
+        function (data, textStatus, jqXHR) {  // success callback
+            for (var produtos in data.content){
+                $("#tabela").append("<tr><th scope=\"row\">"+produtos.id+"</th><td>"+produtos.nome+"</td><td>"+produtos.valor+"</td><td>"+produtos.descricao+"</td>\</tr>");
+                console.log(produtos.id);
+            }
+        });
+}

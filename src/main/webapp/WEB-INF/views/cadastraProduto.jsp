@@ -14,7 +14,7 @@
                 ${error}
         </div>
     </c:if>
-    <a type="button" class="btn btn-outline-primary" data-toggle="modal" data-target=".bd-example-modal-lg" href="prduto/listar">Ver todos produtos</a>
+    <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target=".bd-example-modal-lg" id="btn-lista-produto" ONCLICK="requestListProdutos()">Ver todos produtos</button>
     <h1>Cadastrar novo produto</h1>
     <form method="POST" action="/produto/salvar" enctype="multipart/form-data" class="form">
         <div class="form-group">
