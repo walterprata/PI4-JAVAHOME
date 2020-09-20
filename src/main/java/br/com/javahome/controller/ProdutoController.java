@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-@Controller
+@RestController
 @RequestMapping("/produto")
 public class ProdutoController {
 	@Autowired
@@ -24,11 +24,6 @@ public class ProdutoController {
 
     @Autowired
     private ServletContext servletContext;
-
-	@GetMapping("/cadastrar")
-	public String uploadFile(){
-		return "cadastraProduto";
-	}
 
 	@GetMapping("/listar")
 	public Page<Produto> listarProdutos(ProdutoFilter produtoFilter, Pageable pageable){
@@ -39,19 +34,6 @@ public class ProdutoController {
 	public ResponseEntity<Produto> buscarProduto( @PathVariable Integer id){
 		Produto produto = produtoRepository.findById(id).orElse(null);
 		return produto != null ? ResponseEntity.ok(produto) : ResponseEntity.notFound().build() ;
-	}
-
-	@PostMapping("/salvar")
-	public String fileUpload(@RequestParam("file[]") MultipartFile[] file, @ModelAttribute Produto produto, RedirectAttributes redirectAttributes) {
-		try {
-			String pathImg = UploadFiles.saveFiles(file,servletContext);
-			produto.setCaminhoDaImagem(pathImg);
-			produtoRepository.save(produto);
-			redirectAttributes.addFlashAttribute("messageSucces", "Produto foi Salvo!");
-		}catch (Exception e){
-			redirectAttributes.addFlashAttribute("error", "Erro ao salvar: "+e.getMessage());
-		}
-		return "redirect:/produto/cadastrar";
 	}
 
 	@DeleteMapping("/{id}")
@@ -71,6 +53,29 @@ public class ProdutoController {
 		BeanUtils.copyProperties(produto, produtoSalvo, "id");
 		produtoRepository.save(produtoSalvo);
 		return ResponseEntity.ok(produtoSalvo);
+	}
+
+	@Controller
+	@RequestMapping("/produto")
+	public class CadastraProdutoControler{
+		
+		@GetMapping("/cadastrar")
+		public String uploadFile(){
+			return "cadastraProduto";
+		}
+
+		@PostMapping("/salvar")
+		public String fileUpload(@RequestParam("file[]") MultipartFile[] file, @ModelAttribute Produto produto, RedirectAttributes redirectAttributes) {
+			try {
+				String pathImg = UploadFiles.saveFiles(file,servletContext);
+				produto.setCaminhoDaImagem(pathImg);
+				produtoRepository.save(produto);
+				redirectAttributes.addFlashAttribute("messageSucces", "Produto foi Salvo!");
+			}catch (Exception e){
+				redirectAttributes.addFlashAttribute("error", "Erro ao salvar: "+e.getMessage());
+			}
+			return "redirect:/produto/cadastrar";
+		}
 	}
 	
 }
