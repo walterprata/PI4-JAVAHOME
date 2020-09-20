@@ -24,21 +24,19 @@ import br.com.javahome.repository.ProdutoRepository;
 import br.com.javahome.repository.filter.ProdutoFilter;
 
 @RestController
-@RequestMapping("/produto")
+@RequestMapping("/javahome/produto")
 public class ProdutoController {
 
 	@Autowired
 	private ProdutoRepository produtoRepository;
 	
-	
-	
 	@GetMapping("/listar")
-	public Page<Produto> listarProdutos(@ModelAttribute("produto") ProdutoFilter produtoFilter, Pageable pageable){
+	public Page<Produto> listarProdutos(ProdutoFilter produtoFilter, Pageable pageable){
 		return produtoRepository.filtrar(produtoFilter, pageable);
 	}
 	
 	@GetMapping("/{id}")
-	public Produto buscarProduto(@ModelAttribute("produto") @PathVariable Integer id){
+	public Produto buscarProduto( @PathVariable Integer id){
 		return produtoRepository.findById(id).orElse(null);
 	}
 	

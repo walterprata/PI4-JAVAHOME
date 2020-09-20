@@ -1,12 +1,10 @@
 package br.com.javahome.repository.filter;
 
 
-
 public class ProdutoFilter {
 
 	private String descricao;
 	
-
 	public String getDescricao() {
 		return descricao;
 	}
@@ -14,5 +12,9 @@ public class ProdutoFilter {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
+
+	
+	
+	
 
 }

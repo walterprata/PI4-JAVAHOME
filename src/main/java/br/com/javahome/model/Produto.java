@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -39,12 +38,9 @@ public class Produto {
 	@Column(name = "caminhoDaImagem")
 	private String caminhoDaImagem;
 
-	
 	@Column(name = "ativo")
 	private Boolean ativo;
 	
-	@ManyToOne
-	private DuvidasProduto duvidasProduto;
 
 	public Produto() {
 
