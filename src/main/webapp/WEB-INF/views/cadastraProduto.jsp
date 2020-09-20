@@ -4,9 +4,9 @@
 <jsp:include page="header.jsp"/>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="container">
-    <c:if test="${message != null}">
+    <c:if test="${messageSucces != null}">
         <div class="alert alert-success" role="alert">
-            ${message}
+            ${messageSucces}
         </div>
     </c:if>
     <h1>Cadastrar novo produto</h1>

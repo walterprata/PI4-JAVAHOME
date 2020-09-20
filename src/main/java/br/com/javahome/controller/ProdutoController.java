@@ -51,9 +51,8 @@ public class ProdutoController {
 	public String fileUpload(@RequestParam("file[]") MultipartFile[] file, @ModelAttribute Produto produto, RedirectAttributes redirectAttributes) {
 		String pathImg = UploadFiles.saveFiles(file,servletContext);
 		produto.setCaminhoDaImagem(pathImg);
-		System.out.println(pathImg);
 		produtoRepository.save(produto);
-		redirectAttributes.addFlashAttribute("message", "Produto foi Salvo!");
+		redirectAttributes.addFlashAttribute("messageSucces", "Produto foi Salvo!");
 		return "redirect:/produto/cadastrar";
 	}
 
