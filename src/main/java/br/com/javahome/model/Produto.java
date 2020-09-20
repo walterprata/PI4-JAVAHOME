@@ -35,7 +35,7 @@ public class Produto {
 	@Column(name = "caracteristicas")
 	private String caracteristicas;
 
-	@Column(name = "caminhoDaImagem")
+	@Column(name = "caminhoDaImagem",length = 400)
 	private String caminhoDaImagem;
 
 	@Column(name = "ativo")

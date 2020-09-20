@@ -1,6 +1,12 @@
 package br.com.javahome.controller;
 
 
+import br.com.javahome.model.Produto;
+import br.com.javahome.repository.ProdutoRepository;
+import br.com.javahome.repository.filter.ProdutoFilter;
+import br.com.javahome.utilities.UploadFiles;
+
+import javax.servlet.ServletContext;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,29 +14,21 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.sun.el.stream.Optional;
 
-import br.com.javahome.model.Produto;
-import br.com.javahome.repository.ProdutoRepository;
-import br.com.javahome.repository.filter.ProdutoFilter;
 
-@RestController
-@RequestMapping("/javahome/produto")
+@Controller
+@RequestMapping("/produto")
 public class ProdutoController {
-
 	@Autowired
 	private ProdutoRepository produtoRepository;
+
+    @Autowired
+    private ServletContext servletContext;
 	
 	@GetMapping("/listar")
 	public Page<Produto> listarProdutos(ProdutoFilter produtoFilter, Pageable pageable){
@@ -43,13 +41,17 @@ public class ProdutoController {
 		
 		return produto != null ? ResponseEntity.ok(produto) : ResponseEntity.notFound().build() ;
 	}
-	
-	@PostMapping
+
+	@PostMapping("/salvar")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void cadastrarProduto( @ModelAttribute("produto") @RequestBody Produto produto) {
+	public void fileUpload(@RequestParam("file[]") MultipartFile[] file, @ModelAttribute Produto produto, RedirectAttributes redirectAttributes) {
+		String pathImg = UploadFiles.saveFiles(file,servletContext);
+		produto.setCaminhoDaImagem(pathImg);
+		System.out.println(pathImg);
 		produtoRepository.save(produto);
+		
 	}
-	
+
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Integer id) {
