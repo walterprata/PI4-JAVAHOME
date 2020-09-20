@@ -30,16 +30,16 @@ public class ProdutoController {
 	@Autowired
 	private ProdutoRepository produtoRepository;
 
-	@Autowired
-	private ServletContext servletContext;
-
+    @Autowired
+    private ServletContext servletContext;
+	
 	@GetMapping("/listar")
-	public Page<Produto> listarProdutos(@ModelAttribute("produto") ProdutoFilter produtoFilter, Pageable pageable){
+	public Page<Produto> listarProdutos(ProdutoFilter produtoFilter, Pageable pageable){
 		return produtoRepository.filtrar(produtoFilter, pageable);
 	}
 	
 	@GetMapping("/{id}")
-	public Produto buscarProduto(@ModelAttribute("produto") @PathVariable Integer id){
+	public Produto buscarProduto( @PathVariable Integer id){
 		return produtoRepository.findById(id).orElse(null);
 	}
 

@@ -1,12 +1,15 @@
 package br.com.javahome.model;
 
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
 
 @Entity
-public class DuvidasProduto {
+public class DuvidaProduto {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +19,10 @@ public class DuvidasProduto {
 	
 	private String resposta;
 	
-	public DuvidasProduto() {
+	@ManyToOne
+	private Produto produto;
+	
+	public DuvidaProduto() {
 		
 	}
 
@@ -43,6 +49,15 @@ public class DuvidasProduto {
 	public void setResposta(String resposta) {
 		this.resposta = resposta;
 	}
+	
+
+	public Produto getProduto() {
+		return produto;
+	}
+
+	public void setProduto(Produto produto) {
+		this.produto = produto;
+	}
 
 	@Override
 	public int hashCode() {
@@ -60,7 +75,7 @@ public class DuvidasProduto {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		DuvidasProduto other = (DuvidasProduto) obj;
+		DuvidaProduto other = (DuvidaProduto) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
