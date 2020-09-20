@@ -26,7 +26,12 @@ public class ProdutoController {
 
     @Autowired
     private ServletContext servletContext;
-	
+
+	@GetMapping("/cadastrar")
+	public String uploadFile(){
+		return "cadastraProduto";
+	}
+
 	@GetMapping("/listar")
 	public Page<Produto> listarProdutos(ProdutoFilter produtoFilter, Pageable pageable){
 		return produtoRepository.filtrar(produtoFilter, pageable);
@@ -38,13 +43,13 @@ public class ProdutoController {
 	}
 
 	@PostMapping("/salvar")
-	@ResponseStatus(HttpStatus.CREATED)
-	public void fileUpload(@RequestParam("file[]") MultipartFile[] file, @ModelAttribute Produto produto, RedirectAttributes redirectAttributes) {
+	public String fileUpload(@RequestParam("file[]") MultipartFile[] file, @ModelAttribute Produto produto, RedirectAttributes redirectAttributes) {
 		String pathImg = UploadFiles.saveFiles(file,servletContext);
 		produto.setCaminhoDaImagem(pathImg);
 		System.out.println(pathImg);
 		produtoRepository.save(produto);
-		
+		redirectAttributes.addFlashAttribute("message", "Produto foi Salvo!");
+		return "redirect:/produto/cadastrar";
 	}
 
 	@DeleteMapping("/{id}")

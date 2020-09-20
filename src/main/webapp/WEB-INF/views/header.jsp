@@ -11,7 +11,7 @@
     <!-- Bootstrap core CSS -->
     <link href="<c:url value="/webjars/bootstrap/4.5.2/css/bootstrap.min.css"/>" rel="stylesheet">
     <!-- Custom styles for this template -->
-    <link href="<c:url value="css/shop-homepage.css"/>" rel="stylesheet">
+    <link href="<c:url value="/css/shop-homepage.css"/>" rel="stylesheet">
 
 </head>
 <!-- Navigation -->
