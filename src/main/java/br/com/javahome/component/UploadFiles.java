@@ -1,6 +1,7 @@
-package br.com.javahome.utilities;
+package br.com.javahome.component;
 
 import com.google.gson.Gson;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
@@ -10,7 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
+@Component
 public class UploadFiles {
     public static final String DIRECTORY = "WEB-INF/files/";
 

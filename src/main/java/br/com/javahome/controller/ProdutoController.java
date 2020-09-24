@@ -1,81 +1,141 @@
 package br.com.javahome.controller;
 
+import br.com.javahome.component.FileSaver;
 import br.com.javahome.model.Produto;
 import br.com.javahome.repository.ProdutoRepository;
 import br.com.javahome.repository.filter.ProdutoFilter;
-import br.com.javahome.utilities.UploadFiles;
-import javax.servlet.ServletContext;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.ServletContext;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/produto")
 public class ProdutoController {
-	@Autowired
-	private ProdutoRepository produtoRepository;
+    @Autowired
+    private ProdutoRepository produtoRepository;
 
     @Autowired
     private ServletContext servletContext;
 
-	@GetMapping("/listar")
-	public Page<Produto> listarProdutos(ProdutoFilter produtoFilter, Pageable pageable){
-		return produtoRepository.filtrar(produtoFilter, pageable);
-	}
-	
-	@GetMapping("/{id}")
-	public ResponseEntity<Produto> buscarProduto( @PathVariable Integer id){
-		Produto produto = produtoRepository.findById(id).orElse(null);
-		return produto != null ? ResponseEntity.ok(produto) : ResponseEntity.notFound().build() ;
-	}
+    @Autowired
+    private FileSaver fileSaver;
 
-	@DeleteMapping("/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void remover(@PathVariable Integer id) {
-		Produto p = produtoRepository.findById(id).get();
-		if (p != null) {
-			p.setAtivo(false);
-			produtoRepository.save(p);
+    @PostMapping("/save/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public String imagens(@PathVariable Integer id, @RequestParam("file[]") MultipartFile[] file) {
+        return fileSaver.write(file, id);
+    }
 
-		}
-	}
-	
-	@PutMapping("/{id}")
-	public ResponseEntity<Produto> atualizarProduto(@PathVariable Integer id, @RequestBody Produto produto){
-		Produto produtoSalvo = produtoRepository.findById(id).orElse(null);
-		BeanUtils.copyProperties(produto, produtoSalvo, "id");
-		produtoRepository.save(produtoSalvo);
-		return ResponseEntity.ok(produtoSalvo);
-	}
+    @GetMapping(value = "/imagens/{fileName}", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody
+    byte[] pegarImage(@PathVariable String fileName) throws IOException {
+        InputStream in = servletContext.getResourceAsStream("/WEB-INF/files/" + fileName);
+        System.out.println(fileName);
+        return IOUtils.toByteArray(in);
+    }
 
-	@Controller
-	@RequestMapping("/produto")
-	public class CadastraProdutoControler{
+    @GetMapping("/listar")
+    public Page<Produto> listarProdutos(ProdutoFilter produtoFilter, Pageable pageable) {
+        return produtoRepository.filtrar(produtoFilter, pageable);
+    }
 
-		@GetMapping("/cadastrar")
-		public String uploadFile(){
-			return "cadastraProduto";
-		}
+    @GetMapping("/{id}")
+    public ResponseEntity<Produto> buscarProduto(@PathVariable Integer id) {
+        Produto produto = produtoRepository.findById(id).orElse(null);
+        return produto != null ? ResponseEntity.ok(produto) : ResponseEntity.notFound().build();
+    }
 
-		@PostMapping("/salvar")
-		public String fileUpload(@RequestParam("file[]") MultipartFile[] file, @ModelAttribute Produto produto, RedirectAttributes redirectAttributes) {
-			try {
-				String pathImg = UploadFiles.saveFiles(file,servletContext);
-				produto.setCaminhoDaImagem(pathImg);
-				produtoRepository.save(produto);
-				redirectAttributes.addFlashAttribute("messageSucces", "Produto foi Salvo!");
-			}catch (Exception e){
-				redirectAttributes.addFlashAttribute("error", "Erro ao salvar: "+e.getMessage());
-			}
-			return "redirect:/produto/cadastrar";
-		}
-	}
-	
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void remover(@PathVariable Integer id) {
+        Produto p = produtoRepository.findById(id).get();
+        if (p != null) {
+            p.setAtivo(false);
+            produtoRepository.save(p);
+
+        }
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void atualizarProduto(@PathVariable Integer id, @RequestBody Produto produto) {
+        Produto produtoSalvo = produtoRepository.findById(id).orElse(null);
+        BeanUtils.copyProperties(produto, produtoSalvo, "id");
+        produtoRepository.save(produtoSalvo);
+    }
+
+
+    @Controller
+    @RequestMapping("/produto")
+    public class CadastraProdutoControler {
+
+        @GetMapping("/cadastrar")
+        public String pegaTelaDeCadastro() {
+            return "cadastraProduto";
+        }
+
+        @PostMapping("/salvar")
+        public String salvarProduto(@RequestParam("file[]") MultipartFile[] file, @ModelAttribute Produto produto, RedirectAttributes redirectAttributes) {
+            try {
+                String pathImg = fileSaver.write(file, produto.hashCode());
+                produto.setCaminhoDaImagem(pathImg);
+                produtoRepository.save(produto);
+                redirectAttributes.addFlashAttribute("messageSucces", "Produto foi Salvo!");
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("error", "Erro ao salvar: " + e.getMessage());
+            }
+            return "redirect:/produto/cadastrar";
+        }
+
+        @PostMapping("/{id}")
+        public String atualizarProduto(@PathVariable Integer id, @RequestParam("file[]") MultipartFile[] file, @ModelAttribute Produto produto, RedirectAttributes redirectAttributes) {
+            try {
+                String caminhoDaImagen = fileSaver.write(file, id);
+                produto.setCaminhoDaImagem(caminhoDaImagen);
+
+                Produto produtoSalvo = produtoRepository.findById(id).orElse(null);
+                BeanUtils.copyProperties(produto, produtoSalvo, "id");
+
+                produtoRepository.save(produtoSalvo);
+                redirectAttributes.addFlashAttribute("messageSucces", "Produto foi Salvo!");
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("error", "Erro ao salvar: " + e.getMessage());
+            }
+            return "redirect:/produto/cadastrar";
+        }
+
+        @GetMapping("/detalhes/{id}")
+        public String detalhes(@PathVariable String id,RedirectAttributes redirectAttributes) {
+           Produto produtoEncontrado = produtoRepository.findById(Integer.parseInt(id)).get();
+           ArrayList<String> img = (ArrayList<String>) new Gson().fromJson(produtoEncontrado.getCaminhoDaImagem(), ArrayList.class);
+            produtoEncontrado.setCaminhoDaImagem(img.get(0));
+
+            redirectAttributes.addFlashAttribute("produto", produtoEncontrado);
+            return "redirect:/produto/detalhes";
+        }
+
+        @GetMapping("/detalhes")
+        public String detalhesProdutos(){
+            return "detalhes";
+        }
+
+    }
 }

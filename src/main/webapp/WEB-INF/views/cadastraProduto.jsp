@@ -14,9 +14,9 @@
                 ${error}
         </div>
     </c:if>
-    <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target=".bd-example-modal-lg" id="btn-lista-produto">Ver todos produtos</button>
+    <button type="button" class="btn btn-primary" id="btn-lista-produto">Ver todos produtos</button>
     <h1>Cadastrar novo produto</h1>
-    <form method="POST" action="/produto/salvar" enctype="multipart/form-data" class="form">
+    <form method="POST" action="/produto/salvar" enctype="multipart/form-data" class="form" id="form-salvar">
         <div class="form-group">
             <div class="form-row">
                 <div class="form-group col-md-6">
@@ -81,9 +81,9 @@
             </div>
             <div class="form-group col-md">
                 <label>Imagens do produto</label>
-                <input class="form-control-file" type="file" name="file[]"/><br/><br/>
-                <input class="form-control-file" type="file" name="file[]"/><br/><br/>
-                <input class="form-control-file" type="file" name="file[]"/><br/><br/>
+                <input class="form-control-file" type="file" name="file[]" id="img1"/><br/><br/>
+                <input class="form-control-file" type="file" name="file[]" id="img2"/><br/><br/>
+                <input class="form-control-file" type="file" name="file[]" id="img3"/><br/><br/>
             </div>
             <button type="submit" class="btn btn-primary">Salvar</button>
         </div>
@@ -91,4 +91,6 @@
 </div>
 
 <jsp:include page="modalListaProdutos.jsp"/>
+
 <jsp:include page="footer.jsp"/>
+<script src="<c:url value="/js/produto.js"/>"></script>
