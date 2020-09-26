@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.ServletContext;
 import java.io.IOException;
@@ -91,21 +91,32 @@ public class ProdutoController {
             return "cadastraProduto";
         }
 
+        @GetMapping("/detalhes")
+        public String detalhesProdutos() {
+            return "detalhes";
+        }
+
+
         @PostMapping("/salvar")
-        public String salvarProduto(@RequestParam("file[]") MultipartFile[] file, @ModelAttribute Produto produto, RedirectAttributes redirectAttributes) {
+        @ResponseStatus(HttpStatus.OK)
+        public ModelAndView salvarProduto(@RequestParam("file[]") MultipartFile[] file, @ModelAttribute Produto produto) {
+            ModelAndView modelAndView = new ModelAndView("cadastraProduto");
             try {
                 String pathImg = fileSaver.write(file, produto.hashCode());
                 produto.setCaminhoDaImagem(pathImg);
                 produtoRepository.save(produto);
-                redirectAttributes.addFlashAttribute("messageSucces", "Produto foi Salvo!");
+
+                modelAndView.addObject("messageSucces", "Produto foi Salvo!");
             } catch (Exception e) {
-                redirectAttributes.addFlashAttribute("error", "Erro ao salvar: " + e.getMessage());
+                modelAndView.addObject("error", "Erro ao salvar: " + e.getMessage());
             }
-            return "redirect:/produto/cadastrar";
+            return modelAndView;
         }
 
         @PostMapping("/{id}")
-        public String atualizarProduto(@PathVariable Integer id, @RequestParam("file[]") MultipartFile[] file, @ModelAttribute Produto produto, RedirectAttributes redirectAttributes) {
+        @ResponseStatus(HttpStatus.OK)
+        public ModelAndView atualizarProduto(@PathVariable Integer id, @RequestParam("file[]") MultipartFile[] file, @ModelAttribute Produto produto) {
+            ModelAndView modelAndView = new ModelAndView("cadastraProduto");
             try {
                 String caminhoDaImagen = fileSaver.write(file, id);
                 produto.setCaminhoDaImagem(caminhoDaImagen);
@@ -114,27 +125,20 @@ public class ProdutoController {
                 BeanUtils.copyProperties(produto, produtoSalvo, "id");
 
                 produtoRepository.save(produtoSalvo);
-                redirectAttributes.addFlashAttribute("messageSucces", "Produto foi Salvo!");
+                modelAndView.addObject("messageSucces", "Produto foi Salvo!");
             } catch (Exception e) {
-                redirectAttributes.addFlashAttribute("error", "Erro ao salvar: " + e.getMessage());
+                modelAndView.addObject("error", "Erro ao salvar: " + e.getMessage());
             }
-            return "redirect:/produto/cadastrar";
+            return modelAndView;
         }
 
         @GetMapping("/detalhes/{id}")
-        public String detalhes(@PathVariable String id,RedirectAttributes redirectAttributes) {
-           Produto produtoEncontrado = produtoRepository.findById(Integer.parseInt(id)).get();
-           ArrayList<String> img = (ArrayList<String>) new Gson().fromJson(produtoEncontrado.getCaminhoDaImagem(), ArrayList.class);
+        public ModelAndView detalhes(@PathVariable String id) {
+            Produto produtoEncontrado = produtoRepository.findById(Integer.parseInt(id)).get();
+            ArrayList<String> img = (ArrayList<String>) new Gson().fromJson(produtoEncontrado.getCaminhoDaImagem(), ArrayList.class);
             produtoEncontrado.setCaminhoDaImagem(img.get(0));
 
-            redirectAttributes.addFlashAttribute("produto", produtoEncontrado);
-            return "redirect:/produto/detalhes";
+            return new ModelAndView("detalhes").addObject("produto", produtoEncontrado);
         }
-
-        @GetMapping("/detalhes")
-        public String detalhesProdutos(){
-            return "detalhes";
-        }
-
     }
 }

@@ -14,4 +14,4 @@
 
 <!-- Quickbeam cart end -->
 <jsp:include page="footer.jsp"/>
-<script src="<c:url value="/js/detalhes.js"/>"></script>
+<script src="<c:url value="/js/DetalhesProduto.js"/>"></script>
