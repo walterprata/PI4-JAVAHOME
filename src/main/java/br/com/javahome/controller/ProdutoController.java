@@ -5,7 +5,6 @@ import br.com.javahome.model.Produto;
 import br.com.javahome.repository.ProdutoRepository;
 import br.com.javahome.repository.filter.ProdutoFilter;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,7 @@ import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/produto")
