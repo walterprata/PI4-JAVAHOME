@@ -80,64 +80,52 @@ public class ProdutoController {
         produtoRepository.save(produtoSalvo);
     }
 
+    @GetMapping("/cadastrar")
+    public ModelAndView pegaTelaDeCadastro() {
+        return new ModelAndView("cadastraProduto");
+    }
 
-    @Controller
-    @RequestMapping("/produto")
-    public class CadastraProdutoControler {
+    @PostMapping("/salvar")
+    @ResponseStatus(HttpStatus.OK)
+    public ModelAndView salvarProduto(@RequestParam("file[]") MultipartFile[] file, @ModelAttribute Produto produto) {
+        ModelAndView modelAndView = new ModelAndView("cadastraProduto");
+        try {
+            String pathImg = fileSaver.write(file, produto.hashCode());
+            produto.setCaminhoDaImagem(pathImg);
+            produtoRepository.save(produto);
 
-        @GetMapping("/cadastrar")
-        public String pegaTelaDeCadastro() {
-            return "cadastraProduto";
+            modelAndView.addObject("messageSucces", "Produto foi Salvo!");
+        } catch (Exception e) {
+            modelAndView.addObject("error", "Erro ao salvar: " + e.getMessage());
         }
+        return modelAndView;
+    }
 
-        @GetMapping("/detalhes")
-        public String detalhesProdutos() {
-            return "detalhes";
+    @PostMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ModelAndView atualizarProduto(@PathVariable Integer id, @RequestParam("file[]") MultipartFile[] file, @ModelAttribute Produto produto) {
+        ModelAndView modelAndView = new ModelAndView("cadastraProduto");
+        try {
+            String caminhoDaImagen = fileSaver.write(file, id);
+            produto.setCaminhoDaImagem(caminhoDaImagen);
+
+            Produto produtoSalvo = produtoRepository.findById(id).orElse(null);
+            BeanUtils.copyProperties(produto, produtoSalvo, "id");
+
+            produtoRepository.save(produtoSalvo);
+            modelAndView.addObject("messageSucces", "Produto foi Salvo!");
+        } catch (Exception e) {
+            modelAndView.addObject("error", "Erro ao salvar: " + e.getMessage());
         }
+        return modelAndView;
+    }
 
+    @GetMapping("/detalhes/{id}")
+    public ModelAndView detalhes(@PathVariable String id) {
+        Produto produtoEncontrado = produtoRepository.findById(Integer.parseInt(id)).get();
+        ArrayList<String> img = (ArrayList<String>) new Gson().fromJson(produtoEncontrado.getCaminhoDaImagem(), ArrayList.class);
+        produtoEncontrado.setCaminhoDaImagem(img.get(0));
 
-        @PostMapping("/salvar")
-        @ResponseStatus(HttpStatus.OK)
-        public ModelAndView salvarProduto(@RequestParam("file[]") MultipartFile[] file, @ModelAttribute Produto produto) {
-            ModelAndView modelAndView = new ModelAndView("cadastraProduto");
-            try {
-                String pathImg = fileSaver.write(file, produto.hashCode());
-                produto.setCaminhoDaImagem(pathImg);
-                produtoRepository.save(produto);
-
-                modelAndView.addObject("messageSucces", "Produto foi Salvo!");
-            } catch (Exception e) {
-                modelAndView.addObject("error", "Erro ao salvar: " + e.getMessage());
-            }
-            return modelAndView;
-        }
-
-        @PostMapping("/{id}")
-        @ResponseStatus(HttpStatus.OK)
-        public ModelAndView atualizarProduto(@PathVariable Integer id, @RequestParam("file[]") MultipartFile[] file, @ModelAttribute Produto produto) {
-            ModelAndView modelAndView = new ModelAndView("cadastraProduto");
-            try {
-                String caminhoDaImagen = fileSaver.write(file, id);
-                produto.setCaminhoDaImagem(caminhoDaImagen);
-
-                Produto produtoSalvo = produtoRepository.findById(id).orElse(null);
-                BeanUtils.copyProperties(produto, produtoSalvo, "id");
-
-                produtoRepository.save(produtoSalvo);
-                modelAndView.addObject("messageSucces", "Produto foi Salvo!");
-            } catch (Exception e) {
-                modelAndView.addObject("error", "Erro ao salvar: " + e.getMessage());
-            }
-            return modelAndView;
-        }
-
-        @GetMapping("/detalhes/{id}")
-        public ModelAndView detalhes(@PathVariable String id) {
-            Produto produtoEncontrado = produtoRepository.findById(Integer.parseInt(id)).get();
-            ArrayList<String> img = (ArrayList<String>) new Gson().fromJson(produtoEncontrado.getCaminhoDaImagem(), ArrayList.class);
-            produtoEncontrado.setCaminhoDaImagem(img.get(0));
-
-            return new ModelAndView("detalhes").addObject("produto", produtoEncontrado);
-        }
+        return new ModelAndView("detalhes").addObject("produto", produtoEncontrado);
     }
 }
