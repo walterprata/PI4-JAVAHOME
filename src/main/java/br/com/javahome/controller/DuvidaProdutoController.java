@@ -19,13 +19,13 @@ import br.com.javahome.model.DuvidaProduto;
 import br.com.javahome.repository.DuvidaProdutoRepository;
 
 @RestController
-@RequestMapping("/javahome/duvida-produto")
+@RequestMapping("/javahome")
 public class DuvidaProdutoController {
 
 	@Autowired
 	private DuvidaProdutoRepository duvidaProdutoRepository;
 
-	@GetMapping("/listar")
+	@GetMapping("/listar-perguntas")
 	public List<DuvidaProduto> pesquisar() {
 		return duvidaProdutoRepository.findAll();
 	}
@@ -36,16 +36,14 @@ public class DuvidaProdutoController {
 		duvidaProdutoRepository.save(duvidaProduto);
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("deletar/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Integer id) {
 		duvidaProdutoRepository.deleteById(id);
 	}
 
-	@GetMapping("/filter/{id}")
+	@GetMapping("/filtrar-pergunta/{id}")
 	public List<DuvidaProduto> teste(@PathVariable Integer id) {
-		
-		//List<DuvidaProduto> list = duvidaProdutoRepository.duvidaProduto(id);
 						
 		return duvidaProdutoRepository.duvidaProduto(id);
 
