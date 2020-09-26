@@ -17,7 +17,7 @@ $(document).ready(function () {
                             "                <p class=\"card-text\">"+produtos.descricao+"</p>" +
                             "              </div>" +
                             "              <div class=\"card-footer\">" +
-                            "                <small class=\"text-muted\">&#9733; &#9733; &#9733; &#9733; &#9734;</small>" +
+                                "                <button type=\"button\" class=\"btn btn-dark\">Adicionar ao carrinho</button>" +
                             "              </div>" +
                             "            </div>" +
                             "          </div>"

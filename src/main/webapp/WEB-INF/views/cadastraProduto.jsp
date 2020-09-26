@@ -61,6 +61,7 @@
                 </div>
                 <div class="form-group col-md-4">
                     <h5>Adicionar perguntas e resposta</h5>
+                    <button type="button" class="btn btn-dark">Adicionar</button>
                 </div>
             </div>
 
@@ -79,12 +80,26 @@
                 </div>
 
             </div>
-            <div class="form-group col-md">
-                <label>Imagens do produto</label>
-                <input class="form-control-file" type="file" name="file[]" id="img1"/><br/><br/>
-                <input class="form-control-file" type="file" name="file[]" id="img2"/><br/><br/>
-                <input class="form-control-file" type="file" name="file[]" id="img3"/><br/><br/>
+            <div class="form-row">
+                <div class="form-group col-md">
+                    <label>Imagens do produto</label>
+                    <input class="form-control-file" type="file" name="file[]" id="img1"/><br/><br/>
+                    <input class="form-control-file" type="file" name="file[]" id="img2"/><br/><br/>
+                    <input class="form-control-file" type="file" name="file[]" id="img3"/><br/><br/>
+                </div>
+                <div class="form-group col-md">
+                    <ul class="list-group">
+                        <li class="list-group-item active">Perguntas</li>
+                        <li class="list-group-item">Dapibus ac facilisis in</li>
+                        <li class="list-group-item">Morbi leo risus</li>
+                        <li class="list-group-item">Porta ac consectetur ac</li>
+                        <li class="list-group-item">Vestibulum at eros</li>
+                    </ul>
+                </div>
+
             </div>
+
+
             <button type="submit" class="btn btn-primary">Salvar</button>
         </div>
     </form>
