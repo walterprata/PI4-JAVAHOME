@@ -1,3 +1,10 @@
 body{
   margin-top: 70px;
 }
+
+@media (min-width: 1200px){
+  .modal-xl {
+    max-width: 100%;
+    margin: 10px;
+  }
+}

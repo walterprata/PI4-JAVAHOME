@@ -29,7 +29,7 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label for="caracteristicas">Descrição</label>
-                    <textarea class="form-control" id="caracteristicas" rows="3" name="caracteristicas"></textarea>
+                    <textarea class="form-control" id="caracteristicas" rows="3" name="caracteristicas" maxlength="200"></textarea>
                 </div>
                 <div class="form-group col-md-6">
                     <div class="form-group">
@@ -93,4 +93,4 @@
 <jsp:include page="modalListaProdutos.jsp"/>
 
 <jsp:include page="footer.jsp"/>
-<script src="<c:url value="/js/produto.js"/>"></script>
+<script src="<c:url value="/js/CadastraProduto.js"/>"></script>
