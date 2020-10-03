@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 @Entity
 public class Usuario {
@@ -24,8 +23,8 @@ public class Usuario {
 	@Column(name = "senha")
 	private String senha;
 	
-	@OneToOne
-	private Cargo cargo;
+	@Column(name = "cargo")
+	private String cargo;
 	
 
 	public int getId() {
@@ -60,13 +59,15 @@ public class Usuario {
 		this.senha = senha;
 	}
 
-	public Cargo getCargo() {
+	public String getCargo() {
 		return cargo;
 	}
 
-	public void setCargo(Cargo cargo) {
+	public void setCargo(String cargo) {
 		this.cargo = cargo;
 	}
+
+
 	
 	
 	

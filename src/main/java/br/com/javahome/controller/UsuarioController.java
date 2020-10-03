@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.javahome.model.DuvidaProduto;
+import br.com.javahome.model.Produto;
 import br.com.javahome.model.Usuario;
 import br.com.javahome.repository.UsuarioRepository;
 
@@ -28,6 +30,12 @@ public class UsuarioController {
 	public List<Usuario> pesquisarUsuario() {
 		return usuarioRepository.findAll();
 	}
+	
+	 @GetMapping("usuario/{id}")
+	    public ResponseEntity<Usuario> buscarUsuarioPorId(@PathVariable Integer id) {
+	        Usuario usuario = usuarioRepository.findById(id).orElse(null);
+	        return usuario != null ? ResponseEntity.ok(usuario) : ResponseEntity.notFound().build();
+	    }
 	
 	@PostMapping("/cadastrar-usuario")
 	@ResponseStatus(HttpStatus.CREATED)
