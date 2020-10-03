@@ -1,6 +1,6 @@
     //Sempre ofuscar antes de subir
     //https://obfuscator.io/
-
+    var idPergunta = 0;
     //Apos o carregamento da pagina
     $(document).ready(function () {
         $('#money').mask("##0.00", {reverse: true});
@@ -19,10 +19,35 @@
 
     $('#btn-lista-produto').click(function () {
         $('.modal').modal('show')
+        $("#body").removeClass("modal-open");
     });
-    $('#btn-editar').click(function () {
-        $('.modal').modal('hide')
+
+    $('.btn-editar').click(function () {
+        $('.modal').modal('hide');
+        $("#body").removeClass("modal-open");
     });
+
+    //Adicionar pergunta
+    $('#add-pergunta').click(function () {
+        let pergunta = $('.pergunta').val();
+        let resposta = $('.resposta').val();
+        if (pergunta !== "" || resposta !== ""){
+            $('#lista-pergunta').append("<li class='list-group-item' id='pergunta"+idPergunta+"'>" +
+                "<input type='hidden' name='perguntas[]' value='"+pergunta+"'>" +
+                "<input type='hidden' name='respostas[]' value='"+resposta+"'>" +
+                "<p><b>Pergunta:</b> "+pergunta+"</p><p><b>Resposta:</b> "+resposta+"</p>" +
+                " <a type='button' class='btn btn-danger float-right' onclick='removerPergunta("+idPergunta+")'>Remover</a></li>")
+        }
+        idPergunta++;
+    });
+
+    //remove pergunta
+    function removerPergunta(idDaPergunta) {
+        console.log('pergunta'+idDaPergunta);
+        let campoDaPergunta = "pergunta"+idDaPergunta;
+        $('#'+campoDaPergunta).remove();
+    }
+
     function listarProdutos() {
 
         $('#tabela tr').remove();//limpa a tabela
@@ -53,7 +78,7 @@
             "</td><td>" +
             produtos.quantidade +
             "</td><td>" +
-            "<a type=\"button\" class=\"btn btn-primary\" id='btn-editar' style='margin-right: 10px;' onclick='editarProduto(" + produtos.id + ")'>Editar</a>" +
+            "<a type=\"button\" class=\"btn btn-primary btn-editar\" style='margin-right: 10px;' onclick='editarProduto(" + produtos.id + ")'>Editar</a>" +
             "<a type=\"button\" class=\"btn btn-primary\" style='margin-right: 10px;' onclick='verDetalhes(" + produtos.id + ")' >Detahes</a>"
     }
 

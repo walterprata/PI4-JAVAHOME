@@ -61,7 +61,9 @@
                 </div>
                 <div class="form-group col-md-4">
                     <h5>Adicionar perguntas e resposta</h5>
-                    <button type="button" class="btn btn-dark">Adicionar</button>
+                    <input type="text" class="form-control pergunta" placeholder="Faça sua pergunta">
+                    <input type="text" class="form-control resposta" placeholder="Resposta">
+                    <button type="button" class="btn btn-primary" style="margin-top: 5px" id="add-pergunta">Adicionar</button>
                 </div>
             </div>
 
@@ -90,10 +92,7 @@
                 <div class="form-group col-md">
                     <ul class="list-group">
                         <li class="list-group-item active">Perguntas</li>
-                        <li class="list-group-item">Dapibus ac facilisis in</li>
-                        <li class="list-group-item">Morbi leo risus</li>
-                        <li class="list-group-item">Porta ac consectetur ac</li>
-                        <li class="list-group-item">Vestibulum at eros</li>
+                        <ul class="list-group" id="lista-pergunta"></ul>
                     </ul>
                 </div>
 

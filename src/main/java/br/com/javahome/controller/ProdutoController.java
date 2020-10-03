@@ -1,7 +1,9 @@
 package br.com.javahome.controller;
 
 import br.com.javahome.component.FileSaver;
+import br.com.javahome.model.DuvidaProduto;
 import br.com.javahome.model.Produto;
+import br.com.javahome.repository.DuvidaProdutoRepository;
 import br.com.javahome.repository.ProdutoRepository;
 import br.com.javahome.repository.filter.ProdutoFilter;
 import com.google.gson.Gson;
@@ -26,14 +28,10 @@ import java.util.ArrayList;
 @RestController
 @RequestMapping("/produto")
 public class ProdutoController {
-    @Autowired
-    private ProdutoRepository produtoRepository;
-
-    @Autowired
-    private ServletContext servletContext;
-
-    @Autowired
-    private FileSaver fileSaver;
+    @Autowired private ProdutoRepository produtoRepository;
+    @Autowired private DuvidaProdutoRepository duvidaProdutoRepository;
+    @Autowired private ServletContext servletContext;
+    @Autowired private FileSaver fileSaver;
 
     @PostMapping("/save/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -68,7 +66,6 @@ public class ProdutoController {
         if (p != null) {
             p.setAtivo(false);
             produtoRepository.save(p);
-
         }
     }
 
@@ -79,18 +76,38 @@ public class ProdutoController {
 
     @PostMapping("/salvar")
     @ResponseStatus(HttpStatus.OK)
-    public ModelAndView salvarProduto(@RequestParam("file[]") MultipartFile[] file, @ModelAttribute Produto produto) {
+    public ModelAndView salvarProduto(@RequestParam("file[]") MultipartFile[] file,
+                                      @RequestParam("perguntas[]") String[] pergunta,
+                                      @RequestParam("respostas[]") String[] resposta,
+                                      @ModelAttribute Produto produto) {
         ModelAndView modelAndView = new ModelAndView("cadastraProduto");
         try {
             String pathImg = fileSaver.write(file, produto.hashCode());
             produto.setCaminhoDaImagem(pathImg);
-            produtoRepository.save(produto);
-
+            int idRetornado = produtoRepository.save(produto).getId();
+            produto.setId(idRetornado);
+            adicionaPerguntas(pergunta, resposta, produto);
             modelAndView.addObject("messageSucces", "Produto foi Salvo!");
         } catch (Exception e) {
             modelAndView.addObject("error", "Erro ao salvar: " + e.getMessage());
         }
         return modelAndView;
+    }
+
+    private void adicionaPerguntas(@RequestParam("pergunta[]") String[] pergunta,
+                                   @RequestParam("resposta[]") String[] resposta,
+                                   @ModelAttribute Produto produto) {
+        if (pergunta.length > 0 || resposta.length > 0) {
+            int index = 0;
+            for (String p : pergunta) {
+                DuvidaProduto duvidaProduto = new DuvidaProduto();
+                duvidaProduto.setPergunta(p);
+                duvidaProduto.setResposta(resposta[index]);
+                duvidaProduto.setProduto(produto);
+                duvidaProdutoRepository.save(duvidaProduto);
+                index++;
+            }
+        }
     }
 
     @PutMapping("/{id}")
