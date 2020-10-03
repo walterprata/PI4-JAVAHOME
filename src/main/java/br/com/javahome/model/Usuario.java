@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.servlet.http.HttpSession;
 
 @Entity
 public class Usuario {
@@ -26,6 +27,8 @@ public class Usuario {
 	@Column(name = "cargo")
 	private String cargo;
 	
+	@Column(name="status")
+	private boolean status;
 
 	public int getId() {
 		return id;
@@ -66,6 +69,25 @@ public class Usuario {
 	public void setCargo(String cargo) {
 		this.cargo = cargo;
 	}
+	
+	
+	public void getUsuarioLogado(HttpSession session) {
+		this.id = session.getAttribute("usuario.id") != null ? (int) session.getAttribute("usuario.id") : 0;
+		this.nome = (String) session.getAttribute("usuario.nome");
+		this.email = (String) session.getAttribute("usuario.email");
+		this.status = session.getAttribute("usuario.ativo") != null ? (boolean) session.getAttribute("usuario.status")
+				: false;
+		
+	}
+
+	public void setUsuarioLogado(HttpSession session) {
+		session.setAttribute("usuario.id", this.id);
+		session.setAttribute("usuario.nome", this.nome);
+		session.setAttribute("usuario.cpf", this.email);
+		session.setAttribute("usuario.status", this.status);
+		
+	}
+
 
 
 	
