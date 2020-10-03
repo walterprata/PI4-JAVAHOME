@@ -123,9 +123,11 @@ public class ProdutoController {
     @GetMapping("/detalhes/{id}")
     public ModelAndView detalhes(@PathVariable String id) {
         Produto produtoEncontrado = produtoRepository.findById(Integer.parseInt(id)).get();
-        if (!produtoEncontrado.getCaminhoDaImagem().isEmpty()){
-            ArrayList<String> img = (ArrayList<String>) new Gson().fromJson(produtoEncontrado.getCaminhoDaImagem(), ArrayList.class);
+        ArrayList<String> img = (ArrayList<String>) new Gson().fromJson(produtoEncontrado.getCaminhoDaImagem(), ArrayList.class);
+        if (!img.isEmpty()) {
             produtoEncontrado.setCaminhoDaImagem(img.get(0));
+        } else {
+            produtoEncontrado.setCaminhoDaImagem("");
         }
 
         return new ModelAndView("detalhes").addObject("produto", produtoEncontrado);
