@@ -13,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -73,14 +72,6 @@ public class ProdutoController {
         }
     }
 
-    @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void atualizarProduto(@PathVariable Integer id, @RequestBody Produto produto) {
-        Produto produtoSalvo = produtoRepository.findById(id).orElse(null);
-        BeanUtils.copyProperties(produto, produtoSalvo, "id");
-        produtoRepository.save(produtoSalvo);
-    }
-
     @GetMapping("/cadastrar")
     public ModelAndView pegaTelaDeCadastro() {
         return new ModelAndView("cadastraProduto");
@@ -100,6 +91,14 @@ public class ProdutoController {
             modelAndView.addObject("error", "Erro ao salvar: " + e.getMessage());
         }
         return modelAndView;
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void atualizarProduto(@PathVariable Integer id, @RequestBody Produto produto) {
+        Produto produtoSalvo = produtoRepository.findById(id).orElse(null);
+        BeanUtils.copyProperties(produto, produtoSalvo, "id");
+        produtoRepository.save(produtoSalvo);
     }
 
     @PostMapping("/{id}")
@@ -124,8 +123,10 @@ public class ProdutoController {
     @GetMapping("/detalhes/{id}")
     public ModelAndView detalhes(@PathVariable String id) {
         Produto produtoEncontrado = produtoRepository.findById(Integer.parseInt(id)).get();
-        ArrayList<String> img = (ArrayList<String>) new Gson().fromJson(produtoEncontrado.getCaminhoDaImagem(), ArrayList.class);
-        produtoEncontrado.setCaminhoDaImagem(img.get(0));
+        if (!produtoEncontrado.getCaminhoDaImagem().isEmpty()){
+            ArrayList<String> img = (ArrayList<String>) new Gson().fromJson(produtoEncontrado.getCaminhoDaImagem(), ArrayList.class);
+            produtoEncontrado.setCaminhoDaImagem(img.get(0));
+        }
 
         return new ModelAndView("detalhes").addObject("produto", produtoEncontrado);
     }
