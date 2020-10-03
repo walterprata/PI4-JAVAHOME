@@ -31,6 +31,10 @@
     $('#add-pergunta').click(function () {
         let pergunta = $('.pergunta').val();
         let resposta = $('.resposta').val();
+        addPerguntasNoHtmnl(pergunta,resposta);
+
+    });
+    function addPerguntasNoHtmnl(pergunta,resposta) {
         if (pergunta !== "" || resposta !== ""){
             $('#lista-pergunta').append("<li class='list-group-item' id='pergunta"+idPergunta+"'>" +
                 "<input type='hidden' name='perguntas[]' value='"+pergunta+"'>" +
@@ -39,8 +43,7 @@
                 " <a type='button' class='btn btn-danger float-right' onclick='removerPergunta("+idPergunta+")'>Remover</a></li>")
         }
         idPergunta++;
-    });
-
+    }
     //remove pergunta
     function removerPergunta(idDaPergunta) {
         console.log('pergunta'+idDaPergunta);
@@ -49,7 +52,6 @@
     }
 
     function listarProdutos() {
-
         $('#tabela tr').remove();//limpa a tabela
         $.get('/produto/listar',  // url
             function (data, textStatus, jqXHR) {  // success callback

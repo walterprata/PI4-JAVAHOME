@@ -23,6 +23,7 @@ import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -140,13 +141,13 @@ public class ProdutoController {
     @GetMapping("/detalhes/{id}")
     public ModelAndView detalhes(@PathVariable String id) {
         Produto produtoEncontrado = produtoRepository.findById(Integer.parseInt(id)).get();
+        List<DuvidaProduto> duvidaProdutos = duvidaProdutoRepository.duvidaProduto(Integer.parseInt(id));
         ArrayList<String> img = (ArrayList<String>) new Gson().fromJson(produtoEncontrado.getCaminhoDaImagem(), ArrayList.class);
         if (!img.isEmpty()) {
             produtoEncontrado.setCaminhoDaImagem(img.get(0));
-        } else {
-            produtoEncontrado.setCaminhoDaImagem("");
         }
-
-        return new ModelAndView("detalhes").addObject("produto", produtoEncontrado);
+        return new ModelAndView("detalhes")
+                .addObject("produto", produtoEncontrado)
+                .addObject("perguntas",duvidaProdutos.listIterator());
     }
 }
