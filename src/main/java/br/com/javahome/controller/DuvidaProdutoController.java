@@ -19,7 +19,7 @@ import br.com.javahome.model.DuvidaProduto;
 import br.com.javahome.repository.DuvidaProdutoRepository;
 
 @RestController
-@RequestMapping("/javahome")
+@RequestMapping("/javaHome")
 public class DuvidaProdutoController {
 
 	@Autowired
@@ -44,8 +44,6 @@ public class DuvidaProdutoController {
 
 	@GetMapping("/filtrar-pergunta/{id}")
 	public List<DuvidaProduto> teste(@PathVariable Integer id) {
-						
 		return duvidaProdutoRepository.duvidaProduto(id);
-
 	}
 }

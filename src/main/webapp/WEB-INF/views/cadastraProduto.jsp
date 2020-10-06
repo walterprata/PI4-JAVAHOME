@@ -14,7 +14,7 @@
                 ${error}
         </div>
     </c:if>
-    <button type="button" class="btn btn-primary" id="btn-lista-produto">Ver todos produtos</button>
+    <button type="button" class="btn btn-dark btn-lg col-md" id="btn-lista-produto" >Ver todos produtos</button>
     <h1>Cadastrar novo produto</h1>
     <form method="POST" action="/produto/salvar" enctype="multipart/form-data" class="form" id="form-salvar">
         <div class="form-group">
@@ -85,13 +85,15 @@
             <div class="form-row">
                 <div class="form-group col-md">
                     <label>Imagens do produto</label>
-                    <input class="form-control-file" type="file" name="file[]" id="img1"/><br/><br/>
-                    <input class="form-control-file" type="file" name="file[]" id="img2"/><br/><br/>
-                    <input class="form-control-file" type="file" name="file[]" id="img3"/><br/><br/>
+                    <input class="form-control-file" type="file" name="file[]" /><br/><br/>
+                    <input class="form-control-file" type="file" name="file[]" /><br/><br/>
+                    <input class="form-control-file" type="file" name="file[]" /><br/><br/>
+                    <div class="form-group col-md" id="img1"></div>
                 </div>
+
                 <div class="form-group col-md">
                     <ul class="list-group">
-                        <li class="list-group-item active">Perguntas</li>
+                        <li class="list-group-item active">Duvidas</li>
                         <ul class="list-group" id="lista-pergunta"></ul>
                     </ul>
                 </div>

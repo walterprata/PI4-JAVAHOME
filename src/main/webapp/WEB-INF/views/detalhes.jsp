@@ -4,7 +4,7 @@
 <div class="container">
     <c:if test="${not empty produto}">
         <h1 align="center" style="margin: 30px;">${ produto.nome }</h1>
-        <div class="row">
+        <div class="row" style="margin: 100px;">
             <div class="col-md">
                 <p style="color:dodgerblue;">Categoria: ${ produto.categoria }</p>
                 <img class="img-fluid" src='/produto/imagens${produto.caminhoDaImagem}' alt="">
@@ -16,21 +16,20 @@
                 <h1 style="color: green">à Vista R$${ produto.valor }</h1></p>
                 <button type="button" class="btn btn-success btn-lg">Comprar</button>
                 <p>Quantidade Disponivel: ${ produto.quantidade }</p>
+
+                <h2>Detalhes</h2>
+                <p>${ produto.caracteristicas } </p>
             </div>
         </div>
         <div class="row">
             <div class="col-md">
-                <h2>Detalhes</h2>
-                <p>${ produto.caracteristicas } </p>
-            </div>
-            <div class="col-md">
-                <h2 class="list-group-item active">Perguntas</h2>
+                <h2 class="list-group-item" style="background-color: #343a40;color: white">Duvidas</h2>
                 <ul class="list-group">
                     <c:if test="${not empty perguntas}">
                         <c:forEach var="pergunta" items="${perguntas}">
                             <li class="list-group-item">
-                                <p><b>Pergunta:</b> ${pergunta.pergunta}</p>
-                                <p><b>Resposta:</b> ${pergunta.resposta}</p>
+                                <p style="margin: 0;"><b>Pergunta:</b> ${pergunta.pergunta}</p>
+                                <p style="margin: 0;"><b>Resposta:</b> ${pergunta.resposta}</p>
                             </li>
                         </c:forEach>
                     </c:if>

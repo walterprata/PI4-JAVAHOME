@@ -1,5 +1,11 @@
+
+@font-face {
+  font-family:"Roboto", sans-serif;
+  src: url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,300&display=swap")
+}
 body{
   margin-top: 70px;
+  font-family: "Roboto", sans-serif;
 }
 
 @media (min-width: 1200px){

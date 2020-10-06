@@ -22,7 +22,7 @@
         $("#body").removeClass("modal-open");
     });
 
-    $('.btn-editar').click(function () {
+    $('.btn-  editar').click(function () {
         $('.modal').modal('hide');
         $("#body").removeClass("modal-open");
     });
@@ -36,7 +36,7 @@
     });
     function addPerguntasNoHtmnl(pergunta,resposta) {
         if (pergunta !== "" || resposta !== ""){
-            $('#lista-pergunta').append("<li class='list-group-item' id='pergunta"+idPergunta+"'>" +
+            $('#lista-pergunta').append("<li class='list-group-item perguntas-class' id='pergunta"+idPergunta+"'>" +
                 "<input type='hidden' name='perguntas[]' value='"+pergunta+"'>" +
                 "<input type='hidden' name='respostas[]' value='"+resposta+"'>" +
                 "<p><b>Pergunta:</b> "+pergunta+"</p><p><b>Resposta:</b> "+resposta+"</p>" +
@@ -136,9 +136,23 @@
     function verDetalhes(id) {
         window.location.href = "/produto/detalhes/"+id;
     }
-    function editarProduto(id) {
-        showModal()
 
+    function reiniciaCampos() {
+        $('#nome').val("");
+        $('#descricao').val("");
+        $('#caracteristicas').val("");
+        $('#categoria').val("").prop('selected',true);
+        $('#palavraChave').val("");
+        $('#money').val("");
+        $('#quantidade').val("");
+        $('.img-pergunta').remove();
+        $('.sem-pergunta').remove();
+        $('.perguntas-class').remove();
+    }
+
+    function editarProduto(id) {
+        showModal();
+        reiniciaCampos();
         $('#form-salvar').attr('action','/produto/'+id);
         $('#form-salvar').attr('method','POST');
         let produto = buscarDetalhesDoProduto(id);
@@ -158,18 +172,30 @@
             }
             let urlDasImagens = $.parseJSON(produto.caminhoDaImagem);
             for(i in urlDasImagens){
-
-                console.log(urlDasImagens[i]);
-                $('#img1').append("teste<img src='"+urlDasImagens[i]+"' class='img-fluid img-thumbnail' alt=''>");
-                let idImg = "img"+1;
-                console.log(idImg);
-                $("input:file[id*="+idImg+"]").attr('value',produto.quantidade);
+                $('#img1').append("<img src='/produto/imagens/"+urlDasImagens[i]+"' class='img-fluid img-thumbnail img-pergunta' alt='' width='90'>");
             }
-
-
+            let perguntasDoProduto = Array.from(buscarPerguntasDoProduto(id));
+            if (perguntasDoProduto.length === 0){
+                $('#lista-pergunta').append("<li class='list-group-item sem-pergunta'><h4>Este produto não comtem perguntas.</h4></li>");
+            }else{
+                for(i in perguntasDoProduto){
+                    let p = perguntasDoProduto[i];
+                    addPerguntasNoHtmnl(p.pergunta,p.resposta);
+                }
+            }
         }
     }
-
+    function buscarPerguntasDoProduto(id){
+        let resultado = null;
+        $.ajax({
+            url: '/javaHome/filtrar-pergunta/' + id,
+            async:false,
+            success:function (data) {
+                resultado = data
+            }
+        });
+        return resultado
+    }
     function showModal() {
         $('.modal-backdrop').toggle();
         $('#modal-detalhes').toggle();
