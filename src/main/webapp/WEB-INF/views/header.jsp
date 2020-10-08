@@ -32,9 +32,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Sobre</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/produto/cadastrar">Produtos</a>
-                    </li>
+                    <c:if test="${sessionScope.get('cargo') != null}">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/produto/cadastrar">Produtos</a>
+                        </li>
+                    </c:if>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Contato</a>
                     </li>

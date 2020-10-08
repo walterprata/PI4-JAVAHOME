@@ -21,41 +21,41 @@ import br.com.javahome.repository.UsuarioRepository;
 
 @RestController
 @RequestMapping("/javahome")
-public class UsuarioController  {
+public class UsuarioController {
 
-	@Autowired
-	private UsuarioRepository usuarioRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
-	@PostMapping("/login")
-	public String listUsuarios(@RequestParam("email") String email, @RequestParam("senha") String senha, Model theModel) {
-		Usuario usuario = usuarioRepository.validaUsuario(email, senha);
-		if(usuario != null) {
-			return "Usuario Logado";
-		}
-		return "Usuario invalido";
-	}
-	
-	
-	@GetMapping("/listar-usuario")
-	public List<Usuario> pesquisarUsuario() {
-		return usuarioRepository.findAll();
-	}
-	
-	 @GetMapping("usuario/{id}")
-	    public ResponseEntity<Usuario> buscarUsuarioPorId(@PathVariable Integer id) {
-	        Usuario usuario = usuarioRepository.findById(id).orElse(null);
-	        return usuario != null ? ResponseEntity.ok(usuario) : ResponseEntity.notFound().build();
-	    }
-	
-	@PostMapping("/cadastrar-usuario")
-	@ResponseStatus(HttpStatus.CREATED)
-	public void cadastrarProduto(@RequestBody Usuario usuario) {
-		usuarioRepository.save(usuario);
-	}
+    @PostMapping("/login")
+    public String listUsuarios(@RequestParam("email") String email, @RequestParam("senha") String senha, Model theModel) {
+        Usuario usuario = usuarioRepository.validaUsuario(email, senha);
+        if (usuario != null) {
+            return "Usuario Logado";
+        }
+        return "Usuario invalido";
+    }
 
-	@PostMapping("/deletar-usuario")
-	@ResponseStatus(HttpStatus.CREATED)
-	public void cadastrarUsuario(@RequestBody Usuario usuario) {
-		usuarioRepository.save(usuario);
-	}
+
+    @GetMapping("/listar-usuario")
+    public List<Usuario> pesquisarUsuario() {
+        return usuarioRepository.findAll();
+    }
+
+    @GetMapping("usuario/{id}")
+    public ResponseEntity<Usuario> buscarUsuarioPorId(@PathVariable Integer id) {
+        Usuario usuario = usuarioRepository.findById(id).orElse(null);
+        return usuario != null ? ResponseEntity.ok(usuario) : ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/cadastrar-usuario")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void cadastrarProduto(@RequestBody Usuario usuario) {
+        usuarioRepository.save(usuario);
+    }
+
+    @PostMapping("/deletar-usuario")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void cadastrarUsuario(@RequestBody Usuario usuario) {
+        usuarioRepository.save(usuario);
+    }
 }

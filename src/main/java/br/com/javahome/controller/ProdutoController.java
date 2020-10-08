@@ -29,10 +29,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/produto")
 public class ProdutoController {
-    @Autowired private ProdutoRepository produtoRepository;
-    @Autowired private DuvidaProdutoRepository duvidaProdutoRepository;
-    @Autowired private ServletContext servletContext;
-    @Autowired private FileSaver fileSaver;
+    @Autowired
+    private ProdutoRepository produtoRepository;
+    @Autowired
+    private DuvidaProdutoRepository duvidaProdutoRepository;
+    @Autowired
+    private ServletContext servletContext;
+    @Autowired
+    private FileSaver fileSaver;
 
     @PostMapping("/save/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -95,8 +99,8 @@ public class ProdutoController {
         return modelAndView;
     }
 
-    private void adicionaPerguntas(@RequestParam("pergunta[]") String[] pergunta,
-                                   @RequestParam("resposta[]") String[] resposta,
+    private void adicionaPerguntas(@RequestParam("respostas[]") String[] pergunta,
+                                   @RequestParam("respostas[]") String[] resposta,
                                    @ModelAttribute Produto produto) {
         if (pergunta.length > 0 || resposta.length > 0) {
             int index = 0;
@@ -111,26 +115,35 @@ public class ProdutoController {
         }
     }
 
-    @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void atualizarProduto(@PathVariable Integer id, @RequestBody Produto produto) {
-        Produto produtoSalvo = produtoRepository.findById(id).orElse(null);
-        BeanUtils.copyProperties(produto, produtoSalvo, "id");
-        produtoRepository.save(produtoSalvo);
-    }
-
     @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ModelAndView atualizarProduto(@PathVariable Integer id, @RequestParam("file[]") MultipartFile[] file, @ModelAttribute Produto produto) {
+    public ModelAndView atualizarProduto(@PathVariable Integer id,
+                                         @RequestParam("file[]") MultipartFile[] file,
+                                         @RequestParam("perguntas[]") String[] pergunta,
+                                         @RequestParam("respostas[]") String[] resposta,
+                                         @ModelAttribute Produto produto) {
         ModelAndView modelAndView = new ModelAndView("cadastraProduto");
         try {
-            String caminhoDaImagen = fileSaver.write(file, id);
-            produto.setCaminhoDaImagem(caminhoDaImagen);
 
             Produto produtoSalvo = produtoRepository.findById(id).orElse(null);
+
+            String caminhoDaImagen = fileSaver.write(file, id);
+            ArrayList<String> img = (ArrayList<String>) new Gson().fromJson(caminhoDaImagen, ArrayList.class);
+            if(img.isEmpty() && produtoSalvo != null ){
+                produto.setCaminhoDaImagem(produtoSalvo.getCaminhoDaImagem());
+            }else{
+                produto.setCaminhoDaImagem(caminhoDaImagen);
+            }
+
             BeanUtils.copyProperties(produto, produtoSalvo, "id");
 
             produtoRepository.save(produtoSalvo);
+            List<DuvidaProduto> duvidaProdutos = duvidaProdutoRepository.duvidaProduto(id);
+
+            if (duvidaProdutos.size() < pergunta.length - 1) {
+                adicionaPerguntas(pergunta, resposta, produtoSalvo);
+            }
+
             modelAndView.addObject("messageSucces", "Produto foi Salvo!");
         } catch (Exception e) {
             modelAndView.addObject("error", "Erro ao salvar: " + e.getMessage());
@@ -143,11 +156,11 @@ public class ProdutoController {
         Produto produtoEncontrado = produtoRepository.findById(id).get();
         List<DuvidaProduto> duvidaProdutos = duvidaProdutoRepository.duvidaProduto(id);
         ArrayList<String> img = (ArrayList<String>) new Gson().fromJson(produtoEncontrado.getCaminhoDaImagem(), ArrayList.class);
-        if (!img.isEmpty()) {
+        if (img != null && !img.isEmpty()) {
             produtoEncontrado.setCaminhoDaImagem(img.get(0));
         }
         return new ModelAndView("detalhes")
                 .addObject("produto", produtoEncontrado)
-                .addObject("perguntas",duvidaProdutos.listIterator());
+                .addObject("perguntas", duvidaProdutos.listIterator());
     }
 }

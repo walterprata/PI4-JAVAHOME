@@ -12,7 +12,7 @@ public class ProdutoUtils {
     public static void formataCaminhoDaImagenDosProdutos(List<Produto> produtos) {
         for(Produto p: produtos){
             ArrayList<String> img = (ArrayList<String>) new Gson().fromJson(p.getCaminhoDaImagem(), ArrayList.class);
-            if (!img.isEmpty()) {
+            if (img != null && !img.isEmpty()) {
                 p.setCaminhoDaImagem(img.get(0));
             }
         }

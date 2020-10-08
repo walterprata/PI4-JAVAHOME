@@ -22,7 +22,7 @@
         $("#body").removeClass("modal-open");
     });
 
-    $('.btn-  editar').click(function () {
+    $('.btn-editar').click(function () {
         $('.modal').modal('hide');
         $("#body").removeClass("modal-open");
     });
@@ -32,7 +32,6 @@
         let pergunta = $('.pergunta').val();
         let resposta = $('.resposta').val();
         addPerguntasNoHtmnl(pergunta,resposta);
-
     });
     function addPerguntasNoHtmnl(pergunta,resposta) {
         if (pergunta !== "" || resposta !== ""){

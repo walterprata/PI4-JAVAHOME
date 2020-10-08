@@ -6,7 +6,7 @@
 <div class="container">
     <c:if test="${messageSucces != null}">
         <div class="alert alert-success" role="alert">
-            ${messageSucces}
+                ${messageSucces}
         </div>
     </c:if>
     <c:if test="${error != null}">
@@ -14,43 +14,83 @@
                 ${error}
         </div>
     </c:if>
-    <button type="button" class="btn btn-dark btn-lg col-md" id="btn-lista-produto" >Ver todos produtos</button>
+    <button type="button" class="btn btn-dark btn-lg col-md" id="btn-lista-produto">Ver todos produtos</button>
     <h1>Cadastrar novo produto</h1>
     <form method="POST" action="/produto/salvar" enctype="multipart/form-data" class="form" id="form-salvar">
         <div class="form-group">
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="nome">Nome do produto</label>
-                    <input type="text" class="form-control" id="nome" placeholder="Nome do produto" name="nome" required>
+                    <c:if test="${sessionScope.get('cargo') == 'estoque'}">
+                        <input type="text" class="form-control" id="nome" placeholder="Nome do produto" name="nome"
+                               readonly>
+                    </c:if>
+                    <c:if test="${sessionScope.get('cargo') != 'estoque'}">
+                        <input type="text" class="form-control" id="nome" placeholder="Nome do produto" name="nome"
+                               required>
+                    </c:if>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="descricao">Descrição curta</label>
-                    <input type="text" class="form-control" id="descricao" name="descricao" maxlength="50" required>
+                    <c:if test="${sessionScope.get('cargo') == 'estoque'}">
+                        <input type="text" class="form-control" id="descricao" name="descricao" maxlength="50" readonly>
+                    </c:if>
+                    <c:if test="${sessionScope.get('cargo') != 'estoque'}">
+                        <input type="text" class="form-control" id="descricao" name="descricao" maxlength="50" required>
+                    </c:if>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="caracteristicas">Descrição</label>
-                    <textarea class="form-control" id="caracteristicas" rows="3" name="caracteristicas" maxlength="200"></textarea>
+
+                    <c:if test="${sessionScope.get('cargo') == 'estoque'}">
+                        <textarea class="form-control" id="caracteristicas" rows="3" name="caracteristicas"
+                                  maxlength="200" readonly></textarea>
+                    </c:if>
+                    <c:if test="${sessionScope.get('cargo') != 'estoque'}">
+                        <textarea class="form-control" id="caracteristicas" rows="3" name="caracteristicas"
+                                  maxlength="200"></textarea>
+                    </c:if>
                 </div>
                 <div class="form-group col-md-6">
                     <div class="form-group">
                         <label for="categoria">Categoria</label>
-                        <select class="form-control" id="categoria" name="categoria">
-                            <option value="Console">Console</option>
-                            <option value="Jogos">Jogos</option>
-                            <option value="Periféricos">Periféricos</option>
-                            <option value="Acessórios">Acessórios</option>
-                        </select>
+                        <c:if test="${sessionScope.get('cargo') == 'estoque'}">
+                        <select class="form-control" id="categoria" name="categoria" readonly>
+                            </c:if>
+                            <c:if test="${sessionScope.get('cargo') != 'estoque'}">
+                            <select class="form-control" id="categoria" name="categoria">
+                                </c:if>
+
+                                <option value="Console">Console</option>
+                                <option value="Jogos">Jogos</option>
+                                <option value="Periféricos">Periféricos</option>
+                                <option value="Acessórios">Acessórios</option>
+                            </select>
                     </div>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md">
                     <label for="palavraChave">Palavras-Chaves</label>
-                    <input type="text" class="form-control" id="palavraChave" placeholder="Ex: jogo, periferico..." name="">
+
+                    <c:if test="${sessionScope.get('cargo') == 'estoque'}">
+                        <input type="text" class="form-control" id="palavraChave" placeholder="Ex: jogo, periferico..."
+                               name="" readonly>
+                        </c:if>
+                    <c:if test="${sessionScope.get('cargo') != 'estoque'}">
+                        <input type="text" class="form-control" id="palavraChave" placeholder="Ex: jogo, periferico..."
+                               name="">
+                    </c:if>
                 </div>
                 <div class="form-group col-md">
                     <label for="money">Preço: </label>
-                    <input type="text" class="form-control" id="money" placeholder="00.00" name="valor">
+                    <c:if test="${sessionScope.get('cargo') == 'estoque'}">
+                        <input type="text" class="form-control" id="money" placeholder="00.00" name="valor" readonly>
+                    </c:if>
+                    <c:if test="${sessionScope.get('cargo') != 'estoque'}">
+                        <input type="text" class="form-control" id="money" placeholder="00.00" name="valor">
+                    </c:if>
+
                 </div>
             </div>
 
@@ -63,7 +103,11 @@
                     <h5>Adicionar perguntas e resposta</h5>
                     <input type="text" class="form-control pergunta" placeholder="Faça sua pergunta">
                     <input type="text" class="form-control resposta" placeholder="Resposta">
-                    <button type="button" class="btn btn-primary" style="margin-top: 5px" id="add-pergunta">Adicionar</button>
+                    <c:if test="${sessionScope.get('cargo') != 'estoque'}">
+                        <button type="button" class="btn btn-primary" style="margin-top: 5px" id="add-pergunta">Adicionar
+                        </button>
+                    </c:if>
+
                 </div>
             </div>
 
@@ -83,24 +127,25 @@
 
             </div>
             <div class="form-row">
-                <div class="form-group col-md">
-                    <label>Imagens do produto</label>
-                    <input class="form-control-file" type="file" name="file[]" /><br/><br/>
-                    <input class="form-control-file" type="file" name="file[]" /><br/><br/>
-                    <input class="form-control-file" type="file" name="file[]" /><br/><br/>
-                    <div class="form-group col-md" id="img1"></div>
-                </div>
-
+                <c:if test="${sessionScope.get('cargo') != 'estoque'}">
+                    <div class="form-group col-md">
+                        <label>Imagens do produto</label>
+                        <input class="form-control-file" type="file" name="file[]"/><br/><br/>
+                        <input class="form-control-file" type="file" name="file[]"/><br/><br/>
+                        <input class="form-control-file" type="file" name="file[]"/><br/><br/>
+                        <div class="form-group col-md" id="img1"></div>
+                    </div>
+                </c:if>
+                <input type="hidden" name="perguntas[]" value="">
+                <input type="hidden" name="respostas[]" value="">
                 <div class="form-group col-md">
                     <ul class="list-group">
                         <li class="list-group-item active">Duvidas</li>
+
                         <ul class="list-group" id="lista-pergunta"></ul>
                     </ul>
                 </div>
-
             </div>
-
-
             <button type="submit" class="btn btn-primary">Salvar</button>
         </div>
     </form>
