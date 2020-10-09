@@ -127,17 +127,22 @@
 
             </div>
             <div class="form-row">
-                <c:if test="${sessionScope.get('cargo') != 'estoque'}">
                     <div class="form-group col-md">
                         <label>Imagens do produto</label>
-                        <input class="form-control-file" type="file" name="file[]"/><br/><br/>
-                        <input class="form-control-file" type="file" name="file[]"/><br/><br/>
-                        <input class="form-control-file" type="file" name="file[]"/><br/><br/>
+                        <c:if test="${sessionScope.get('cargo') == 'estoque'}">
+                            <input class="form-control-file" type="file" name="file[]" disabled/><br/><br/>
+                            <input class="form-control-file" type="file" name="file[]" disabled/><br/><br/>
+                            <input class="form-control-file" type="file" name="file[]" disabled/><br/><br/>
+                        </c:if>
+                        <c:if test="${sessionScope.get('cargo') != 'estoque'}">
+                        <input class="form-control-file" type="file" name="file[]" /><br/><br/>
+                        <input class="form-control-file" type="file" name="file[]" /><br/><br/>
+                        <input class="form-control-file" type="file" name="file[]" /><br/><br/>
+                        </c:if>
                         <div class="form-group col-md" id="img1"></div>
                     </div>
-                </c:if>
-                <input type="hidden" name="perguntas[]" value="">
-                <input type="hidden" name="respostas[]" value="">
+
+
                 <div class="form-group col-md">
                     <ul class="list-group">
                         <li class="list-group-item active">Duvidas</li>

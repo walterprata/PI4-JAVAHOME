@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -121,28 +122,35 @@ public class ProdutoController {
                                          @RequestParam("file[]") MultipartFile[] file,
                                          @RequestParam("perguntas[]") String[] pergunta,
                                          @RequestParam("respostas[]") String[] resposta,
-                                         @ModelAttribute Produto produto) {
+                                         @ModelAttribute Produto produto,
+                                         HttpSession session) {
         ModelAndView modelAndView = new ModelAndView("cadastraProduto");
         try {
-
             Produto produtoSalvo = produtoRepository.findById(id).orElse(null);
-
-            String caminhoDaImagen = fileSaver.write(file, id);
-            ArrayList<String> img = (ArrayList<String>) new Gson().fromJson(caminhoDaImagen, ArrayList.class);
-            if(img.isEmpty() && produtoSalvo != null ){
-                produto.setCaminhoDaImagem(produtoSalvo.getCaminhoDaImagem());
+            if(!session.getAttribute("cargo").equals("estoque") && produtoSalvo != null){
+                String caminhoDaImagen = fileSaver.write(file, id);
+                ArrayList<String> img = (ArrayList<String>) new Gson().fromJson(caminhoDaImagen, ArrayList.class);
+                if(img.isEmpty()){
+                    produto.setCaminhoDaImagem(produtoSalvo.getCaminhoDaImagem());
+                }else{
+                    produto.setCaminhoDaImagem(caminhoDaImagen);
+                }
             }else{
-                produto.setCaminhoDaImagem(caminhoDaImagen);
+                produto.setCaminhoDaImagem(produtoSalvo.getCaminhoDaImagem());
             }
+
 
             BeanUtils.copyProperties(produto, produtoSalvo, "id");
 
             produtoRepository.save(produtoSalvo);
             List<DuvidaProduto> duvidaProdutos = duvidaProdutoRepository.duvidaProduto(id);
-
-            if (duvidaProdutos.size() < pergunta.length - 1) {
-                adicionaPerguntas(pergunta, resposta, produtoSalvo);
+            for (DuvidaProduto d: duvidaProdutos){
+                duvidaProdutoRepository.delete(d);
             }
+
+
+                adicionaPerguntas(pergunta, resposta, produtoSalvo);
+
 
             modelAndView.addObject("messageSucces", "Produto foi Salvo!");
         } catch (Exception e) {
