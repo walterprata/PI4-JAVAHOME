@@ -6,6 +6,7 @@
 body{
   margin-top: 70px;
   font-family: "Roboto", sans-serif;
+  background-color: #d2d2d2;
 }
 
 @media (min-width: 1200px){

@@ -6,6 +6,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.servlet.http.HttpSession;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 
 @Entity
 public class Usuario {
@@ -15,20 +19,27 @@ public class Usuario {
 	@Column(name = "id")
 	private int id;
 
+	@Size(min = 5, max = 50)
+	@NotNull
 	@Column(name = "nome")
 	private String nome;
 	
+	@NotNull
+	@Email(regexp = "^(.+)@(.+)$")
 	@Column(name = "email")
 	private String email;
 
+	@NotNull
 	@Column(name = "senha")
 	private String senha;
 	
+	@NotNull
 	@Column(name = "cargo")
 	private String cargo;
 	
+	@NotNull
 	@Column(name="status")
-	private boolean status;
+	private boolean status = true;
 
 	public int getId() {
 		return id;
@@ -70,7 +81,14 @@ public class Usuario {
 		this.cargo = cargo;
 	}
 	
-	
+	public boolean isStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
+
 	public void getUsuarioLogado(HttpSession session) {
 		this.id = session.getAttribute("usuario.id") != null ? (int) session.getAttribute("usuario.id") : 0;
 		this.nome = (String) session.getAttribute("usuario.nome");
