@@ -31,15 +31,14 @@ public class UsuarioController {
     private UsuarioRepository usuarioRepository;
 
     @PostMapping("/login")
-    public String listUsuarios(@RequestParam("email") String email, @RequestParam("senha") String senha, @RequestParam("cargo") String cargo , Model theModel, HttpSession session) {
+    public String listUsuarios(@RequestParam("email") String email, @RequestParam("senha") String senha , Model theModel, HttpSession session) {
         //VALIDA USUARIO NO BANCO DE DADOS
     	Usuario usuario = usuarioRepository.validaUsuario(email, senha);
         if (usuario != null) {
-        	session.setAttribute("email", email);
-        	session.setAttribute("cargo", cargo);
+        	session.setAttribute("email", usuario.getEmail());
+        	session.setAttribute("cargo", usuario.getCargo());
             return "Usuario Logado";
         }
-        
         return "Usuario invalido";
     }
 
