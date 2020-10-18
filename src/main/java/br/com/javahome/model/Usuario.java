@@ -26,7 +26,7 @@ public class Usuario {
 	
 	@NotNull
 	@Email(regexp = "^(.+)@(.+)$")
-	@Column(name = "email")
+	@Column(name = "email",unique = true)
 	private String email;
 
 	@NotNull

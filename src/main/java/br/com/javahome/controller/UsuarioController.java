@@ -1,20 +1,16 @@
 package br.com.javahome.controller;
 
-import java.util.List;
-
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
-
+import br.com.javahome.model.Usuario;
+import br.com.javahome.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import br.com.javahome.model.Usuario;
-import br.com.javahome.repository.UsuarioRepository;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/javaHome")
@@ -36,7 +32,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/auth/login")
-    public String authUsuario(@RequestParam("email") String email, @RequestParam("senha") String senha , Model theModel, HttpSession session) {
+    public String authUsuario(@RequestParam("email") String email, @RequestParam("senha") String senha , HttpSession session) {
         //VALIDA USUARIO NO BANCO DE DADOS
     	Usuario usuario = usuarioRepository.validaUsuario(email, senha);
         if (usuario != null) {
@@ -69,7 +65,7 @@ public class UsuarioController {
     //CADASTRA UM USUÁRIO
     @PostMapping("/auth/cadastrar-usuario")
     @ResponseStatus(HttpStatus.CREATED)
-    public ModelAndView cadastrarUsuario( @Valid @ModelAttribute Usuario usuario) {
+    public ModelAndView cadastrarUsuario( @Valid @ModelAttribute() Usuario usuario) {
         ModelAndView modelAndView = new ModelAndView("cadastraUsuario");
         try {
             usuarioRepository.save(usuario);

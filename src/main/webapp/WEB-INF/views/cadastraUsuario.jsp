@@ -19,7 +19,6 @@
     <form method="POST" action="/javaHome/auth/cadastrar-usuario" enctype="multipart/form-data" class="form" id="form-salvar">
         <div class="form-group">
             <div class="form-row">
-                <input type="hidden" class="form-control" id="id" name="id" minlength="5" value="">
                 <div class="form-group col-md">
                     <label for="nome">Nome completo</label>
                     <input type="text" class="form-control" id="nome" placeholder="Nome do usuário" name="nome" minlength="5" required>

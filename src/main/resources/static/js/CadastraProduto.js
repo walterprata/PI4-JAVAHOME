@@ -270,6 +270,7 @@
         reiniciaCampos();
         $('#form-salvar').attr('action','/javaHome/auth/cadastrar-usuario');
         $('#form-salvar').attr('method','POST');
+        $('#form-salvar').append("<input type='hidden' class='form-control' id='id' name='id' value="+id+">");
         let usuario = buscarDetalhesDoUsuario(id);
         if (!!usuario) {
             console.log(usuario);
