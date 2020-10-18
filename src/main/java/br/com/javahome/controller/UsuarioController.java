@@ -3,6 +3,7 @@ package br.com.javahome.controller;
 import br.com.javahome.model.Usuario;
 import br.com.javahome.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,11 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired
+    private HttpSession session;
+
+    private static final String SESSION_ATRIBUTE_EMAIL = "email";
+    private static final String SESSION_ATRIBUTE_CARGO = "cargo";
 
     @GetMapping(value = {"/login"})
     public ModelAndView login(){
@@ -32,15 +38,19 @@ public class UsuarioController {
     }
 
     @PostMapping("/auth/login")
-    public String authUsuario(@RequestParam("email") String email, @RequestParam("senha") String senha , HttpSession session) {
+    public ModelAndView authUsuario(@RequestParam("email") String email, @RequestParam("senha") String senha) {
         //VALIDA USUARIO NO BANCO DE DADOS
     	Usuario usuario = usuarioRepository.validaUsuario(email, senha);
+    	ModelAndView modelAndView;
         if (usuario != null) {
-        	session.setAttribute("email", usuario.getEmail());
-        	session.setAttribute("cargo", usuario.getCargo());
-            return "Usuario Logado";
+            session.setAttribute(SESSION_ATRIBUTE_EMAIL, usuario.getEmail());
+        	session.setAttribute(SESSION_ATRIBUTE_CARGO, usuario.getCargo());
+        	modelAndView = new ModelAndView("index");
+        }else{
+            modelAndView = new ModelAndView("login");
+            modelAndView.addObject("message","Usuário não encontrado!");
         }
-        return "Usuario invalido";
+        return modelAndView;
     }
 
     //LISTAR TODOS ATIVOS E INATIVOS
@@ -65,11 +75,15 @@ public class UsuarioController {
     //CADASTRA UM USUÁRIO
     @PostMapping("/auth/cadastrar-usuario")
     @ResponseStatus(HttpStatus.CREATED)
-    public ModelAndView cadastrarUsuario( @Valid @ModelAttribute() Usuario usuario) {
+    public ModelAndView cadastrarUsuario(@Valid @ModelAttribute() Usuario usuario) {
         ModelAndView modelAndView = new ModelAndView("cadastraUsuario");
         try {
-            usuarioRepository.save(usuario);
-            modelAndView.addObject("messageSucces", "Usuário foi Salvo!");
+            if (session.getAttribute(SESSION_ATRIBUTE_EMAIL).equals(usuario.getEmail())){
+                usuarioRepository.save(usuario);
+                modelAndView.addObject("messageSucces", "Usuário foi Salvo!");
+            }else{
+                throw new RuntimeException("Este usuário esta sendo usado no momento");
+            }
         }catch (Exception e){
             modelAndView.addObject("error", "Erro ao salvar: " + e.getMessage());
         }

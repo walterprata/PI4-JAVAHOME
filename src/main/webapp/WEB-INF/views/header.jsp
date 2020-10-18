@@ -19,7 +19,8 @@
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-javahome-dark" style="background-color: black">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">Java Home</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                    aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
@@ -32,15 +33,18 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Sobre</a>
                     </li>
-                    <c:if test="${sessionScope.get('cargo') != null}">
+                    <c:if test="${sessionScope.get('cargo') != 'comun' && sessionScope.get('cargo') != null }">
                         <li class="nav-item">
                             <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Admin
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <a class="dropdown-item" href="/produto/cadastrar">Produtos</a>
-                                    <a class="dropdown-item" href="/javaHome/login/cadastrar">Usuários</a>
+                                    <c:if test="${sessionScope.get('cargo') != 'estoquista'}">
+                                        <a class="dropdown-item" href="/javaHome/login/cadastrar">Usuários</a>
+                                    </c:if>
                                 </div>
                             </div>
                         </li>
@@ -48,9 +52,16 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Contato</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/javaHome/login">Login</a>
-                    </li>
+                    <c:if test="${sessionScope.get('cargo') == null}">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/javaHome/login">Entrar</a>
+                        </li>
+                    </c:if>
+                    <c:if test="${sessionScope.get('cargo') != null}">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/javaHome/logon">Sair</a>
+                        </li>
+                    </c:if>
                 </ul>
             </div>
         </div>
