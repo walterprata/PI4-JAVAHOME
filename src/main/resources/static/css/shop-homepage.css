@@ -6,7 +6,7 @@
 body{
   margin-top: 70px;
   font-family: "Roboto", sans-serif;
-  background-color: #d2d2d2;
+  background-color: #d2d2d21f;
 }
 
 @media (min-width: 1200px){
@@ -44,4 +44,7 @@ body{
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+.bg-javahome-dark,.bg-javahome-dark {
+  background: #000000;
 }

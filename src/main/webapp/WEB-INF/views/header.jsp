@@ -16,7 +16,7 @@
 </head>
 <!-- Navigation -->
 <header>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" style="background-color: black">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-javahome-dark" style="background-color: black">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">Java Home</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,11 +34,22 @@
                     </li>
                     <c:if test="${sessionScope.get('cargo') != null}">
                         <li class="nav-item">
-                            <a class="nav-link" href="/produto/cadastrar">Produtos</a>
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Admin
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="/produto/cadastrar">Produtos</a>
+                                    <a class="dropdown-item" href="/javaHome/login/cadastrar">Usuários</a>
+                                </div>
+                            </div>
                         </li>
                     </c:if>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Contato</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/javaHome/login">Login</a>
                     </li>
                 </ul>
             </div>

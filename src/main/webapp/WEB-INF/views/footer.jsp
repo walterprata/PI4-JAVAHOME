@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <!-- Footer -->
-<footer class="py-5 bg-dark">
+<footer class="py-5 bg-javahome-dark">
     <div class="container">
         <p class="m-0 text-center text-white">Copyright &copy; Your Website 2020</p>
     </div>

@@ -12,7 +12,8 @@
     });
     //ao clicar no botão, ele cria a tabelas com campos
     $('#btn-lista-produto').click(function () {
-        listarProdutos()
+        listarProdutos();
+        listarUsuarios();
         showModal()
     });
     //ocultar modal
@@ -56,9 +57,23 @@
             function (data, textStatus, jqXHR) {  // success callback
                 if (textStatus === "success") {
                     data.content.forEach(criaTabela);
-
                     function criaTabela(produtos) {
                         $('#tabela').append(createTabela(produtos) + estaAtivo(produtos))
+                    }
+                }
+            }
+        );
+    }
+
+    function listarUsuarios() {
+        $('#tabela-user tr').remove();//limpa a tabela
+        $.get('/javaHome/auth/listar-todos-usuarios',  // url
+            function (data, textStatus, jqXHR) {  // success callback
+                if (textStatus === "success") {
+                    data.forEach(criaTabelaUser);
+                    function criaTabelaUser(usuarios) {
+                        console.log(usuarios);
+                        $('#tabela-user').append(createTabelaUsuario(usuarios) + estaAtivoUser(usuarios))
                     }
                 }
             }
@@ -83,11 +98,32 @@
             "<a type=\"button\" class=\"btn btn-primary\" style='margin-right: 10px;' onclick='verDetalhes(" + produtos.id + ")' >Detahes</a>"
     }
 
+    function createTabelaUsuario(usuario) {
+        return "<tr><th scope=\"row\">"
+            + usuario.id +
+            "</th><td>"
+            + usuario.nome +
+            "</td><td>"
+            + usuario.email +
+            "</td><td>"
+            + usuario.senha +
+            "</td><td>" +
+            "<a type=\"button\" class=\"btn btn-primary btn-editar\" style='margin-right: 10px;' onclick='editarUsuario(" + usuario.id + ")'>Editar</a>"
+    }
+
     function estaAtivo(produto) {
         if (produto.ativo > 0) {
             return "<a type='button' class='btn btn-danger'  onclick='mudarStatusProduto(" + produto.id + ",\"desativa\")'>Desativar</a></td></tr>"
         } else {
             return "<a type='button' class='btn btn-success' onclick='mudarStatusProduto(" + produto.id + ",\"ativa\")\'>Ativar</a></td></tr>"
+        }
+    }
+
+    function estaAtivoUser(produto) {
+        if (produto.status === true) {
+            return "<a type='button' class='btn btn-danger'  onclick='mudarStatusUsuario(" + produto.id + ",\"desativa\")'>Desativar</a></td></tr>"
+        } else {
+            return "<a type='button' class='btn btn-success' onclick='mudarStatusUsuario(" + produto.id + ",\"ativa\")\'>Ativar</a></td></tr>"
         }
     }
 
@@ -120,6 +156,38 @@
         }
     }
 
+    function mudarStatusUsuario(id,ativa) {
+        let usuarioEncontrado = buscarDetalhesDoUsuario(id);
+        let acao;
+        if (ativa === "ativa") {
+            usuarioEncontrado.status = 1;
+            acao = confirm("Tem certeza que deseja Ativar esse usuário?")
+        } else if (ativa === "desativa") {
+            usuarioEncontrado.status = 0;
+            acao = confirm("Tem certeza que deseja desativar esse usuário?")
+        } else {
+            alert("Não foi possivel definir o status");
+            return
+        }
+
+        if (!!usuarioEncontrado && acao) {
+            $.ajax({
+                url: '/javaHome/auth/deleta-usuario/' + id+'/'+usuarioEncontrado.status,
+                type: 'PUT',
+                success: callback,
+                data: JSON.stringify(usuarioEncontrado),
+                contentType: 'application/json'
+            });
+
+            function callback() {
+                alert("Usuário Editado com Sucesso.");
+                listarUsuarios();
+            }
+        }else{
+            alert("Não foi possivel editar o Usuário")
+        }
+    }
+
     function buscarDetalhesDoProduto(id){
         let resultado = null;
          $.ajax({
@@ -128,7 +196,19 @@
             success:function (data) {
                 resultado = data
             }
-        })
+        });
+        return resultado
+    }
+
+    function buscarDetalhesDoUsuario(id){
+        let resultado = null;
+        $.ajax({
+            url: '/javaHome/auth/usuario/' + id,
+            async:false,
+            success:function (data) {
+                resultado = data
+            }
+        });
         return resultado
     }
     
@@ -181,6 +261,27 @@
                     let p = perguntasDoProduto[i];
                     addPerguntasNoHtmnl(p.pergunta,p.resposta);
                 }
+            }
+        }
+    }
+
+    function editarUsuario(id) {
+        showModal();
+        reiniciaCampos();
+        $('#form-salvar').attr('action','/javaHome/auth/cadastrar-usuario');
+        $('#form-salvar').attr('method','POST');
+        let usuario = buscarDetalhesDoUsuario(id);
+        if (!!usuario) {
+            console.log(usuario);
+            $('#nome').val(usuario.nome);
+            $('#email').val(usuario.email);
+            $('#senha').val(usuario.senha);
+            $('#cargo').val(usuario.cargo).prop('selected',true);
+            $('#id').val(usuario.id);
+            if (usuario.status >0){
+                $('#true').prop('checked',true)
+            }else{
+                $('#false').prop('checked',true)
             }
         }
     }
