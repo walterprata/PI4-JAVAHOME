@@ -277,8 +277,9 @@ function editarProduto(id) {
 function editarUsuario(id) {
     showModal();
     reiniciaCampos();
-    $('#form-salvar').attr('action', '/javaHome/auth/cadastrar-usuario');
+    $('#form-salvar').attr('action', '/javaHome/auth/edita-usuario');
     $('#form-salvar').attr('method', 'POST');
+    $('#email').attr('readonly', true);
     $('#form-salvar').append("<input type='hidden' class='form-control' id='id' name='id' value=" + id + ">");
     let usuario = buscarDetalhesDoUsuario(id);
     if (!!usuario) {

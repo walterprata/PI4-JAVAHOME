@@ -29,7 +29,7 @@
             <div class="form-row">
                 <div class="form-group col-md">
                     <label for="email">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" minlength="5" maxlength="50" required>
+                    <input type="email" class="form-control" id="email" name="email" minlength="5" maxlength="50" required >
                 </div>
             </div>
             <div class="form-row">
