@@ -14,7 +14,9 @@
                 ${error}
         </div>
     </c:if>
+<c:if test="${sessionScope.get('cargo') != null && sessionScope.get('cargo') == 'admin' }">
     <button type="button" class="btn btn-dark btn-lg col-md" id="btn-lista-produto">Ver todos Usários</button>
+</c:if>
     <h1>Cadastrar novo Usuário</h1>
     <form method="POST" action="/javaHome/auth/cadastrar-usuario" enctype="multipart/form-data" class="form" id="form-salvar">
         <div class="form-group">
@@ -49,7 +51,7 @@
             <div class="form-row">
                 <div class="form-group col-md">
                     <label for="senhaConfirm">Confirmar Senha</label>
-                    <input type="password" class="form-control" id="senhaConfirm" name="senhaConfirm" minlength="5" required>
+                    <input type="password" class="form-control" id="senhaConfirm" name="senhaConfirm" minlength="5">
                 </div>
             </div>
             <div class="form-group col-md">
@@ -75,4 +77,4 @@
 <jsp:include page="modalListaUsuarios.jsp"/>
 
 <jsp:include page="footer.jsp"/>
-<script src="<c:url value="/js/CadastraProduto.js"/>"></script>
+<script src="<c:url value="/js/JavaHome.js"/>"></script>

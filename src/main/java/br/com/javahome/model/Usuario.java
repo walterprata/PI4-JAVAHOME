@@ -81,7 +81,7 @@ public class Usuario {
 		this.cargo = cargo;
 	}
 	
-	public boolean isStatus() {
+	public boolean getStatus() {
 		return status;
 	}
 

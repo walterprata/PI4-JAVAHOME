@@ -2,8 +2,8 @@ package br.com.javahome.controller;
 
 import br.com.javahome.model.Usuario;
 import br.com.javahome.repository.UsuarioRepository;
+import org.apache.catalina.filters.HttpHeaderSecurityFilter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,18 +12,26 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/javaHome")
 public class UsuarioController {
 
+    public static final String MESSAGE_SUCCES = "messageSucces";
+    public static final String MESSAGE_ERROR = "error";
     @Autowired
     private UsuarioRepository usuarioRepository;
     @Autowired
     private HttpSession session;
+    @Autowired
+    private HomeController homeRotas;
 
     private static final String SESSION_ATRIBUTE_EMAIL = "email";
     private static final String SESSION_ATRIBUTE_CARGO = "cargo";
+    private static final String SESSION_ATRIBUTE_USER_NAME = "nome";
+    private static final String SESSION_ATRIBUTE_USER_ID = "id";
+    private static final String CARGO_ESTOQUISTA = "estoquista";
 
     @GetMapping(value = {"/login"})
     public ModelAndView login(){
@@ -33,21 +41,37 @@ public class UsuarioController {
 
     @GetMapping(value = {"/login/cadastrar"})
     public ModelAndView cadastra(){
-        ModelAndView modelAndView = new ModelAndView("cadastraUsuario");
-        return modelAndView;
-    }
+        ModelAndView modelAndView = verificaCargo();
+        if (modelAndView!= null){
+            return modelAndView;
+        }
 
+        return new ModelAndView("cadastraUsuario");
+    }
+    private ModelAndView verificaCargo(){
+        if (session.getAttribute(SESSION_ATRIBUTE_CARGO).equals(CARGO_ESTOQUISTA)){
+            ModelAndView modelAndView = new ModelAndView();
+            modelAndView.setStatus(HttpStatus.NOT_FOUND);
+            return modelAndView;
+        }
+        return null;
+    }
     @PostMapping("/auth/login")
     public ModelAndView authUsuario(@RequestParam("email") String email, @RequestParam("senha") String senha) {
         //VALIDA USUARIO NO BANCO DE DADOS
     	Usuario usuario = usuarioRepository.validaUsuario(email, senha);
-    	ModelAndView modelAndView;
+    	ModelAndView modelAndView = login();
         if (usuario != null) {
-            session.setAttribute(SESSION_ATRIBUTE_EMAIL, usuario.getEmail());
-        	session.setAttribute(SESSION_ATRIBUTE_CARGO, usuario.getCargo());
-        	modelAndView = new ModelAndView("index");
+            if(usuario.getStatus()){
+                session.setAttribute(SESSION_ATRIBUTE_EMAIL, usuario.getEmail());
+                session.setAttribute(SESSION_ATRIBUTE_CARGO, usuario.getCargo());
+                session.setAttribute(SESSION_ATRIBUTE_USER_NAME, usuario.getNome());
+                session.setAttribute(SESSION_ATRIBUTE_USER_ID, usuario.getId());
+                modelAndView = new ModelAndView("redirect:/javaHome/");
+            }else{
+                modelAndView.addObject("message","Usuário desativado, Por favor contate o administrador!");
+            }
         }else{
-            modelAndView = new ModelAndView("login");
             modelAndView.addObject("message","Usuário não encontrado!");
         }
         return modelAndView;
@@ -76,28 +100,37 @@ public class UsuarioController {
     @PostMapping("/auth/cadastrar-usuario")
     @ResponseStatus(HttpStatus.CREATED)
     public ModelAndView cadastrarUsuario(@Valid @ModelAttribute() Usuario usuario) {
-        ModelAndView modelAndView = new ModelAndView("cadastraUsuario");
+        ModelAndView modelAndView = cadastra();
         try {
-            if (session.getAttribute(SESSION_ATRIBUTE_EMAIL).equals(usuario.getEmail())){
+            System.out.println(session.getAttribute(SESSION_ATRIBUTE_EMAIL));
+            if (!session.getAttribute(SESSION_ATRIBUTE_EMAIL).equals(usuario.getEmail())){
                 usuarioRepository.save(usuario);
-                modelAndView.addObject("messageSucces", "Usuário foi Salvo!");
+                modelAndView.addObject(MESSAGE_SUCCES, "Usuário foi Salvo!");
             }else{
                 throw new RuntimeException("Este usuário esta sendo usado no momento");
             }
         }catch (Exception e){
-            modelAndView.addObject("error", "Erro ao salvar: " + e.getMessage());
+            modelAndView.addObject(MESSAGE_ERROR, "Erro ao salvar: " + e.getMessage());
         }
         return modelAndView;
     }
 
     //ATIVA OU DESATIVA UM USUÁRIO
-    @PutMapping("/auth/deleta-usuario/{id}/{status}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void remover(@PathVariable Integer id,@PathVariable boolean status) {
-        Usuario p = usuarioRepository.findById(id).get();
-        if (p != null) {
-            p.setStatus(status);
-            usuarioRepository.save(p);
+    @PostMapping("/auth/deleta-usuario/{id}/{status}")
+    public HttpStatus remover(@PathVariable Integer id,@PathVariable boolean status) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
+        if (usuarioOptional.isPresent()) {
+            Usuario usuario = usuarioOptional.get();
+            System.out.println(session.getAttribute(SESSION_ATRIBUTE_USER_ID));
+            if (!session.getAttribute(SESSION_ATRIBUTE_USER_ID).equals(usuario.getId())){
+                usuario.setStatus(status);
+                usuarioRepository.save(usuario);
+                return HttpStatus.OK;
+            }else{
+               return HttpStatus.BAD_REQUEST;
+            }
+        }else{
+            return HttpStatus.BAD_REQUEST;
         }
     }
 }

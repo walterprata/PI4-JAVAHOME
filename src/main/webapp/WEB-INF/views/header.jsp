@@ -33,22 +33,6 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Sobre</a>
                     </li>
-                    <c:if test="${sessionScope.get('cargo') != 'comun' && sessionScope.get('cargo') != null }">
-                        <li class="nav-item">
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Admin
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item" href="/produto/cadastrar">Produtos</a>
-                                    <c:if test="${sessionScope.get('cargo') != 'estoquista'}">
-                                        <a class="dropdown-item" href="/javaHome/login/cadastrar">Usuários</a>
-                                    </c:if>
-                                </div>
-                            </div>
-                        </li>
-                    </c:if>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Contato</a>
                     </li>
@@ -58,6 +42,22 @@
                         </li>
                     </c:if>
                     <c:if test="${sessionScope.get('cargo') != null}">
+                        <li class="nav-item">
+                            <div class="dropdown">
+                                <a class="nav-link" type="button" id="dropdownMenuButton"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        ${sessionScope.get("nome")}
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <c:if test="${sessionScope.get('cargo') != 'comun'}">
+                                        <a class="dropdown-item" href="/produto/cadastrar">Produtos</a>
+                                        <c:if test="${sessionScope.get('cargo') != 'estoquista'}">
+                                            <a class="dropdown-item" href="/javaHome/login/cadastrar">Usuários</a>
+                                        </c:if>
+                                    </c:if>
+                                </div>
+                            </div>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/javaHome/logon">Sair</a>
                         </li>

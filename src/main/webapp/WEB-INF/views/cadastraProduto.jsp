@@ -159,4 +159,4 @@
 <jsp:include page="modalListaProdutos.jsp"/>
 
 <jsp:include page="footer.jsp"/>
-<script src="<c:url value="/js/CadastraProduto.js"/>"></script>
+<script src="<c:url value="/js/JavaHome.js"/>"></script>

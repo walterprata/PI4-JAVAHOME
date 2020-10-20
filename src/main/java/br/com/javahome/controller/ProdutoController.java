@@ -47,8 +47,7 @@ public class ProdutoController {
 
     @GetMapping(value = "/imagens/{fileName}", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody
-    byte[] pegarImage(@PathVariable String fileName) throws IOException {
+    public @ResponseBody byte[] pegarImage(@PathVariable String fileName) throws IOException {
         InputStream in = servletContext.getResourceAsStream("/WEB-INF/files/" + fileName);
         System.out.println(fileName);
         return IOUtils.toByteArray(in);
