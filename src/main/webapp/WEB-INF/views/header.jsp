@@ -45,7 +45,7 @@
                         <li class="nav-item">
                             <div class="dropdown">
                                 <a class="nav-link" type="button" id="dropdownMenuButton"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         ${sessionScope.get("nome")}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -55,11 +55,11 @@
                                             <a class="dropdown-item" href="/javaHome/login/cadastrar">Usuários</a>
                                         </c:if>
                                     </c:if>
+
+                                    <a class="dropdown-item" href="/javaHome/logon">Sair</a>
+
                                 </div>
                             </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/javaHome/logon">Sair</a>
                         </li>
                     </c:if>
                 </ul>
