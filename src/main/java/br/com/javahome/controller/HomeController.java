@@ -48,7 +48,7 @@ public class HomeController {
 
     @GetMapping("/javaHome/logon")
     public void logon(HttpSession session, HttpServletResponse response) throws IOException {
-        session.setAttribute("cargo",null);
+        session.invalidate();
         response.sendRedirect("/");
     }
 }

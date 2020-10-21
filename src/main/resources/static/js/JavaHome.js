@@ -14,6 +14,8 @@ $('.alert').click(function () {
 $('#btn-lista-produto').click(function () {
     listarProdutos();
     listarUsuarios();
+    resetBtnStatusUsuarios();
+    $('#btn-listar-todos').addClass("active")
     showModal()
 });
 //ocultar modal
@@ -26,6 +28,7 @@ $('#btn-lista-produto').click(function () {
 $('.btn-editar').click(function () {
     $('.modal').modal('hide');
     $("#body").removeClass("modal-open");
+
 });
 
 //Adicionar pergunta
@@ -34,6 +37,24 @@ $('#add-pergunta').click(function () {
     let resposta = $('.resposta').val();
     addPerguntasNoHtmnl(pergunta, resposta);
 });
+$('#btn-listar-ativos').click(function () {
+    resetBtnStatusUsuarios();
+    $('#btn-listar-ativos').addClass("active")
+});
+$('#btn-listar-desativados').click(function () {
+    resetBtnStatusUsuarios();
+    $('#btn-listar-desativados').addClass("active")
+});
+$('#btn-listar-todos').click(function () {
+    resetBtnStatusUsuarios();
+    $('#btn-listar-todos').addClass("active")
+});
+
+function resetBtnStatusUsuarios() {
+    $('#btn-listar-ativos').removeClass("active");
+    $('#btn-listar-desativados').removeClass("active");
+    $('#btn-listar-todos').removeClass("active");
+}
 
 function addPerguntasNoHtmnl(pergunta, resposta) {
     if (pergunta !== "" || resposta !== "") {
@@ -82,6 +103,34 @@ function listarUsuarios() {
             }
         }
     );
+}
+
+function listarUsuariosComBaseNoStatus(status) {
+    if(status === 1 || status === 0){
+        let defineStatus = false;
+        if(status === 1){
+            defineStatus = true
+        }
+
+        $('#tabela-user tr').remove();//limpa a tabela
+        $.get('/javaHome/auth/listar-todos-usuarios',  // url
+            function (data, textStatus, jqXHR) {  // success callback
+                if (textStatus === "success") {
+                    data.forEach(criaTabelaUser);
+
+                    function criaTabelaUser(usuarios) {
+                        console.log(usuarios);
+                        if(usuarios.status === defineStatus){
+                            $('#tabela-user').append(createTabelaUsuario(usuarios) + estaAtivoUser(usuarios))
+                        }
+                    }
+                }
+            }
+        );
+    }else{
+        alert("Não foi possivel definir o status");
+    }
+
 }
 
 function createTabela(produtos) {

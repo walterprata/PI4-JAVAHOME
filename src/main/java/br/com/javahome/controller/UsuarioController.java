@@ -161,4 +161,13 @@ public class UsuarioController {
             return HttpStatus.BAD_REQUEST;
         }
     }
+
+    @RequestMapping("/adcionar-produto")
+    public ModelAndView addProduto(){
+        if (session.getAttribute(SESSION_ATRIBUTE_USER_ID) == null){
+            return login();
+        }else{
+            return new ModelAndView("redirect:/javaHome/");
+        }
+    }
 }

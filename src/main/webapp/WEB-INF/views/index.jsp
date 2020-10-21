@@ -66,7 +66,7 @@
                                         <p class="card-text">${produto.descricao}</p>
                                     </div>
                                     <div class="card-footer">
-                                        <button type="button" class="btn btn-dark">Adicionar ao carrinho</button>
+                                        <a type="button" class="btn btn-dark" href="/javaHome/adcionar-produto">Adicionar ao carrinho</a>
                                     </div>
                                 </div>
                             </div>
