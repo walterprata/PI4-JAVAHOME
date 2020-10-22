@@ -164,7 +164,7 @@ public class ProdutoController {
         List<DuvidaProduto> duvidaProdutos = duvidaProdutoRepository.duvidaProduto(id);
         ArrayList<String> img = (ArrayList<String>) new Gson().fromJson(produtoEncontrado.getCaminhoDaImagem(), ArrayList.class);
         if (img != null && !img.isEmpty()) {
-            produtoEncontrado.setCaminhoDaImagem(img.get(0));
+            produtoEncontrado.setCaminhoImagensLista(img);
         }
         return new ModelAndView("detalhes")
                 .addObject("produto", produtoEncontrado)

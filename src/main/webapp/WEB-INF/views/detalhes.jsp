@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <jsp:include page="header.jsp"/>
 <div class="container">
@@ -7,8 +8,60 @@
         <div class="row" style="margin: 100px;">
             <div class="col-md">
                 <p style="color:dodgerblue;">Categoria: ${ produto.categoria }</p>
-                <img class="img-fluid" src='/produto/imagens${produto.caminhoDaImagem}' alt="">
+                <div class="row">
+                    <div class="col-md-4">
+                        <ul class="list-group">
+                            <c:if test="${not empty produto.caminhoImagensLista}">
+                                <c:forEach var="img" items="${produto.caminhoImagensLista}">
+                                    <li class="list-group-item"><img class="img-fluid" src='/produto/imagens${img}'
+                                                                     alt=""></li>
+                                </c:forEach>
+                            </c:if>
 
+                        </ul>
+                    </div>
+                    <div class="col-md-8 list-group-item">
+                        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                            <ol class="carousel-indicators">
+                                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                            </ol>
+                            <div class="carousel-inner">
+
+                                <c:if test="${not empty produto.caminhoImagensLista}">
+                                    <% int count = 0; %>
+                                    <c:forEach var="img" items="${produto.caminhoImagensLista}">
+                                        <%if (count == 0) {%>
+                                        <div class="carousel-item active">
+                                            <img class="img-fluid " src='/produto/imagens${img}'
+                                                 alt="">
+                                        </div>
+                                        <%count++;}else{%>
+                                        <div class="carousel-item">
+                                            <img class="img-fluid " src='/produto/imagens${img}'
+                                                 alt="">
+                                        </div>
+                                        <%}%>
+
+                                    </c:forEach>
+
+                                </c:if>
+                            </div>
+                            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button"
+                               data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button"
+                               data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
             </div>
             <div class="col-md">
                 <h2> ${ produto.descricao } </h2>
@@ -59,7 +112,6 @@
         </nav>
     </div>
 </footer>
-<script src="<c:url value="/js/DetalhesProduto.js"/>"></script>
 <!-- Bootstrap core JavaScript -->
 <script src="<c:url value="/webjars/jquery/3.5.1/jquery.min.js"/>"></script>
 <script src="<c:url value="/webjars/bootstrap/4.5.2/js/bootstrap.bundle.min.js"/>"></script>
