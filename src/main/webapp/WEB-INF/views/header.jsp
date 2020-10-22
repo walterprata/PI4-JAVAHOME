@@ -51,7 +51,7 @@
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <c:if test="${sessionScope.get('cargo') != 'comun'}">
                                         <a class="dropdown-item" href="/produto/cadastrar">Produtos</a>
-                                        <c:if test="${sessionScope.get('cargo') != 'estoquista'}">
+                                        <c:if test="${sessionScope.get('cargo') != 'estoque'}">
                                             <a class="dropdown-item" href="/javaHome/login/cadastrar">Usuários</a>
                                         </c:if>
                                     </c:if>

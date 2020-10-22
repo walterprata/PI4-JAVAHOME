@@ -37,7 +37,7 @@
                     <label for="cargo">Cargo</label>
                         <select class="form-control" id="cargo" name="cargo">
                             <option value="admin">admin</option>
-                            <option value="estoquista">estoquista</option>
+                            <option value="estoque">estoque</option>
                             <option value="comun">comun</option>
                         </select>
                 </div>
