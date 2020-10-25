@@ -1,9 +1,13 @@
 package br.com.javahome.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+import org.hibernate.annotations.ManyToAny;
 
 @Entity
 public class Endereco {
@@ -12,16 +16,25 @@ public class Endereco {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
+	@ManyToOne
+	private Usuario usuario;
+	
+	@Column
 	private String logradouro;
 	
+	@Column
 	private String cidade;
 	
+	@Column
 	private String estado;
 	
+	@Column
 	private String UF;
 	
+	@Column
 	private String cep;
 	
+	@Column
 	private String complemento;
 	
 	public Endereco() {}
@@ -41,6 +54,15 @@ public class Endereco {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+	
+	
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 	public String getLogradouro() {

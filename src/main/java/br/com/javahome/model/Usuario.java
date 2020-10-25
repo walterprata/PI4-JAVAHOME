@@ -5,10 +5,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.br.CPF;
+
+import br.com.javahome.model.enums.TipoUsuario;
 
 
 @Entity
@@ -24,6 +29,9 @@ public class Usuario {
 	@Column(name = "nome")
 	private String nome;
 	
+	@CPF(message="cpf inválido")
+	private String cpf;
+	
 	@NotNull
 	@Email(regexp = "^(.+)@(.+)$")
 	@Column(name = "email",unique = true)
@@ -36,6 +44,8 @@ public class Usuario {
 	@NotNull
 	@Column(name = "cargo")
 	private String cargo;
+		
+	private TipoUsuario TipoUsuario;
 	
 	@NotNull
 	@Column(name="status")
@@ -88,6 +98,22 @@ public class Usuario {
 	public void setStatus(boolean status) {
 		this.status = status;
 	}
+	
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+
+	public TipoUsuario getTipoUsuario() {
+		return TipoUsuario;
+	}
+
+	public void setTipoUsuario(TipoUsuario tipoUsuario) {
+		TipoUsuario = tipoUsuario;
+	}
 
 	public void getUsuarioLogado(HttpSession session) {
 		this.id = session.getAttribute("usuario.id") != null ? (int) session.getAttribute("usuario.id") : 0;
@@ -106,6 +132,7 @@ public class Usuario {
 		
 	}
 
+	public Usuario() {};
 
 
 	
