@@ -5,8 +5,10 @@ import br.com.javahome.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -104,6 +106,9 @@ public class UsuarioController {
         try {
             System.out.println(session.getAttribute(SESSION_ATRIBUTE_EMAIL));
             if (!session.getAttribute(SESSION_ATRIBUTE_EMAIL).equals(usuario.getEmail())) {
+                BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+                String senha = encoder.encode(usuario.getSenha());
+            	usuario.setSenha(senha);
                 usuarioRepository.save(usuario);
                 modelAndView.addObject(MESSAGE_SUCCES, USUÁRIO_FOI_SALVO);
             } else {
