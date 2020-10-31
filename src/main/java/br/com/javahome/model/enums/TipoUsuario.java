@@ -4,5 +4,4 @@ public enum TipoUsuario {
 	ESTOQUISTA,
 	ADMIN,
 	COMUM
-
 }

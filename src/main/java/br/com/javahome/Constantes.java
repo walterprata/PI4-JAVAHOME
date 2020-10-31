@@ -11,6 +11,7 @@ public class Constantes {
     public static final String USUÁRIO_FOI_SALVO = "Usuário foi Salvo!";
     public static final String O_USUÁRIO_NÃO_FOI_ENCONTRADO_NA_BASE_DE_DADOS = "O Usuário não foi encontrado na base de dados";
     public static final String ESTE_USUÁRIO_ESTA_SENDO_USADO_NO_MOMENTO = "Este usuário esta sendo usado no momento";
+    public static final String NAO_TEM_USUARIO_NA_SECAO= "Para cadastrar um usuário é necessário tem um usuário na seção";
     public static final String ERRO_AO_SALVAR = "Erro ao salvar: ";
     public static final String USUÁRIO_NÃO_ENCONTRADO = "Usuário não encontrado!";
     public static final String USUÁRIO_DESATIVADO_POR_FAVOR_CONTATE_O_ADMINISTRADOR = "Usuário desativado, Por favor contate o administrador!";

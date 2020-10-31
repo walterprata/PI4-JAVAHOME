@@ -23,6 +23,7 @@
             <input type="checkbox" value="remember-me"> Lembre de min
         </label>
     </div>
+    <a href="#">Ainda não sou cadastrado</a>
     <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
     <p class="mt-5 mb-3 text-muted">© 2017-2018</p>
 </form>

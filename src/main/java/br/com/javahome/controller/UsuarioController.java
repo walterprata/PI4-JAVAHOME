@@ -51,7 +51,7 @@ public class UsuarioController {
     }
 
     private ModelAndView verificaCargo() {
-        if (session.getAttribute(SESSION_ATRIBUTE_CARGO).equals(CARGO_ESTOQUISTA)) {
+        if (session.getAttribute(SESSION_ATRIBUTE_CARGO) != null && session.getAttribute(SESSION_ATRIBUTE_CARGO).equals(CARGO_ESTOQUISTA)) {
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.setStatus(HttpStatus.NOT_FOUND);
             return modelAndView;
@@ -64,7 +64,7 @@ public class UsuarioController {
         //VALIDA USUARIO NO BANCO DE DADOS
         Usuario usuario = usuarioRepository.validaUsuario(email);
         ModelAndView modelAndView = login();
-        if (usuario != null && utilidades.validaSenha(senha,usuario.getSenha())) {
+        if (usuario != null && utilidades.validaSenha(senha, usuario.getSenha())) {
             if (usuario.getStatus()) {
                 session.setAttribute(SESSION_ATRIBUTE_EMAIL, usuario.getEmail());
                 session.setAttribute(SESSION_ATRIBUTE_CARGO, usuario.getCargo());
@@ -105,16 +105,18 @@ public class UsuarioController {
     public ModelAndView cadastrarUsuario(@Valid @ModelAttribute() Usuario usuario) {
         ModelAndView modelAndView = cadastra();
         try {
-            System.out.println(session.getAttribute(SESSION_ATRIBUTE_EMAIL));
-            if (!session.getAttribute(SESSION_ATRIBUTE_EMAIL).equals(usuario.getEmail())) {
-            	usuario.setSenha(utilidades.encryptaSenha(usuario.getSenha()));
+            System.out.println("Usuário na seção: " + session.getAttribute(SESSION_ATRIBUTE_EMAIL));
+            Object emailNaSecao = session.getAttribute(SESSION_ATRIBUTE_EMAIL);
+
+            if (emailNaSecao == null || !emailNaSecao.equals(usuario.getEmail())) {
+                usuario.setSenha(utilidades.encryptaSenha(usuario.getSenha()));
                 usuarioRepository.save(usuario);
                 modelAndView.addObject(MESSAGE_SUCCES, USUÁRIO_FOI_SALVO);
             } else {
                 throw new RuntimeException(ESTE_USUÁRIO_ESTA_SENDO_USADO_NO_MOMENTO);
             }
         } catch (Exception e) {
-            modelAndView.addObject(MESSAGE_ERROR, ERRO_AO_SALVAR+ e.getMessage());
+            modelAndView.addObject(MESSAGE_ERROR, ERRO_AO_SALVAR + e.getMessage());
         }
         return modelAndView;
     }
@@ -128,7 +130,7 @@ public class UsuarioController {
             System.out.println(session.getAttribute(SESSION_ATRIBUTE_EMAIL));
             Optional<Usuario> usuarioOptional = usuarioRepository.findById(usuario.getId());
             if (!session.getAttribute(SESSION_ATRIBUTE_EMAIL).equals(usuario.getEmail())) {
-                if (usuarioOptional.isPresent()){
+                if (usuarioOptional.isPresent()) {
                     Usuario usuarioEncontrado = usuarioOptional.get();
                     if (!usuarioEncontrado.getEmail().equals(usuario.getEmail())) {
                         throw new RuntimeException(O_EMAIL_LOGIN_NÃO_PODE_SER_ALTERADO);
@@ -136,7 +138,7 @@ public class UsuarioController {
                     usuario.setSenha(utilidades.encryptaSenha(usuario.getSenha()));
                     usuarioRepository.save(usuario);
                     modelAndView.addObject(MESSAGE_SUCCES, USUÁRIO_FOI_SALVO);
-                }else{
+                } else {
                     throw new RuntimeException(O_USUÁRIO_NÃO_FOI_ENCONTRADO_NA_BASE_DE_DADOS);
                 }
             } else {
@@ -168,10 +170,10 @@ public class UsuarioController {
     }
 
     @RequestMapping("/adcionar-produto")
-    public ModelAndView addProduto(){
-        if (session.getAttribute(SESSION_ATRIBUTE_USER_ID) == null){
+    public ModelAndView addProduto() {
+        if (session.getAttribute(SESSION_ATRIBUTE_USER_ID) == null) {
             return login();
-        }else{
+        } else {
             return new ModelAndView("redirect:/javaHome/");
         }
     }

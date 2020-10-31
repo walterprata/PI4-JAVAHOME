@@ -1,11 +1,6 @@
 package br.com.javahome.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -44,7 +39,10 @@ public class Usuario {
 	@NotNull
 	@Column(name = "cargo")
 	private String cargo;
-		
+
+	@ManyToOne
+	private Endereco endereco;
+
 	private TipoUsuario TipoUsuario;
 	
 	@NotNull
@@ -115,28 +113,15 @@ public class Usuario {
 		TipoUsuario = tipoUsuario;
 	}
 
-	public void getUsuarioLogado(HttpSession session) {
-		this.id = session.getAttribute("usuario.id") != null ? (int) session.getAttribute("usuario.id") : 0;
-		this.nome = (String) session.getAttribute("usuario.nome");
-		this.email = (String) session.getAttribute("usuario.email");
-		this.status = session.getAttribute("usuario.ativo") != null ? (boolean) session.getAttribute("usuario.status")
-				: false;
-		
+	public Endereco getEndereco() {
+		return endereco;
 	}
 
-	public void setUsuarioLogado(HttpSession session) {
-		session.setAttribute("usuario.id", this.id);
-		session.setAttribute("usuario.nome", this.nome);
-		session.setAttribute("usuario.cpf", this.email);
-		session.setAttribute("usuario.status", this.status);
-		
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
 	}
 
-	public Usuario() {};
-
-
-	
-	
-	
-	
+	public boolean isStatus() {
+		return status;
+	}
 }
