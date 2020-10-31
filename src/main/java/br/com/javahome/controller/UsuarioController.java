@@ -1,5 +1,6 @@
 package br.com.javahome.controller;
 
+import br.com.javahome.component.Utilidades;
 import br.com.javahome.model.Usuario;
 import br.com.javahome.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,9 @@ public class UsuarioController {
     private UsuarioRepository usuarioRepository;
     @Autowired
     private HttpSession session;
+
     @Autowired
-    private HomeController homeRotas;
+    private Utilidades utilidades;
 
     private static final String SESSION_ATRIBUTE_EMAIL = "email";
     private static final String SESSION_ATRIBUTE_CARGO = "cargo";
@@ -60,9 +62,9 @@ public class UsuarioController {
     @PostMapping("/auth/login")
     public ModelAndView authUsuario(@RequestParam("email") String email, @RequestParam("senha") String senha) {
         //VALIDA USUARIO NO BANCO DE DADOS
-        Usuario usuario = usuarioRepository.validaUsuario(email, senha);
+        Usuario usuario = usuarioRepository.validaUsuario(email);
         ModelAndView modelAndView = login();
-        if (usuario != null) {
+        if (usuario != null && utilidades.validaSenha(senha,usuario.getSenha())) {
             if (usuario.getStatus()) {
                 session.setAttribute(SESSION_ATRIBUTE_EMAIL, usuario.getEmail());
                 session.setAttribute(SESSION_ATRIBUTE_CARGO, usuario.getCargo());
@@ -105,9 +107,7 @@ public class UsuarioController {
         try {
             System.out.println(session.getAttribute(SESSION_ATRIBUTE_EMAIL));
             if (!session.getAttribute(SESSION_ATRIBUTE_EMAIL).equals(usuario.getEmail())) {
-                BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-                String senha = encoder.encode(usuario.getSenha());
-            	usuario.setSenha(senha);
+            	usuario.setSenha(utilidades.encryptaSenha(usuario.getSenha()));
                 usuarioRepository.save(usuario);
                 modelAndView.addObject(MESSAGE_SUCCES, USUÁRIO_FOI_SALVO);
             } else {
@@ -133,6 +133,7 @@ public class UsuarioController {
                     if (!usuarioEncontrado.getEmail().equals(usuario.getEmail())) {
                         throw new RuntimeException(O_EMAIL_LOGIN_NÃO_PODE_SER_ALTERADO);
                     }
+                    usuario.setSenha(utilidades.encryptaSenha(usuario.getSenha()));
                     usuarioRepository.save(usuario);
                     modelAndView.addObject(MESSAGE_SUCCES, USUÁRIO_FOI_SALVO);
                 }else{
