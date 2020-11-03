@@ -1,14 +1,12 @@
 package br.com.javahome.model;
 
+import br.com.javahome.model.enums.TipoUsuario;
+import org.hibernate.validator.constraints.br.CPF;
+
 import javax.persistence.*;
-import javax.servlet.http.HttpSession;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.br.CPF;
-
-import br.com.javahome.model.enums.TipoUsuario;
 
 
 @Entity
@@ -25,6 +23,7 @@ public class Usuario {
 	private String nome;
 	
 	@CPF(message="cpf inválido")
+	@Column(name = "cpf",unique = true)
 	private String cpf;
 	
 	@NotNull
