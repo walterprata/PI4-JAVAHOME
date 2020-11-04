@@ -97,20 +97,25 @@
                         <input type="password" class="form-control" id="senhaConfirm" name="senhaConfirm" minlength="5">
                     </div>
                 </div>
-                <div class="form-group col-md">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="status" id="true" value="true" checked>
-                        <label class="form-check-label" for="true">
-                            Usuário ativo
-                        </label>
+                <c:if test="${sessionScope.get('cargo') == null }">
+                    <input class="form-check-input" type="radio" name="status" id="true" value="true" checked hidden>
+                </c:if>
+                <c:if test="${sessionScope.get('cargo') != null }">
+                    <div class="form-group col-md">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="status" id="true" value="true" checked>
+                            <label class="form-check-label" for="true">
+                                Usuário ativo
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="status" id="false" value="false">
+                            <label class="form-check-label" for="false">
+                                Usuário não ativo
+                            </label>
+                        </div>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="status" id="false" value="false">
-                        <label class="form-check-label" for="false">
-                            Usuário não ativo
-                        </label>
-                    </div>
-                </div>
+                </c:if>
 
                 <button type="submit" class="btn btn-primary">Salvar</button>
             </div>
