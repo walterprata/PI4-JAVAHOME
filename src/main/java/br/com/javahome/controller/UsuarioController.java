@@ -2,6 +2,7 @@ package br.com.javahome.controller;
 
 import br.com.javahome.component.Utilidades;
 import br.com.javahome.model.Usuario;
+import br.com.javahome.repository.EnderecoRepository;
 import br.com.javahome.repository.UsuarioRepository;
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,8 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
-
+    @Autowired
+    private EnderecoRepository enderecoRepository;
     @Autowired
     private HttpSession session;
 
