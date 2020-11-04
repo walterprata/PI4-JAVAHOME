@@ -35,6 +35,10 @@ $('.btn-editar').click(function () {
 
 // Ao selecionar cliente na opção
 $('#cargo').change(function () {
+   mudaCargo()
+});
+
+function mudaCargo(){
     let selecionado = $('#cargo').val();
     if (selecionado === "Cliente") {
         $('#campo-cliente').attr('hidden', false);
@@ -45,7 +49,7 @@ $('#cargo').change(function () {
         $('#cep').attr('required',false);
         $('#cpf').attr('required',false);
     }
-});
+}
 // Ao mudar o foco
 $('#cep').blur(function () {
     let cep = $('#cep').val();
@@ -404,6 +408,7 @@ function editarUsuario(id) {
     $('#form-salvar').attr('action', '/javaHome/auth/edita-usuario');
     $('#form-salvar').attr('method', 'POST');
     $('#email').attr('readonly', true);
+    $('#cpf').attr('readonly', true);
     $('#form-salvar').append("<input type='hidden' class='form-control' id='id' name='id' value=" + id + ">");
     let usuario = buscarDetalhesDoUsuario(id);
     if (!!usuario) {
@@ -412,6 +417,8 @@ function editarUsuario(id) {
         $('#email').val(usuario.email);
         $('#senha').val(usuario.senha);
         $('#cargo').val(usuario.cargo).prop('selected', true);
+        $('#cpf').val(usuario.cpf);
+        mudaCargo();
         $('#id').val(usuario.id);
         if (usuario.status > 0) {
             $('#true').prop('checked', true)
