@@ -49,9 +49,9 @@
                                         ${sessionScope.get("nome")}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <c:if test="${sessionScope.get('cargo') != 'comun'}">
+                                    <c:if test="${sessionScope.get('cargo') != 'Cliente'}">
                                         <a class="dropdown-item" href="/produto/cadastrar">Produtos</a>
-                                        <c:if test="${sessionScope.get('cargo') != 'estoque'}">
+                                        <c:if test="${sessionScope.get('cargo') != 'estoque' && sessionScope.get('cargo') != 'Cliente'}">
                                             <a class="dropdown-item" href="/javaHome/login/cadastrar">Usuários</a>
                                         </c:if>
                                     </c:if>

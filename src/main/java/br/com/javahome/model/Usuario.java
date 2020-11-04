@@ -21,8 +21,7 @@ public class Usuario {
 	@NotNull
 	@Column(name = "nome")
 	private String nome;
-	
-	@CPF(message="cpf inválido")
+
 	@Column(name = "cpf",unique = true)
 	private String cpf;
 	

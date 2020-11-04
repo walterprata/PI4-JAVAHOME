@@ -4,6 +4,8 @@ var idPergunta = 0;
 //Apos o carregamento da pagina
 $(document).ready(function () {
     $('#money').mask("##0.00", {reverse: true});
+    $('#cpf').mask("###.###.###-##", {reverse: true});
+    $('#cep').mask("#####-###", {reverse: true});
 });
 
 //Ocultar alert
@@ -30,6 +32,79 @@ $('.btn-editar').click(function () {
     $("#body").removeClass("modal-open");
 
 });
+
+// Ao selecionar cliente na opção
+$('#cargo').change(function () {
+    let selecionado = $('#cargo').val();
+    if (selecionado === "Cliente") {
+        $('#campo-cliente').attr('hidden', false);
+        $('#cep').attr('required',true);
+        $('#cpf').attr('required',true);
+    } else {
+        $('#campo-cliente').attr('hidden', true);
+        $('#cep').attr('required',false);
+        $('#cpf').attr('required',false);
+    }
+});
+// Ao mudar o foco
+$('#cep').blur(function () {
+    let cep = $('#cep').val();
+    let cepFormatado = cep.replace("-", "");
+    if (cep.length > 0) {
+        $.get('https://viacep.com.br/ws/' + cepFormatado + '/json/',  // url
+            function (data, textStatus, jqXHR) {  // success callback
+                if (textStatus === "success") {
+                    console.log(data);
+                    if (data.erro) {
+                        $('#cep').removeClass("is-valid")
+                        $('#cep').addClass("is-invalid");
+                        return
+                    }
+                    $('#cep').removeClass("is-invalid")
+                    $('#cep').addClass("is-valid")
+                    $('#bairro').val(data.bairro);
+                    $('#localidade').val(data.localidade);
+                    $('#logradouro').val(data.logradouro);
+                    $('#uf').val(data.uf);
+                }
+            }
+        );
+    }
+});
+
+$('#cpf').blur(function () {
+    let cpf = $('#cpf').val().replace(/[^a-z0-9\s]/gi, "");
+    if (cpf.length > 0 ){
+        if(testaCPF(cpf)) {
+            $('#cpf').removeClass("is-invalid")
+            $('#cpf').addClass("is-valid")
+        } else {
+            $('#cpf').removeClass("is-valid")
+            $('#cpf').addClass("is-invalid")
+        }
+    }
+});
+
+function testaCPF(strCPF) {
+    var Soma;
+    var Resto;
+    Soma = 0;
+    if (strCPF == "00000000000") return false;
+
+    for (i = 1; i <= 9; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
+    Resto = (Soma * 10) % 11;
+
+    if ((Resto == 10) || (Resto == 11)) Resto = 0;
+    if (Resto != parseInt(strCPF.substring(9, 10))) return false;
+
+    Soma = 0;
+    for (i = 1; i <= 10; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (12 - i);
+    Resto = (Soma * 10) % 11;
+
+    if ((Resto == 10) || (Resto == 11)) Resto = 0;
+    if (Resto != parseInt(strCPF.substring(10, 11))) return false;
+    return true;
+}
 
 //Adicionar pergunta
 $('#add-pergunta').click(function () {
@@ -106,9 +181,9 @@ function listarUsuarios() {
 }
 
 function listarUsuariosComBaseNoStatus(status) {
-    if(status === 1 || status === 0){
+    if (status === 1 || status === 0) {
         let defineStatus = false;
-        if(status === 1){
+        if (status === 1) {
             defineStatus = true
         }
 
@@ -120,14 +195,14 @@ function listarUsuariosComBaseNoStatus(status) {
 
                     function criaTabelaUser(usuarios) {
                         console.log(usuarios);
-                        if(usuarios.status === defineStatus){
+                        if (usuarios.status === defineStatus) {
                             $('#tabela-user').append(createTabelaUsuario(usuarios) + estaAtivoUser(usuarios))
                         }
                     }
                 }
             }
         );
-    }else{
+    } else {
         alert("Não foi possivel definir o status");
     }
 
@@ -232,9 +307,9 @@ function mudarStatusUsuario(id, ativa) {
             contentType: 'application/json',
             success: function (data) {
                 console.log(data);
-                if (data !== "BAD_REQUEST"){
+                if (data !== "BAD_REQUEST") {
                     alert("Usuário editado com sucesso.")
-                }else{
+                } else {
                     alert("Não foi possivel editar o Usuário")
                 }
                 listarUsuarios()

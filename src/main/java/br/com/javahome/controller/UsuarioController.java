@@ -3,15 +3,18 @@ package br.com.javahome.controller;
 import br.com.javahome.component.Utilidades;
 import br.com.javahome.model.Usuario;
 import br.com.javahome.repository.UsuarioRepository;
+import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +26,7 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
     @Autowired
     private HttpSession session;
 
@@ -115,7 +119,10 @@ public class UsuarioController {
             } else {
                 throw new RuntimeException(ESTE_USUÁRIO_ESTA_SENDO_USADO_NO_MOMENTO);
             }
-        } catch (Exception e) {
+
+        } catch (DataIntegrityViolationException e){
+            modelAndView.addObject(MESSAGE_ERROR, ERRO_AO_SALVAR + CPF_CADASTRADO);
+        } catch (Exception e ) {
             modelAndView.addObject(MESSAGE_ERROR, ERRO_AO_SALVAR + e.getMessage());
         }
         return modelAndView;
