@@ -29,7 +29,7 @@ public class Endereco {
 	private String estado;
 	
 	@Column
-	private String UF;
+	private String uf;
 	
 	@Column
 	private String cep;
@@ -39,11 +39,11 @@ public class Endereco {
 	
 	public Endereco() {}
 
-	public Endereco(String logradouro, String cidade, String estado, String UF, String cep, String complemento) {
+	public Endereco(String logradouro, String cidade, String estado, String uf, String cep, String complemento) {
 		this.logradouro = logradouro;
 		this.cidade = cidade;
 		this.estado = estado;
-		this.UF = UF;
+		this.uf = uf;
 		this.cep = cep;
 		this.complemento = complemento;
 	}
@@ -89,12 +89,12 @@ public class Endereco {
 		this.estado = estado;
 	}
 
-	public String getUF() {
-		return UF;
+	public String getUf() {
+		return uf;
 	}
 
-	public void setUF(String uF) {
-		UF = uF;
+	public void setUf(String uf) {
+		this.uf = uf;
 	}
 
 	public String getCep() {

@@ -1,6 +1,7 @@
 package br.com.javahome.controller;
 
 import br.com.javahome.component.Utilidades;
+import br.com.javahome.model.Endereco;
 import br.com.javahome.model.Usuario;
 import br.com.javahome.repository.EnderecoRepository;
 import br.com.javahome.repository.UsuarioRepository;
@@ -108,7 +109,7 @@ public class UsuarioController {
     //CADASTRA UM USUÁRIO
     @PostMapping("/auth/cadastrar-usuario")
     @ResponseStatus(HttpStatus.CREATED)
-    public ModelAndView cadastrarUsuario(@Valid @ModelAttribute() Usuario usuario) {
+    public ModelAndView cadastrarUsuario(@Valid @ModelAttribute() Usuario usuario,@ModelAttribute Endereco endereco) {
         ModelAndView modelAndView = cadastra();
         try {
             System.out.println("Usuário na seção: " + session.getAttribute(SESSION_ATRIBUTE_EMAIL));
@@ -116,15 +117,21 @@ public class UsuarioController {
 
             if (emailNaSecao == null || !emailNaSecao.equals(usuario.getEmail())) {
                 usuario.setSenha(utilidades.encryptaSenha(usuario.getSenha()));
+
+                Endereco enderecoSalvo = enderecoRepository.save(endereco);
+                usuario.setEndereco(enderecoSalvo);
                 usuarioRepository.save(usuario);
+
                 modelAndView.addObject(MESSAGE_SUCCES, USUÁRIO_FOI_SALVO);
             } else {
                 throw new RuntimeException(ESTE_USUÁRIO_ESTA_SENDO_USADO_NO_MOMENTO);
             }
 
         } catch (DataIntegrityViolationException e){
+            System.out.println(e.getMessage());
             modelAndView.addObject(MESSAGE_ERROR, ERRO_AO_SALVAR + CPF_CADASTRADO);
         } catch (Exception e ) {
+            System.out.println(e.getMessage());
             modelAndView.addObject(MESSAGE_ERROR, ERRO_AO_SALVAR + e.getMessage());
         }
         return modelAndView;

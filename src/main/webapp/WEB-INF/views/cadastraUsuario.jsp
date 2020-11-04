@@ -74,7 +74,7 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label for="localidade">Cidade</label>
-                        <input type="text" class="form-control" id="localidade" name="localidade">
+                        <input type="text" class="form-control" id="localidade" name="cidade">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="logradouro">Logradouro</label>
