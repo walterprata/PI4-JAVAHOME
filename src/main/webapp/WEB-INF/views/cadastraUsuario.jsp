@@ -90,7 +90,7 @@
                     <div class="form-group col-md-12">
                         <button type="button" class="btn btn-primary" style="margin-top: 20px;margin-bottom: 20px;" id="btn-add-endereco">Adicionar endereço</button>
                         <div class="table-responsive-md">
-                            <table class="table">
+                            <table class="table table-sm table-dark table-bordered">
                                 <thead>
                                 <tr>
                                     <th scope="col">cep</th>
@@ -114,7 +114,7 @@
             <div class="form-row">
                 <div class="form-group col-md">
                     <label for="senhaConfirm">Confirmar Senha</label>
-                    <input type="password" class="form-control" id="senhaConfirm" name="senhaConfirm" minlength="5">
+                    <input type="password" class="form-control" id="senhaConfirm" name="senhaConfirm" minlength="5" readonly>
                 </div>
             </div>
             <c:if test="${sessionScope.get('cargo') == null }">
