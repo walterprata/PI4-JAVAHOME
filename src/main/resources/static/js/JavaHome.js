@@ -39,19 +39,6 @@ $('#cargo').change(function () {
     mudaCargo()
 });
 
-function mudaCargo() {
-    let selecionado = $('#cargo').val();
-    if (selecionado === "Cliente") {
-        $('#cep').attr('required', true);
-        $('#cpf').attr('required', true);
-        $('#complemento').attr('required', true);
-    } else {
-        $('#cep').attr('required', false);
-        $('#cpf').attr('required', false);
-        $('#complemento').attr('required', false);
-    }
-}
-
 // Ao mudar o foco
 $('#cep').blur(function () {
     let cep = $('#cep').val();

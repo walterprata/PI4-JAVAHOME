@@ -131,7 +131,7 @@
                     <div class="form-row">
                         <div class="form-group col-md">
                             <label for="senha">Senha</label>
-                            <input type="password" class="form-control" id="senha" name="senha" minlength="5" required>
+                            <input type="password" class="form-control" id="senha" name="senha" minlength="5">
                         </div>
                     </div>
                     <div class="form-row">
