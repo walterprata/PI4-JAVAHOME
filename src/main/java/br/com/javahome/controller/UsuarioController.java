@@ -57,6 +57,20 @@ public class UsuarioController {
         return new ModelAndView(CADASTRA_USUARIO_JSP);
     }
 
+    @GetMapping(value = {"/usuario/editar/cliente"})
+    public ModelAndView editarInfoDoCliente() {
+        ModelAndView modelAndView = new ModelAndView(CADASTRA_USUARIO_JSP);
+        String attribute = session.getAttribute(SESSION_ATRIBUTE_USER_ID).toString();
+        if (attribute != null){
+            Optional<Usuario> usuarioEncontrado = usuarioRepository.findById(Integer.parseInt(attribute));
+            if (usuarioEncontrado.isPresent()){
+                Usuario usuario = usuarioEncontrado.get();
+                modelAndView.addObject("cliente",usuario);
+            }
+        }
+        return modelAndView;
+    }
+
     private ModelAndView verificaCargo() {
         if (session.getAttribute(SESSION_ATRIBUTE_CARGO) != null && session.getAttribute(SESSION_ATRIBUTE_CARGO).equals(CARGO_ESTOQUISTA)) {
             ModelAndView modelAndView = new ModelAndView();
@@ -160,10 +174,10 @@ public class UsuarioController {
         try {
             System.out.println(session.getAttribute(SESSION_ATRIBUTE_EMAIL));
             Optional<Usuario> usuarioOptional = usuarioRepository.findById(usuario.getId());
-            if (!session.getAttribute(SESSION_ATRIBUTE_EMAIL).equals(usuario.getEmail())) {
+            if (!session.getAttribute(SESSION_ATRIBUTE_EMAIL).equals(usuario.getEmail()) || usuario.getCargo().equals("Cliente")) {
                 if (usuarioOptional.isPresent()) {
                     Usuario usuarioEncontrado = usuarioOptional.get();
-                    if (!usuarioEncontrado.getEmail().equals(usuario.getEmail())) {
+                    if (!usuarioEncontrado.getEmail().equals(usuario.getEmail()) ) {
                         throw new RuntimeException(O_EMAIL_LOGIN_NÃO_PODE_SER_ALTERADO);
                     }
                     usuario.setSenha(utilidades.encryptaSenha(usuario.getSenha()));

@@ -55,6 +55,7 @@
                                             <a class="dropdown-item" href="/javaHome/login/cadastrar">Usuários</a>
                                         </c:if>
                                     </c:if>
+                                    <a class="dropdown-item" href="/javaHome/usuario/editar/cliente">Editar Perfil</a>
                                     <a class="dropdown-item" href="/javaHome/logon">Sair</a>
                                 </div>
                             </div>
