@@ -132,7 +132,8 @@ public class UsuarioController {
             String localidade = split[2];
             String logradouro = split[3];
             String uf = split[4];
-            Endereco endereco = new Endereco(logradouro, localidade, localidade, uf, cep, bairro, "");
+            String complemento = split[5];
+            Endereco endereco = new Endereco(logradouro, localidade, localidade, uf, cep, bairro, complemento);
             enderecosFormatados.add(endereco);
         }
     }
@@ -144,7 +145,6 @@ public class UsuarioController {
         if (emailNaSecao == null || !emailNaSecao.equals(usuario.getEmail())) {
             usuario.setSenha(utilidades.encryptaSenha(usuario.getSenha()));
             usuarioRepository.save(usuario);
-
             modelAndView.addObject(MESSAGE_SUCCES, USUÁRIO_FOI_SALVO);
         } else {
             throw new RuntimeException(ESTE_USUÁRIO_ESTA_SENDO_USADO_NO_MOMENTO);

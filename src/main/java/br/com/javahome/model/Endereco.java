@@ -5,9 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-
-import org.hibernate.annotations.ManyToAny;
 
 @Entity
 public class Endereco {
@@ -20,7 +17,7 @@ public class Endereco {
 	private String logradouro;
 	
 	@Column
-	private String cidade;
+	private String localidade;
 	
 	@Column
 	private String estado;
@@ -42,9 +39,9 @@ public class Endereco {
 
 	public Endereco() {}
 
-	public Endereco(String logradouro, String cidade, String estado, String uf, String cep,String bairro,String complemento) {
+	public Endereco(String logradouro, String localidade, String estado, String uf, String cep, String bairro, String complemento) {
 		this.logradouro = logradouro;
-		this.cidade = cidade;
+		this.localidade = localidade;
 		this.estado = estado;
 		this.uf = uf;
 		this.cep = cep;
@@ -68,12 +65,12 @@ public class Endereco {
 		this.logradouro = logradouro;
 	}
 
-	public String getCidade() {
-		return cidade;
+	public String getLocalidade() {
+		return localidade;
 	}
 
-	public void setCidade(String cidade) {
-		this.cidade = cidade;
+	public void setLocalidade(String cidade) {
+		this.localidade = cidade;
 	}
 
 	public String getEstado() {

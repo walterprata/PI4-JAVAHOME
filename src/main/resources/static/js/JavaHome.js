@@ -80,11 +80,11 @@ $('#cpf').blur(function () {
     let cpf = $('#cpf').val().replace(/[^a-z0-9\s]/gi, "");
     if (cpf.length > 0) {
         if (testaCPF(cpf)) {
-            $('#cpf').removeClass("is-invalid")
-            $('#cpf').addClass("is-valid")
+            $('#cpf').removeClass("is-invalid");
+            $('#cpf').addClass("is-valid");
         } else {
-            $('#cpf').removeClass("is-valid")
-            $('#cpf').addClass("is-invalid")
+            $('#cpf').removeClass("is-valid");
+            $('#cpf').addClass("is-invalid");
         }
     }
 });
@@ -137,23 +137,31 @@ $('#btn-add-endereco').click(function () {
     enderecoObjeto.localidade = $('#localidade').val();
     enderecoObjeto.logradouro = $('#logradouro').val();
     enderecoObjeto.uf = $('#uf').val();
+    enderecoObjeto.complemento = $('#complemento').val();
 
-    if (qtdPerguntas <= 2) {
-        criaListaEndereco(enderecoObjeto);
-        qtdPerguntas++
-    }
+    criaListaEndereco(enderecoObjeto);
+
+
 });
 
 function criaListaEndereco(enderecoObjeto) {
-    let endereco = enderecoObjeto.cep + ";" + enderecoObjeto.bairro + ";" + enderecoObjeto.localidade + ";" + enderecoObjeto.logradouro + ";" + enderecoObjeto.uf;
+    let endereco = enderecoObjeto.cep + ";" + enderecoObjeto.bairro + ";" + enderecoObjeto.localidade + ";" + enderecoObjeto.logradouro + ";" + enderecoObjeto.uf + ";"+enderecoObjeto.complemento;
 
-    $('#lista-endereco').append("<tr><th scope=\"row\"><input value='" + endereco + "' name='enderecos[]' hidden/>" + enderecoObjeto.cep +
+    $('#lista-endereco').append("<tr id='" + qtdPerguntas + "'><th scope=\"row\"><input value='" + endereco + "' name='enderecos[]' hidden/>" + enderecoObjeto.cep +
         "</th><td>" + enderecoObjeto.bairro +
-        "</td><td>" + enderecoObjeto.cidade +
+        "</td><td>" + enderecoObjeto.localidade +
         "</td><td>" + enderecoObjeto.logradouro +
         "</td><td>" + enderecoObjeto.uf +
-        "</td><td><a type='button' class='btn btn-danger'  onclick=''>Desativar</a>"+
+        "</td><td>" + enderecoObjeto.complemento +
+        "</td><td><a type='button' class='text-warning'  onclick='removeEndereco(" + qtdPerguntas + ")'>Remover</a>" +
         "</td></tr>");
+    qtdPerguntas++
+
+}
+
+function removeEndereco(index) {
+    let campo = '#lista-endereco #' + index;
+    $(campo).remove();
 }
 
 function resetBtnStatusUsuarios() {
