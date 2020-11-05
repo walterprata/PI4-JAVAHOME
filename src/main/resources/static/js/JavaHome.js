@@ -44,9 +44,11 @@ function mudaCargo() {
     if (selecionado === "Cliente") {
         $('#cep').attr('required', true);
         $('#cpf').attr('required', true);
+        $('#complemento').attr('required', true);
     } else {
         $('#cep').attr('required', false);
         $('#cpf').attr('required', false);
+        $('#complemento').attr('required', false);
     }
 }
 
@@ -132,22 +134,21 @@ $('#btn-listar-todos').click(function () {
 $('#btn-add-endereco').click(function () {
     let enderecoObjeto = new Object();
 
-    enderecoObjeto.cep = $('#cep').val();
-    enderecoObjeto.bairro = $('#bairro').val();
-    enderecoObjeto.localidade = $('#localidade').val();
-    enderecoObjeto.logradouro = $('#logradouro').val();
-    enderecoObjeto.uf = $('#uf').val();
-    enderecoObjeto.complemento = $('#complemento').val();
+    enderecoObjeto.cep = $('#cep').val() || " ";
+    enderecoObjeto.bairro = $('#bairro').val() || " ";
+    enderecoObjeto.localidade = $('#localidade').val() || " ";
+    enderecoObjeto.logradouro = $('#logradouro').val() || " ";
+    enderecoObjeto.uf = $('#uf').val() || " ";
+    enderecoObjeto.complemento = $('#complemento').val() || " ";
 
     criaListaEndereco(enderecoObjeto);
-
-
 });
 
 function criaListaEndereco(enderecoObjeto) {
-    let endereco = enderecoObjeto.cep + ";" + enderecoObjeto.bairro + ";" + enderecoObjeto.localidade + ";" + enderecoObjeto.logradouro + ";" + enderecoObjeto.uf + ";"+enderecoObjeto.complemento;
+    let endereco = enderecoObjeto.cep + ";" + enderecoObjeto.bairro + ";" + enderecoObjeto.localidade + ";" + enderecoObjeto.logradouro + ";" + enderecoObjeto.uf + ";"+enderecoObjeto.complemento+";";
 
-    $('#lista-endereco').append("<tr id='" + qtdPerguntas + "'><th scope=\"row\"><input value='" + endereco + "' name='enderecos[]' hidden/>" + enderecoObjeto.cep +
+    $('#lista-endereco').append("<tr id='" + qtdPerguntas + "'>" +
+        "<th scope=\"row\"><input value='" + endereco + "' name='enderecos[]' hidden/>" + enderecoObjeto.cep +
         "</th><td>" + enderecoObjeto.bairro +
         "</td><td>" + enderecoObjeto.localidade +
         "</td><td>" + enderecoObjeto.logradouro +
@@ -357,41 +358,6 @@ function mudarStatusUsuario(id, ativa) {
 
     } else {
         alert("Não foi possivel editar o Usuário")
-    }
-}
-
-function mudarStatusEndereco(id, ativa) {
-    let status = false;
-    if (ativa === "ativa") {
-        status = true;
-        acao = confirm("Tem certeza que deseja Ativar esse Endereço?")
-    } else if (ativa === "desativa") {
-        acao = confirm("Tem certeza que deseja desativar esse Endereço?")
-    } else {
-        alert("Não foi possivel definir o status");
-        return
-    }
-
-    if (!!acao) {
-        $.ajax({
-            url: '/javaHome/auth/deleta-usuario/' + id + '/' + usuarioEncontrado.status,
-            type: 'POST',
-            dataType: "json",
-            data: JSON.stringify(status),
-            contentType: 'application/json',
-            success: function (data) {
-                console.log(data);
-                if (data !== "BAD_REQUEST") {
-                    alert("Endereço editado com sucesso.")
-                } else {
-                    alert("Não foi possivel editar o Endereço")
-                }
-                listarUsuarios()
-            }
-        });
-
-    } else {
-        alert("Não foi possivel editar o Endereço.")
     }
 }
 

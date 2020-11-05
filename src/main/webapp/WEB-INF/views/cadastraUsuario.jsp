@@ -86,14 +86,17 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label for="complemento">Complemento</label>
-                        <input type="text" class="form-control" id="complemento" name="complemento">
+                        <input type="text" class="form-control" id="complemento" name="complemento" >
                     </div>
                     <div class="form-group col-md-12">
                         <button type="button" class="btn btn-primary" style="margin-top: 20px;margin-bottom: 20px;"
                                 id="btn-add-endereco">Adicionar endereço
                         </button>
+                        <div class="flex-row">
+                            <h3 align="center" class="">Lista De endereços</h3>
+                        </div>
                         <div class="table-responsive-md">
-                            <table class="table table-sm table-dark table-bordered">
+                            <table class="table table-striped">
                                 <thead>
                                 <tr>
                                     <th scope="col">cep</th>

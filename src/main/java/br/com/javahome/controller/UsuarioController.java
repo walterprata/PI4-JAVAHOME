@@ -125,7 +125,8 @@ public class UsuarioController {
     }
 
     private void formataEnderecos(String[] enderecos, ArrayList<Endereco> enderecosFormatados) {
-        for (int i = 0; i <= enderecos.length - 1; i++) {
+        int quantidadeDeIntes = enderecos.length - 1;
+        for (int i = 0; i <= quantidadeDeIntes; i++) {
             String[] split = enderecos[i].split(";");
             String cep = split[0];
             String bairro = split[1];
