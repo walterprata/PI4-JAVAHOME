@@ -47,7 +47,8 @@ public class ProdutoController {
 
     @GetMapping(value = "/imagens/{fileName}", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody byte[] pegarImage(@PathVariable String fileName) throws IOException {
+    public @ResponseBody
+    byte[] pegarImage(@PathVariable String fileName) throws IOException {
         InputStream in = servletContext.getResourceAsStream("/WEB-INF/files/" + fileName);
         System.out.println(fileName);
         return IOUtils.toByteArray(in);
@@ -81,9 +82,9 @@ public class ProdutoController {
 
     @PostMapping("/salvar")
     @ResponseStatus(HttpStatus.OK)
-    public ModelAndView salvarProduto(@RequestParam("file[]") MultipartFile[] file,
-                                      @RequestParam("perguntas[]") String[] pergunta,
-                                      @RequestParam("respostas[]") String[] resposta,
+    public ModelAndView salvarProduto(@RequestParam(value = "file[]", required = false) MultipartFile[] file,
+                                      @RequestParam(value = "perguntas[]", required = false) String[] pergunta,
+                                      @RequestParam(value = "respostas[]", required = false) String[] resposta,
                                       @ModelAttribute Produto produto) {
         ModelAndView modelAndView = new ModelAndView("cadastraProduto");
         try {
@@ -118,23 +119,23 @@ public class ProdutoController {
     @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ModelAndView atualizarProduto(@PathVariable Integer id,
-                                         @RequestParam("file[]") MultipartFile[] file,
-                                         @RequestParam("perguntas[]") String[] pergunta,
-                                         @RequestParam("respostas[]") String[] resposta,
+                                         @RequestParam(value = "file[]", required = false) MultipartFile[] file,
+                                         @RequestParam(value = "perguntas[]", required = false) String[] pergunta,
+                                         @RequestParam(value = "respostas[]", required = false) String[] resposta,
                                          @ModelAttribute Produto produto,
                                          HttpSession session) {
         ModelAndView modelAndView = new ModelAndView("cadastraProduto");
         try {
             Produto produtoSalvo = produtoRepository.findById(id).orElse(null);
-            if(!session.getAttribute("cargo").equals("estoque") && produtoSalvo != null){
+            if (!session.getAttribute("cargo").equals("estoque") && produtoSalvo != null) {
                 String caminhoDaImagen = fileSaver.write(file, id);
                 ArrayList<String> img = (ArrayList<String>) new Gson().fromJson(caminhoDaImagen, ArrayList.class);
-                if(img.isEmpty()){
+                if (img.isEmpty()) {
                     produto.setCaminhoDaImagem(produtoSalvo.getCaminhoDaImagem());
-                }else{
+                } else {
                     produto.setCaminhoDaImagem(caminhoDaImagen);
                 }
-            }else{
+            } else {
                 produto.setCaminhoDaImagem(produtoSalvo.getCaminhoDaImagem());
             }
 
@@ -143,12 +144,12 @@ public class ProdutoController {
 
             produtoRepository.save(produtoSalvo);
             List<DuvidaProduto> duvidaProdutos = duvidaProdutoRepository.duvidaProduto(id);
-            for (DuvidaProduto d: duvidaProdutos){
+            for (DuvidaProduto d : duvidaProdutos) {
                 duvidaProdutoRepository.delete(d);
             }
 
 
-                adicionaPerguntas(pergunta, resposta, produtoSalvo);
+            adicionaPerguntas(pergunta, resposta, produtoSalvo);
 
 
             modelAndView.addObject("messageSucces", "Produto foi Salvo!");

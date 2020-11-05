@@ -34,6 +34,13 @@
                     <input type="email" class="form-control" id="email" name="email" minlength="5" maxlength="50"
                            required>
                 </div>
+                <div class="form-group col-md-6">
+                    <label for="cpf">CPF</label>
+                    <input type="text" class="form-control" id="cpf" name="cpf" minlength="14" maxlength="14">
+                    <div class="invalid-feedback">
+                        CPF informado é invalido!
+                    </div>
+                </div>
             </div>
             <c:if test="${sessionScope.get('cargo') != null && sessionScope.get('cargo') == 'admin' }">
                 <div class="form-row">
@@ -48,7 +55,7 @@
                 </div>
             </c:if>
             <c:if test="${sessionScope.get('cargo') != null && sessionScope.get('cargo') == 'admin' }">
-            <div class="form-row" id="campo-cliente" hidden>
+            <div class="form-row" id="campo-cliente">
                 </c:if>
                 <c:if test="${sessionScope.get('cargo') == null }">
                     <input type="text" name="cargo" value="Cliente" readonly hidden>
@@ -57,13 +64,6 @@
                     <div class="form-group col-md-12">
                        <h3>Endereço</h3>
                     </div>
-                <div class="form-group col-md-6">
-                    <label for="cpf">CPF</label>
-                    <input type="text" class="form-control" id="cpf" name="cpf" minlength="14" maxlength="14">
-                    <div class="invalid-feedback">
-                        CPF informado é invalido!
-                    </div>
-                </div>
                 <div class="form-group col-md-6">
                     <label for="cep">Cep</label>
                     <input type="text" class="form-control" id="cep" name="cep" minlength="9" maxlength="9">
@@ -87,9 +87,8 @@
                     <label for="uf">UF</label>
                     <input type="text" class="form-control" id="uf" name="uf">
                 </div>
-                    <button type="button" class="btn btn-primary" style="margin-top: 20px;margin-bottom: 20px;" id="btn-add-endereco">Adicionar endereço</button>
-
                     <div class="form-group col-md-12">
+                        <button type="button" class="btn btn-primary" style="margin-top: 20px;margin-bottom: 20px;" id="btn-add-endereco">Adicionar endereço</button>
                         <div class="table-responsive-md">
                             <table class="table">
                                 <thead>

@@ -36,7 +36,10 @@ public class Endereco {
 
 	@Column
 	private String bairro;
-	
+
+	@Column
+	private Boolean status;
+
 	public Endereco() {}
 
 	public Endereco(String logradouro, String cidade, String estado, String uf, String cep,String bairro,String complemento) {
@@ -111,5 +114,13 @@ public class Endereco {
 
 	public void setBairro(String bairro) {
 		this.bairro = bairro;
+	}
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
 	}
 }

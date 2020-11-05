@@ -109,12 +109,11 @@ public class UsuarioController {
     //CADASTRA UM USUÁRIO
     @PostMapping("/auth/cadastrar-usuario")
     @ResponseStatus(HttpStatus.CREATED)
-    public ModelAndView cadastrarUsuario(@Valid @ModelAttribute Usuario usuario,@RequestParam("enderecos[]") String[] enderecos) {
+    public ModelAndView cadastrarUsuario(@Valid @ModelAttribute Usuario usuario, @RequestParam(value = "enderecos[]",required = false) String[] enderecos) {
         ModelAndView modelAndView = cadastra();
-        ArrayList<Endereco> enderecosFormatados = new ArrayList<>();
         try {
-            formataEnderecos(enderecos, enderecosFormatados);
-            salvaUsuario(usuario,enderecosFormatados,modelAndView);
+            inserirEnderecos(usuario, enderecos);
+            salvaUsuario(usuario, modelAndView);
         } catch (DataIntegrityViolationException e) {
             System.out.println(e.getMessage());
             modelAndView.addObject(MESSAGE_ERROR, ERRO_AO_SALVAR + CPF_CADASTRADO);
@@ -126,28 +125,24 @@ public class UsuarioController {
     }
 
     private void formataEnderecos(String[] enderecos, ArrayList<Endereco> enderecosFormatados) {
-        for (int i =0 ; i<= enderecos.length-1;i++){
+        for (int i = 0; i <= enderecos.length - 1; i++) {
             String[] split = enderecos[i].split(";");
             String cep = split[0];
             String bairro = split[1];
             String localidade = split[2];
             String logradouro = split[3];
             String uf = split[4];
-            Endereco endereco = new Endereco(logradouro,localidade,localidade,uf,cep,bairro,"");
+            Endereco endereco = new Endereco(logradouro, localidade, localidade, uf, cep, bairro, "");
             enderecosFormatados.add(endereco);
         }
     }
 
-    private void salvaUsuario(Usuario usuario, ArrayList<Endereco> enderecos, ModelAndView modelAndView) {
+    private void salvaUsuario(Usuario usuario, ModelAndView modelAndView) {
         System.out.println("Usuário na seção: " + session.getAttribute(SESSION_ATRIBUTE_EMAIL));
         Object emailNaSecao = session.getAttribute(SESSION_ATRIBUTE_EMAIL);
 
         if (emailNaSecao == null || !emailNaSecao.equals(usuario.getEmail())) {
             usuario.setSenha(utilidades.encryptaSenha(usuario.getSenha()));
-            if (enderecos != null && !enderecos.isEmpty()){
-                enderecos.forEach(e -> e = enderecoRepository.save(e));
-                usuario.setEndereco(enderecos);
-            }
             usuarioRepository.save(usuario);
 
             modelAndView.addObject(MESSAGE_SUCCES, USUÁRIO_FOI_SALVO);
@@ -159,7 +154,7 @@ public class UsuarioController {
     //CADASTRA UM USUÁRIO
     @PostMapping("/auth/edita-usuario")
     @ResponseStatus(HttpStatus.CREATED)
-    public ModelAndView editar(@Valid @ModelAttribute() Usuario usuario) {
+    public ModelAndView editar(@Valid @ModelAttribute() Usuario usuario, @RequestParam(value = "enderecos[]",required = false) String[] enderecos) {
         ModelAndView modelAndView = cadastra();
         try {
             System.out.println(session.getAttribute(SESSION_ATRIBUTE_EMAIL));
@@ -171,6 +166,7 @@ public class UsuarioController {
                         throw new RuntimeException(O_EMAIL_LOGIN_NÃO_PODE_SER_ALTERADO);
                     }
                     usuario.setSenha(utilidades.encryptaSenha(usuario.getSenha()));
+                    inserirEnderecos(usuario, enderecos);
                     usuarioRepository.save(usuario);
                     modelAndView.addObject(MESSAGE_SUCCES, USUÁRIO_FOI_SALVO);
                 } else {
@@ -183,6 +179,15 @@ public class UsuarioController {
             modelAndView.addObject(MESSAGE_ERROR, ERRO_AO_SALVAR + e.getMessage());
         }
         return modelAndView;
+    }
+
+    private void inserirEnderecos(@ModelAttribute @Valid Usuario usuario, @RequestParam("enderecos[]") String[] enderecos) {
+        ArrayList<Endereco> enderecosFormatados = new ArrayList<>();
+        if (enderecos != null && enderecos.length - 1 >= 0) {
+            formataEnderecos(enderecos, enderecosFormatados);
+            enderecosFormatados.forEach(e -> e = enderecoRepository.save(e));
+            usuario.setEndereco(enderecosFormatados);
+        }
     }
 
     //ATIVA OU DESATIVA UM USUÁRIO

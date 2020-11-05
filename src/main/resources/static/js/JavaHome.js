@@ -1,7 +1,7 @@
 //Sempre ofuscar antes de subir
 //https://obfuscator.io/
 var idPergunta = 0;
-var qtdPerguntas =0;
+var qtdPerguntas = 0;
 //Apos o carregamento da pagina
 $(document).ready(function () {
     $('#money').mask("##0.00", {reverse: true});
@@ -42,11 +42,9 @@ $('#cargo').change(function () {
 function mudaCargo() {
     let selecionado = $('#cargo').val();
     if (selecionado === "Cliente") {
-        $('#campo-cliente').attr('hidden', false);
         $('#cep').attr('required', true);
         $('#cpf').attr('required', true);
     } else {
-        $('#campo-cliente').attr('hidden', true);
         $('#cep').attr('required', false);
         $('#cpf').attr('required', false);
     }
@@ -140,21 +138,24 @@ $('#btn-add-endereco').click(function () {
     enderecoObjeto.logradouro = $('#logradouro').val();
     enderecoObjeto.uf = $('#uf').val();
 
-    if (qtdPerguntas <= 2){
+    if (qtdPerguntas <= 2) {
         criaListaEndereco(enderecoObjeto);
         qtdPerguntas++
     }
 });
-function criaListaEndereco(enderecoObjeto) {
-    let endereco = enderecoObjeto.cep+";"+enderecoObjeto.bairro+";"+enderecoObjeto.localidade+";"+enderecoObjeto.logradouro+";"+enderecoObjeto.uf;
 
-    $('#lista-endereco').append("<tr><th scope=\"row\"><input value='"+endereco+"' name='enderecos[]' hidden/>" +enderecoObjeto.cep +
-        "</th><td>"+enderecoObjeto.bairro+
-        "</td><td>"+enderecoObjeto.localidade+
-        "</td><td>"+enderecoObjeto.logradouro+
-        "</td><td>"+enderecoObjeto.uf+
+function criaListaEndereco(enderecoObjeto) {
+    let endereco = enderecoObjeto.cep + ";" + enderecoObjeto.bairro + ";" + enderecoObjeto.localidade + ";" + enderecoObjeto.logradouro + ";" + enderecoObjeto.uf;
+
+    $('#lista-endereco').append("<tr><th scope=\"row\"><input value='" + endereco + "' name='enderecos[]' hidden/>" + enderecoObjeto.cep +
+        "</th><td>" + enderecoObjeto.bairro +
+        "</td><td>" + enderecoObjeto.cidade +
+        "</td><td>" + enderecoObjeto.logradouro +
+        "</td><td>" + enderecoObjeto.uf +
+        "</td><td><a type='button' class='btn btn-danger'  onclick=''>Desativar</a>"+
         "</td></tr>");
 }
+
 function resetBtnStatusUsuarios() {
     $('#btn-listar-ativos').removeClass("active");
     $('#btn-listar-desativados').removeClass("active");
@@ -351,6 +352,41 @@ function mudarStatusUsuario(id, ativa) {
     }
 }
 
+function mudarStatusEndereco(id, ativa) {
+    let status = false;
+    if (ativa === "ativa") {
+        status = true;
+        acao = confirm("Tem certeza que deseja Ativar esse Endereço?")
+    } else if (ativa === "desativa") {
+        acao = confirm("Tem certeza que deseja desativar esse Endereço?")
+    } else {
+        alert("Não foi possivel definir o status");
+        return
+    }
+
+    if (!!acao) {
+        $.ajax({
+            url: '/javaHome/auth/deleta-usuario/' + id + '/' + usuarioEncontrado.status,
+            type: 'POST',
+            dataType: "json",
+            data: JSON.stringify(status),
+            contentType: 'application/json',
+            success: function (data) {
+                console.log(data);
+                if (data !== "BAD_REQUEST") {
+                    alert("Endereço editado com sucesso.")
+                } else {
+                    alert("Não foi possivel editar o Endereço")
+                }
+                listarUsuarios()
+            }
+        });
+
+    } else {
+        alert("Não foi possivel editar o Endereço.")
+    }
+}
+
 function buscarDetalhesDoProduto(id) {
     let resultado = null;
     $.ajax({
@@ -441,10 +477,10 @@ function editarUsuario(id) {
         console.log(usuario);
         $('#nome').val(usuario.nome);
         $('#email').val(usuario.email);
-        // $('#senha').val(usuario.senha);
+        $('#cpf').val(usuario.cpf);
         $('#cargo').val(usuario.cargo).prop('selected', true);
         $('#lista-endereco tr').remove();
-        for (test in usuario.endereco){
+        for (test in usuario.endereco) {
             criaListaEndereco(usuario.endereco[test])
         }
 

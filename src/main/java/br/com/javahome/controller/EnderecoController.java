@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -25,5 +26,16 @@ public class EnderecoController {
     @ResponseStatus(HttpStatus.CREATED)
     public void salvaEndereco(@ModelAttribute Endereco endereco){
         enderecoRepository.save(endereco);
+    }
+
+    @PostMapping("/endereco/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void editaStatusEndereco(@PathVariable Integer id,@ModelAttribute Endereco endereco){
+        Optional<Endereco> enderecoOptional = enderecoRepository.findById(id);
+        if (enderecoOptional.isPresent()){
+            Endereco enderecoEncontrado = enderecoOptional.get();
+            enderecoEncontrado.setStatus(endereco.getStatus());
+            enderecoRepository.save(enderecoEncontrado);
+        }
     }
 }
