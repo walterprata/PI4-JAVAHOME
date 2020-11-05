@@ -15,10 +15,7 @@ public class Endereco {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
-	@ManyToOne
-	private Usuario usuario;
-	
+
 	@Column
 	private String logradouro;
 	
@@ -36,16 +33,20 @@ public class Endereco {
 	
 	@Column
 	private String complemento;
+
+	@Column
+	private String bairro;
 	
 	public Endereco() {}
 
-	public Endereco(String logradouro, String cidade, String estado, String uf, String cep, String complemento) {
+	public Endereco(String logradouro, String cidade, String estado, String uf, String cep,String bairro,String complemento) {
 		this.logradouro = logradouro;
 		this.cidade = cidade;
 		this.estado = estado;
 		this.uf = uf;
 		this.cep = cep;
 		this.complemento = complemento;
+		this.bairro = bairro;
 	}
 
 	public Integer getId() {
@@ -54,15 +55,6 @@ public class Endereco {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-	
-	
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
 	}
 
 	public String getLogradouro() {
@@ -112,8 +104,12 @@ public class Endereco {
 	public void setComplemento(String complemento) {
 		this.complemento = complemento;
 	}
-	
-	
-	
-	
+
+	public String getBairro() {
+		return bairro;
+	}
+
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
+	}
 }

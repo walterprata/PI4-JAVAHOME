@@ -1,12 +1,13 @@
 package br.com.javahome.model;
 
 import br.com.javahome.model.enums.TipoUsuario;
-import org.hibernate.validator.constraints.br.CPF;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 
 @Entity
@@ -38,8 +39,8 @@ public class Usuario {
 	@Column(name = "cargo")
 	private String cargo;
 
-	@ManyToOne
-	private Endereco endereco;
+	@OneToMany
+	private List<Endereco> endereco;
 
 	private TipoUsuario TipoUsuario;
 	
@@ -111,11 +112,11 @@ public class Usuario {
 		TipoUsuario = tipoUsuario;
 	}
 
-	public Endereco getEndereco() {
+	public List<Endereco> getEndereco() {
 		return endereco;
 	}
 
-	public void setEndereco(Endereco endereco) {
+	public void setEndereco(List<Endereco> endereco) {
 		this.endereco = endereco;
 	}
 

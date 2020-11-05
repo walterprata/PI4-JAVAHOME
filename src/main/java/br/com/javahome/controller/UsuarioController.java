@@ -5,7 +5,6 @@ import br.com.javahome.model.Endereco;
 import br.com.javahome.model.Usuario;
 import br.com.javahome.repository.EnderecoRepository;
 import br.com.javahome.repository.UsuarioRepository;
-import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -14,11 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
-import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static br.com.javahome.Constantes.*;
 
@@ -109,32 +109,51 @@ public class UsuarioController {
     //CADASTRA UM USUÁRIO
     @PostMapping("/auth/cadastrar-usuario")
     @ResponseStatus(HttpStatus.CREATED)
-    public ModelAndView cadastrarUsuario(@Valid @ModelAttribute() Usuario usuario,@ModelAttribute Endereco endereco) {
+    public ModelAndView cadastrarUsuario(@Valid @ModelAttribute Usuario usuario,@RequestParam("enderecos[]") String[] enderecos) {
         ModelAndView modelAndView = cadastra();
+        ArrayList<Endereco> enderecosFormatados = new ArrayList<>();
         try {
-            System.out.println("Usuário na seção: " + session.getAttribute(SESSION_ATRIBUTE_EMAIL));
-            Object emailNaSecao = session.getAttribute(SESSION_ATRIBUTE_EMAIL);
-
-            if (emailNaSecao == null || !emailNaSecao.equals(usuario.getEmail())) {
-                usuario.setSenha(utilidades.encryptaSenha(usuario.getSenha()));
-
-                Endereco enderecoSalvo = enderecoRepository.save(endereco);
-                usuario.setEndereco(enderecoSalvo);
-                usuarioRepository.save(usuario);
-
-                modelAndView.addObject(MESSAGE_SUCCES, USUÁRIO_FOI_SALVO);
-            } else {
-                throw new RuntimeException(ESTE_USUÁRIO_ESTA_SENDO_USADO_NO_MOMENTO);
-            }
-
-        } catch (DataIntegrityViolationException e){
+            formataEnderecos(enderecos, enderecosFormatados);
+            salvaUsuario(usuario,enderecosFormatados,modelAndView);
+        } catch (DataIntegrityViolationException e) {
             System.out.println(e.getMessage());
             modelAndView.addObject(MESSAGE_ERROR, ERRO_AO_SALVAR + CPF_CADASTRADO);
-        } catch (Exception e ) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             modelAndView.addObject(MESSAGE_ERROR, ERRO_AO_SALVAR + e.getMessage());
         }
         return modelAndView;
+    }
+
+    private void formataEnderecos(String[] enderecos, ArrayList<Endereco> enderecosFormatados) {
+        for (int i =0 ; i<= enderecos.length-1;i++){
+            String[] split = enderecos[i].split(";");
+            String cep = split[0];
+            String bairro = split[1];
+            String localidade = split[2];
+            String logradouro = split[3];
+            String uf = split[4];
+            Endereco endereco = new Endereco(logradouro,localidade,localidade,uf,cep,bairro,"");
+            enderecosFormatados.add(endereco);
+        }
+    }
+
+    private void salvaUsuario(Usuario usuario, ArrayList<Endereco> enderecos, ModelAndView modelAndView) {
+        System.out.println("Usuário na seção: " + session.getAttribute(SESSION_ATRIBUTE_EMAIL));
+        Object emailNaSecao = session.getAttribute(SESSION_ATRIBUTE_EMAIL);
+
+        if (emailNaSecao == null || !emailNaSecao.equals(usuario.getEmail())) {
+            usuario.setSenha(utilidades.encryptaSenha(usuario.getSenha()));
+            if (enderecos != null && !enderecos.isEmpty()){
+                enderecos.forEach(e -> e = enderecoRepository.save(e));
+                usuario.setEndereco(enderecos);
+            }
+            usuarioRepository.save(usuario);
+
+            modelAndView.addObject(MESSAGE_SUCCES, USUÁRIO_FOI_SALVO);
+        } else {
+            throw new RuntimeException(ESTE_USUÁRIO_ESTA_SENDO_USADO_NO_MOMENTO);
+        }
     }
 
     //CADASTRA UM USUÁRIO

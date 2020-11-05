@@ -1,6 +1,7 @@
 //Sempre ofuscar antes de subir
 //https://obfuscator.io/
 var idPergunta = 0;
+var qtdPerguntas =0;
 //Apos o carregamento da pagina
 $(document).ready(function () {
     $('#money').mask("##0.00", {reverse: true});
@@ -17,7 +18,7 @@ $('#btn-lista-produto').click(function () {
     listarProdutos();
     listarUsuarios();
     resetBtnStatusUsuarios();
-    $('#btn-listar-todos').addClass("active")
+    $('#btn-listar-todos').addClass("active");
     showModal()
 });
 //ocultar modal
@@ -35,21 +36,22 @@ $('.btn-editar').click(function () {
 
 // Ao selecionar cliente na opção
 $('#cargo').change(function () {
-   mudaCargo()
+    mudaCargo()
 });
 
-function mudaCargo(){
+function mudaCargo() {
     let selecionado = $('#cargo').val();
     if (selecionado === "Cliente") {
         $('#campo-cliente').attr('hidden', false);
-        $('#cep').attr('required',true);
-        $('#cpf').attr('required',true);
+        $('#cep').attr('required', true);
+        $('#cpf').attr('required', true);
     } else {
         $('#campo-cliente').attr('hidden', true);
-        $('#cep').attr('required',false);
-        $('#cpf').attr('required',false);
+        $('#cep').attr('required', false);
+        $('#cpf').attr('required', false);
     }
 }
+
 // Ao mudar o foco
 $('#cep').blur(function () {
     let cep = $('#cep').val();
@@ -60,12 +62,12 @@ $('#cep').blur(function () {
                 if (textStatus === "success") {
                     console.log(data);
                     if (data.erro) {
-                        $('#cep').removeClass("is-valid")
+                        $('#cep').removeClass("is-valid");
                         $('#cep').addClass("is-invalid");
                         return
                     }
-                    $('#cep').removeClass("is-invalid")
-                    $('#cep').addClass("is-valid")
+                    $('#cep').removeClass("is-invalid");
+                    $('#cep').addClass("is-valid");
                     $('#bairro').val(data.bairro);
                     $('#localidade').val(data.localidade);
                     $('#logradouro').val(data.logradouro);
@@ -78,8 +80,8 @@ $('#cep').blur(function () {
 
 $('#cpf').blur(function () {
     let cpf = $('#cpf').val().replace(/[^a-z0-9\s]/gi, "");
-    if (cpf.length > 0 ){
-        if(testaCPF(cpf)) {
+    if (cpf.length > 0) {
+        if (testaCPF(cpf)) {
             $('#cpf').removeClass("is-invalid")
             $('#cpf').addClass("is-valid")
         } else {
@@ -129,6 +131,30 @@ $('#btn-listar-todos').click(function () {
     $('#btn-listar-todos').addClass("active")
 });
 
+$('#btn-add-endereco').click(function () {
+    let enderecoObjeto = new Object();
+
+    enderecoObjeto.cep = $('#cep').val();
+    enderecoObjeto.bairro = $('#bairro').val();
+    enderecoObjeto.localidade = $('#localidade').val();
+    enderecoObjeto.logradouro = $('#logradouro').val();
+    enderecoObjeto.uf = $('#uf').val();
+
+    if (qtdPerguntas <= 2){
+        criaListaEndereco(enderecoObjeto);
+        qtdPerguntas++
+    }
+});
+function criaListaEndereco(enderecoObjeto) {
+    let endereco = enderecoObjeto.cep+";"+enderecoObjeto.bairro+";"+enderecoObjeto.localidade+";"+enderecoObjeto.logradouro+";"+enderecoObjeto.uf;
+
+    $('#lista-endereco').append("<tr><th scope=\"row\"><input value='"+endereco+"' name='enderecos[]' hidden/>" +enderecoObjeto.cep +
+        "</th><td>"+enderecoObjeto.bairro+
+        "</td><td>"+enderecoObjeto.localidade+
+        "</td><td>"+enderecoObjeto.logradouro+
+        "</td><td>"+enderecoObjeto.uf+
+        "</td></tr>");
+}
 function resetBtnStatusUsuarios() {
     $('#btn-listar-ativos').removeClass("active");
     $('#btn-listar-desativados').removeClass("active");
@@ -415,9 +441,13 @@ function editarUsuario(id) {
         console.log(usuario);
         $('#nome').val(usuario.nome);
         $('#email').val(usuario.email);
-        $('#senha').val(usuario.senha);
+        // $('#senha').val(usuario.senha);
         $('#cargo').val(usuario.cargo).prop('selected', true);
-        $('#cpf').val(usuario.cpf);
+        $('#lista-endereco tr').remove();
+        for (test in usuario.endereco){
+            criaListaEndereco(usuario.endereco[test])
+        }
+
         mudaCargo();
         $('#id').val(usuario.id);
         if (usuario.status > 0) {
