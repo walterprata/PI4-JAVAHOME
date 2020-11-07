@@ -10,8 +10,6 @@ public interface PedidoService {
 	
 	public Pedido getPedido(int id);
 	
-	public List<Pedido> getPedidosDoUsuario(int id);
-	
 	public List<Pedido> getTodosPedidos();
 	
 	public void atualizarPedido(Pedido pedido);
