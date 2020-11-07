@@ -13,6 +13,8 @@ public interface ItensPedidoService {
 	
 	ItensPedido buscaPedidoPorId(Integer id);
 	
+	void salvarItens(List<ItensPedido> listaProduto);
+	
 	List<ItensPedido> salvarProdutos(List<ItensPedido> listaProduto, Pedido pedido);
 	
 	

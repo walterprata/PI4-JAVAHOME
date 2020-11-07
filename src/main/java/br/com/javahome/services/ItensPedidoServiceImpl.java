@@ -50,6 +50,13 @@ public class ItensPedidoServiceImpl implements ItensPedidoService {
 		return repository.findById(id).orElse(null);
 	}
 
+	@Override
+	public void salvarItens(List<ItensPedido> listaProduto) {
+
+			repository.saveAll(listaProduto);
+	
+	}
+
 
 
 

@@ -30,7 +30,7 @@ public class ItensPedidoController {
 	
 
 	//LISTA TODOS OS PEDIDOS
-	@GetMapping("/listar-pedidos")
+	@GetMapping("/listar-itenspedidos")
 	public List<ItensPedido> listarPedidos(){
 		return itensPedidoService.listarPedidos();
 	}
@@ -44,9 +44,15 @@ public class ItensPedidoController {
 	//SALVA LISTA DE PEDIDOS
 	@PostMapping("/salvar-pedido")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void salvarItensPedido(@RequestBody List<ItensPedido> itens, @RequestBody Pedido pedido) {
+	public ResponseEntity<ItensPedido> salvarItensPedido(@RequestBody List<ItensPedido> itens) {
 		
-		itensPedidoService.salvarProdutos(itens, pedido);
+		if(!itens.isEmpty()) {
+			itensPedidoService.salvarItens(itens);
+			return ResponseEntity.status(HttpStatus.CREATED).build();
+		}
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		
+		
 		
 	}
 	

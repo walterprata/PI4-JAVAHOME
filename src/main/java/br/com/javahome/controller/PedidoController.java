@@ -31,14 +31,7 @@ public class PedidoController {
 	@Autowired 
 	private PedidoService pedidoService;
 	
-	@PostMapping(value="/salvar")
-	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<?> cadastrarUsuario(@ModelAttribute Pedido pedido, ItensPedido[] itens) {
-		
-		
-		
-		
-		return null;
-        
-	}
+
+	
+	
 }
