@@ -15,7 +15,7 @@
         </div>
     </c:if>
         <C:if test="${empty cliente}">
-            <c:set var="url" value="/javaHome/uth/cadastrar-usuario"/>
+            <c:set var="url" value="/javaHome/auth/cadastrar-usuario"/>
         </C:if>
         <c:if test="${not empty cliente}">
             <c:set var="url" value="/javaHome/auth/edita-usuario"/>

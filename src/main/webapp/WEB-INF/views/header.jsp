@@ -36,12 +36,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Contato</a>
                     </li>
-                    <c:if test="${sessionScope.get('cargo') == null}">
+                    <c:if test="${empty sessionScope.get('cargo')}">
                         <li class="nav-item">
                             <a class="nav-link" href="/javaHome/login">Entrar</a>
                         </li>
                     </c:if>
-                    <c:if test="${sessionScope.get('cargo') != null}">
+                    <c:if test="${not empty sessionScope.get('cargo')}">
                         <li class="nav-item">
                             <div class="dropdown">
                                 <a class="nav-link" type="button" id="dropdownMenuButton"
@@ -55,7 +55,9 @@
                                             <a class="dropdown-item" href="/javaHome/login/cadastrar">Usuários</a>
                                         </c:if>
                                     </c:if>
+                                    <c:if test="${sessionScope.get('cargo') eq 'Cliente'}">
                                     <a class="dropdown-item" href="/javaHome/usuario/editar/cliente">Editar Perfil</a>
+                                    </c:if>
                                     <a class="dropdown-item" href="/javaHome/logon">Sair</a>
                                 </div>
                             </div>
