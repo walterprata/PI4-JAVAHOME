@@ -3,10 +3,12 @@ package br.com.javahome.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import br.com.javahome.model.Pedido;
 import br.com.javahome.repository.PedidoRepository;
 
+@Service
 public class PedidoServiceImpl implements PedidoService {
 
 	@Autowired
