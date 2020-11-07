@@ -36,6 +36,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Contato</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="btn btn-secondary" href="/javaHome/carrinho"> 0 | Carrinho</a>
+                    </li>
                     <c:if test="${empty sessionScope.get('cargo')}">
                         <li class="nav-item">
                             <a class="nav-link" href="/javaHome/login">Entrar</a>

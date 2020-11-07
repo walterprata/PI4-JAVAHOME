@@ -48,3 +48,47 @@ body{
 .bg-javahome-dark,.bg-javahome-dark {
   background: #000000;
 }
+
+.container-cupom{
+  border-radius: 20px;
+  background: #ececec;
+  margin-bottom: 20px;
+}
+
+.carrinho-form-cupom{
+  margin: 30px;
+}
+.carrinho-form-cupom > label{
+  margin-right: 10px;
+}
+.carrinho-btn-qtd{
+  border: none;
+  margin-right: 5px;
+  margin-left: 5px;
+  width: 30px;
+  height: 30px;
+  background: black;
+  color: white;
+  font-size: 16px;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 60px;
+}
+
+#carrinho-qtd{
+  width: 50px;
+  text-align: center;
+}
+
+.carrinho-valor-uni{
+  border: none;
+  text-align: left;
+  background: #ececec;
+}
+
+.carrinho-footer{
+  margin: 20px;
+}
+.carrinho-footer-info{
+  margin-top: 20px;
+}
