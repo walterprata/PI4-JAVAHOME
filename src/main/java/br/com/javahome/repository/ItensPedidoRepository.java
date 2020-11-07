@@ -1,9 +1,11 @@
 package br.com.javahome.repository;
 
-import br.com.javahome.model.Endereco;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import br.com.javahome.model.ItensPedido;
+
 @Repository
-public interface EnderecoRepository extends JpaRepository<Endereco, Integer> {
+public interface ItensPedidoRepository extends JpaRepository<ItensPedido, Integer>{
+
 }
