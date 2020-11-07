@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"
          pageEncoding="UTF-8"
 %>
-<jsp:include page="header.jsp"/>
+<jsp:include page="${'header.jsp'}"/>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="container">
     <c:if test="${messageSucces != null}">
@@ -155,8 +155,6 @@
         </div>
     </form>
 </div>
-
-<jsp:include page="modalListaProdutos.jsp"/>
-
-<jsp:include page="footer.jsp"/>
+<jsp:include page="${'modalListaProdutos.jsp'}"/>
+<jsp:include page="${'footer.jsp'}"/>
 <script src="<c:url value="/js/JavaHome.js"/>"></script>

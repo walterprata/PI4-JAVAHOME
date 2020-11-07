@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"
          pageEncoding="UTF-8"
 %>
-<jsp:include page="header.jsp"/>
+<jsp:include page="${'header.jsp'}"/>
 <!-- Page Content -->
 <div class="container">
 
@@ -84,5 +84,5 @@
 
 </div>
 <!-- /.container -->
-<jsp:include page="footer.jsp"/>
-<script src="<c:url value="/js/index.js"/>"></script>
+<jsp:include page="${'footer.jsp'}"/>
+<script src="<c:url value="${'/js/index.js'}"/>"></script>

@@ -15,10 +15,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static br.com.javahome.Constantes.*;
 
@@ -61,11 +59,11 @@ public class UsuarioController {
     public ModelAndView editarInfoDoCliente() {
         ModelAndView modelAndView = new ModelAndView(CADASTRA_USUARIO_JSP);
         String attribute = session.getAttribute(SESSION_ATRIBUTE_USER_ID).toString();
-        if (attribute != null){
+        if (attribute != null) {
             Optional<Usuario> usuarioEncontrado = usuarioRepository.findById(Integer.parseInt(attribute));
-            if (usuarioEncontrado.isPresent()){
+            if (usuarioEncontrado.isPresent()) {
                 Usuario usuario = usuarioEncontrado.get();
-                modelAndView.addObject("cliente",usuario);
+                modelAndView.addObject("cliente", usuario);
             }
         }
         return modelAndView;
@@ -123,7 +121,7 @@ public class UsuarioController {
     //CADASTRA UM USUÁRIO
     @PostMapping("/auth/cadastrar-usuario")
     @ResponseStatus(HttpStatus.CREATED)
-    public ModelAndView cadastrarUsuario(@Valid @ModelAttribute Usuario usuario, @RequestParam(value = "enderecos[]",required = false) String[] enderecos) {
+    public ModelAndView cadastrarUsuario(@Valid @ModelAttribute Usuario usuario, @RequestParam(value = "enderecos[]", required = false) String[] enderecos) {
         ModelAndView modelAndView = cadastra();
         try {
             inserirEnderecos(usuario, enderecos);
@@ -140,16 +138,37 @@ public class UsuarioController {
 
     private void formataEnderecos(String[] enderecos, ArrayList<Endereco> enderecosFormatados) {
         int quantidadeDeIntes = enderecos.length - 1;
+        Endereco endereco;
         for (int i = 0; i <= quantidadeDeIntes; i++) {
             String[] split = enderecos[i].split(";");
-            String cep = split[0];
-            String bairro = split[1];
-            String localidade = split[2];
-            String logradouro = split[3];
-            String uf = split[4];
-            String complemento = split[5];
-            Endereco endereco = new Endereco(logradouro, localidade, localidade, uf, cep, bairro, complemento);
+            endereco = new Endereco();
+            for (int index = 0; index <= split.length - 1; index++) {
+                 criaEndereco(endereco,split, index);
+            }
             enderecosFormatados.add(endereco);
+        }
+    }
+
+    private void criaEndereco(Endereco endereco, String[] split, int index) {
+        switch (index) {
+            case 0:
+                endereco.setCep(split[0]);
+                break;
+            case 1:
+                endereco.setBairro(split[1]);
+                break;
+            case 2:
+                endereco.setLocalidade(split[2]);
+                break;
+            case 3:
+                endereco.setLogradouro(split[3]);
+                break;
+            case 4:
+                endereco.setUf(split[4]);
+                break;
+            case 5:
+                endereco.setComplemento(split[5]);
+                break;
         }
     }
 
@@ -169,17 +188,21 @@ public class UsuarioController {
     //CADASTRA UM USUÁRIO
     @PostMapping("/auth/edita-usuario")
     @ResponseStatus(HttpStatus.CREATED)
-    public ModelAndView editar(@Valid @ModelAttribute() Usuario usuario, @RequestParam(value = "enderecos[]",required = false) String[] enderecos) {
-        ModelAndView modelAndView = cadastra();
+    public ModelAndView editar(@Valid @ModelAttribute() Usuario usuario, @RequestParam(value = "enderecos[]", required = false) String[] enderecos) {
+        ModelAndView modelAndView = editarInfoDoCliente();
         try {
-            System.out.println(session.getAttribute(SESSION_ATRIBUTE_EMAIL));
+            String emailNaSessao = session.getAttribute(SESSION_ATRIBUTE_EMAIL).toString().trim();
+            System.out.println(emailNaSessao);
             Optional<Usuario> usuarioOptional = usuarioRepository.findById(usuario.getId());
             if (!session.getAttribute(SESSION_ATRIBUTE_EMAIL).equals(usuario.getEmail()) || usuario.getCargo().equals("Cliente")) {
                 if (usuarioOptional.isPresent()) {
                     Usuario usuarioEncontrado = usuarioOptional.get();
-                    if (!usuarioEncontrado.getEmail().equals(usuario.getEmail()) ) {
+                    if (!usuarioEncontrado.getEmail().equals(usuario.getEmail())) {
                         throw new RuntimeException(O_EMAIL_LOGIN_NÃO_PODE_SER_ALTERADO);
+                    }else if (!emailNaSessao.equals(usuarioEncontrado.getEmail())){
+                        modelAndView = cadastra();
                     }
+
                     usuario.setSenha(utilidades.encryptaSenha(usuario.getSenha()));
                     inserirEnderecos(usuario, enderecos);
                     usuarioRepository.save(usuario);
@@ -195,6 +218,8 @@ public class UsuarioController {
         }
         return modelAndView;
     }
+
+
 
     private void inserirEnderecos(@ModelAttribute @Valid Usuario usuario, @RequestParam("enderecos[]") String[] enderecos) {
         ArrayList<Endereco> enderecosFormatados = new ArrayList<>();

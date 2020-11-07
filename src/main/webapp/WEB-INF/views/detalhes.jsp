@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
-<jsp:include page="header.jsp"/>
+<jsp:include page="${'header.jsp'}"/>
 <div class="container">
     <c:if test="${not empty produto}">
         <h1 align="center" style="margin: 30px;">${ produto.nome }</h1>
@@ -37,7 +37,10 @@
                                             <img class="img-fluid " src='/produto/imagens${img}'
                                                  alt="">
                                         </div>
-                                        <%count++;}else{%>
+                                        <%
+                                            count++;
+                                        } else {
+                                        %>
                                         <div class="carousel-item">
                                             <img class="img-fluid " src='/produto/imagens${img}'
                                                  alt="">
@@ -118,5 +121,4 @@
 <script src="<c:url value="/webjars/jquery-mask-plugin/1.14.15/src/jquery.mask.js"/>"></script>
 
 </body>
-
 </html>
