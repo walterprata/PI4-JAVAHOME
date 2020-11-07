@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.javahome.model.ItensPedido;
 import br.com.javahome.model.Pedido;
-import br.com.javahome.model.Produto;
+import br.com.javahome.model.Usuario;
 import br.com.javahome.repository.ItensPedidoRepository;
 
 @Service
@@ -35,9 +35,32 @@ public class ItensPedidoServiceImpl implements ItensPedidoService {
 			
 		}
 		return  itensPedidos;
-			
 		
 	}
+
+	@Override
+	public List<ItensPedido> listarPedidos() {
+		
+		return repository.findAll();
+	}
+	
+	@Override
+	public ItensPedido buscaPedidoPorId(Integer id) {
+		
+		return repository.findById(id).orElse(null);
+	}
+
+	@Override
+	public void salvarItens(List<ItensPedido> listaProduto) {
+
+			repository.saveAll(listaProduto);
+	
+	}
+
+
+
+
+
 
 	
 }

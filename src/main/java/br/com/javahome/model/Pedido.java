@@ -23,7 +23,7 @@ public class Pedido {
 	private Double valorTotal;
 
 	@OneToMany
-    private List<Produto> produtos = new ArrayList();
+    private List<ItensPedido> itensPedido = new ArrayList();
 	
 	@ManyToOne
 	private Usuario usuario;
@@ -63,12 +63,12 @@ public class Pedido {
 		this.valorTotal = valorTotal;
 	}
 
-	public List<Produto> getProdutos() {
-		return produtos;
+	public List<ItensPedido> getItensPedido() {
+		return itensPedido;
 	}
 
-	public void setProdutos(List<Produto> produtos) {
-		this.produtos = produtos;
+	public void setItensPedido(List<ItensPedido> itensPedido) {
+		this.itensPedido = itensPedido;
 	}
 
 	public Usuario getUsuario() {
