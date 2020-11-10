@@ -1,5 +1,6 @@
 package br.com.javahome.model.carrinho;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,11 @@ import java.util.Map;
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class Carrinho implements Serializable {
     private Map<ItenCarrinho,Integer> items = new LinkedHashMap<>();
-    private LocalEntrega destino = new LocalEntrega();
+
+    @Autowired
+    private LocalEntrega destino;
+
+    private boolean mostrarCep = false;
 
     public void add(ItenCarrinho item) {
         items.put(item, getQuantidade(item) + 1);
@@ -40,12 +45,20 @@ public class Carrinho implements Serializable {
         return items.keySet();
     }
 
-    public BigDecimal getTotal(){
+    public BigDecimal getSubTotal(){
         BigDecimal total = BigDecimal.ZERO;
         for(ItenCarrinho item : items.keySet()){
             total = total.add(getTotal(item));
         }
         return total;
+    }
+
+    public BigDecimal getTotal(){
+        BigDecimal total = BigDecimal.ZERO;
+        for(ItenCarrinho item : items.keySet()){
+            total = total.add(getTotal(item));
+        }
+        return total.add(destino.getValor());
     }
 
     public BigDecimal getTotal(ItenCarrinho item) {
@@ -66,5 +79,13 @@ public class Carrinho implements Serializable {
 
     public void setDestino(LocalEntrega destino) {
         this.destino = destino;
+    }
+
+    public boolean isMostrarCep() {
+        return mostrarCep;
+    }
+
+    public void setMostrarCep(boolean mostrarCep) {
+        this.mostrarCep = mostrarCep;
     }
 }

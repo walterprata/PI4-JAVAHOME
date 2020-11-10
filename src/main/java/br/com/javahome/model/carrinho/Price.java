@@ -13,7 +13,7 @@ public class Price {
     //@NumberFormat(style=Style.CURRENCY)
     private BigDecimal value;
    //Forma de pagamento
-    private FormaDePagamento formaDePagamento;
+
 
     public BigDecimal getValue() {
         return value;

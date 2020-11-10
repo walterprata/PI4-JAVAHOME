@@ -12,19 +12,17 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
+import static br.com.javahome.Constantes.REDIRECT_JAVA_HOME_CARRINHO;
+
 @RestController
 @RequestMapping("/javaHome/carrinho")
 @Scope(value = WebApplicationContext.SCOPE_REQUEST)
 public class CarrinhoController {
-    public static final String REDIRECT_JAVA_HOME_CARRINHO = "redirect:/javaHome/carrinho";
     @Autowired
     private ProdutoRepository produtoRepository;
 
     @Autowired
     private Carrinho carrinho;
-
-    @Autowired
-    private ProdutoUtils produtoUtils;
 
     @RequestMapping
     public ModelAndView carrinho() {

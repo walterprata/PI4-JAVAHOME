@@ -19,7 +19,7 @@ public class Constantes {
 
     //Paginas jsp
     public static final String CADASTRA_USUARIO_JSP = "cadastraUsuario";
-
+    public static final String REDIRECT_JAVA_HOME_CARRINHO = "redirect:/javaHome/carrinho";
     //Redirecionamento
     public static final String REDIRECT_JAVA_HOME = "redirect:/javaHome/";
 

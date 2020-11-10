@@ -17,4 +17,13 @@ public class ProdutoUtils {
             }
         }
     }
+
+    public static void formataCaminhoDaImagenDosProdutos(Produto produto) {
+        if(produto != null){
+            ArrayList<String> img = (ArrayList<String>) new Gson().fromJson(produto.getCaminhoDaImagem(), ArrayList.class);
+            if (img != null && !img.isEmpty()) {
+                produto.setCaminhoDaImagem(img.get(0));
+            }
+        }
+    }
 }

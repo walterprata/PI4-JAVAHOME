@@ -43,7 +43,7 @@ public class Usuario {
 	@Column(name = "cargo")
 	private String cargo;
 
-	@OneToMany
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Endereco> endereco;
 
 	private TipoUsuario TipoUsuario;

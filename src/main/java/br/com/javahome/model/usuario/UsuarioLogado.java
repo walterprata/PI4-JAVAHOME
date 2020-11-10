@@ -20,4 +20,11 @@ public class UsuarioLogado implements Serializable {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
+
+    public String getCep() {
+        if (usuario.getEndereco() != null && !usuario.getEndereco().isEmpty()) {
+            return usuario.getEndereco().stream().findFirst().get().getCep();
+        }
+        return null;
+    }
 }

@@ -1,13 +1,33 @@
 package br.com.javahome.model.carrinho;
 
-public class LocalEntrega {
-    double entrega = 50.00;
+import br.com.javahome.services.EnviaCepService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-    public double getEntrega() {
-        return entrega;
+import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.HashMap;
+
+@Component
+public class LocalEntrega {
+    @Autowired
+    private EnviaCepService enviaCepService;
+
+    private BigDecimal valor = BigDecimal.ZERO;
+
+    public HashMap<String, Double> getCeps() {
+        return enviaCepService.getEntregas();
     }
 
-    public void setEntrega(double entrega) {
-        this.entrega = entrega;
+    public Collection<String> getLocais(){
+        return enviaCepService.getEntregas().keySet();
+    }
+
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
     }
 }
