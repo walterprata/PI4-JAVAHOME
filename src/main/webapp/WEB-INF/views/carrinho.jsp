@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <jsp:include page="${'header.jsp'}"/>
@@ -10,7 +11,6 @@
             <tr>
                 <th scope="col"></th>
                 <th scope="col">Produto</th>
-                <th scope="col">Valor da Entrega</th>
                 <th scope="col">Quantidade</th>
                 <th scope="col">Preço uni</th>
                 <th scope="col">Preço total</th>
@@ -18,21 +18,32 @@
             </thead>
 
             <tbody id="lista-endereco">
-            <tr>
-                <td class="img-thumbnail"><img class="img-fluid" src="/produto/imagens/31tlol_.jpg" alt="" width="70">
-                </td>
-                <td><a href="#"><h5>The las of us 2</h5></a></td>
-                <td>R$ 36,00</td>
-                <td>
-                    <button class="carrinho-btn-qtd" id="carrinho-btn-add">+</button>
-                    <input id="carrinho-qtd" type="text" onKeyDown="return false" value="1" readonly/>
-                    <button class="carrinho-btn-qtd" id="carrinho-btn-rmv">─</button>
-                </td>
-                <td>R$ <input class="carrinho-valor-uni" id="carrinho-preco-uni" type="text" value="250,21"
-                              onKeyDown="return false" readonly disabled></td>
-                <td>R$ <input class="carrinho-valor-uni" id="carrinho-preco-total" type="text" value="0"
-                              onKeyDown="return false" readonly disabled></td>
-            </tr>
+            <c:forEach var="item" items="${carrinho.itens}">
+                <tr>
+                    <td class="img-thumbnail"><img class="img-fluid" src="/produto/imagens/${item.produto.caminhoDaImagem}" alt="" width="70">
+                    </td>
+                    <td><a href="${s:mvcUrl('PC#detalhes').arg(0,item.produto.id).build()}"><h5>${item.produto.nome}</h5></a></td>
+                    <td>
+                        <div class="row">
+                            <form:form action="${s:mvcUrl('CC#add').arg(0,item.produto.id).build()}" method="post" cssClass="carrinho-form-add">
+                                <button type="submit" class="carrinho-btn-qtd" id="carrinho-btn-add">+</button>
+                            </form:form>
+
+                            <input id="carrinho-qtd" type="text" onKeyDown="return false" value="${carrinho.getQuantidade(item)}" readonly/>
+
+                            <form:form action="${s:mvcUrl('CC#removeQuatidade').arg(0,item.produto.id).build()}" method="post" cssClass="carrinho-form-add">
+                                <button type="submit" class="carrinho-btn-qtd" id="carrinho-btn-rmv">─</button>
+                            </form:form>
+                        </div>
+                        <div class="row">
+                            <a href="${s:mvcUrl('CC#remove').arg(0,item.produto.id).build()}" style="color: red">excluir</a>
+                        </div>
+
+                    </td>
+                    <td>R$ ${item.preco}</td>
+                    <td>R$ ${carrinho.getTotal(item)}</td>
+                </tr>
+            </c:forEach>
             </tbody>
         </table>
     </div>
@@ -49,21 +60,23 @@
         <div class="d-flex flex-row-reverse col-md-12 carrinho-footer-info">
             <div>
                 <ul class="list-group">
-                    <li class="list-group-item">R$ 1200,00</li>
-                    <li class="list-group-item">R$ 1200,00</li>
-                    <li class="list-group-item">R$ 1200,00</li>
+                    <li class="list-group-item">R$ ${carrinho.total}</li>
+                    <li class="list-group-item">${carrinho.destino.entrega}</li>
+                    <li class="list-group-item">R$ N/A</li>
+                    <li class="list-group-item">R$ ${carrinho.total + carrinho.destino.entrega}</li>
                 </ul>
             </div>
             <div>
                 <ul class="list-group">
                     <li class="list-group-item">SUBTOTAL</li>
                     <li class="list-group-item">ENTREGA</li>
+                    <li class="list-group-item">DESCONTO</li>
                     <li class="list-group-item">VALOR TOTAL</li>
                 </ul>
             </div>
         </div>
         <div class="col-md-12 carrinho-footer">
-            <button type="button" class="btn btn-primary">Continuar Comprando</button>
+            <a href="${s:mvcUrl('HC#index').build()}" class="btn btn-primary">Continuar Comprando</a>
             <button type="button" class="btn btn-success float-right" style="margin-right: 20px ">FINALIZAR COMPRA</button>
         </div>
     </div>

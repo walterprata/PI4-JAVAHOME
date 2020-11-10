@@ -45,15 +45,11 @@ public class ItensPedidoController {
 	@PostMapping("/salvar-pedido")
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<ItensPedido> salvarItensPedido(@RequestBody List<ItensPedido> itens) {
-		
 		if(!itens.isEmpty()) {
 			itensPedidoService.salvarItens(itens);
 			return ResponseEntity.status(HttpStatus.CREATED).build();
 		}
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-		
-		
-		
 	}
 	
 }

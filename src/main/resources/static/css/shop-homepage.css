@@ -92,3 +92,6 @@ body{
 .carrinho-footer-info{
   margin-top: 20px;
 }
+.carrinho-form-add{
+  display: inline-block;
+}

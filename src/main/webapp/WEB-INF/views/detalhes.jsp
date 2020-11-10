@@ -70,7 +70,10 @@
                 <h2> ${ produto.descricao } </h2>
                 <p>
                 <h1 style="color: green">à Vista R$${ produto.valor }</h1></p>
-                <button type="button" class="btn btn-success btn-lg">Comprar</button>
+                <form action="/javaHome/carrinho/add" method="post">
+                    <input type="text" value="${produto.id}" name="id" hidden/>
+                    <button type="submit" class="btn btn-success btn-lg">Comprar</button>
+                </form>
                 <p>Quantidade Disponivel: ${ produto.quantidade }</p>
 
                 <h2>Detalhes</h2>

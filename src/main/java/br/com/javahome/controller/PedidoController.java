@@ -26,12 +26,8 @@ import br.com.javahome.services.PedidoService;
 @RestController
 @RequestMapping("/javaHome")
 public class PedidoController {
-
 	
 	@Autowired 
 	private PedidoService pedidoService;
-	
 
-	
-	
 }

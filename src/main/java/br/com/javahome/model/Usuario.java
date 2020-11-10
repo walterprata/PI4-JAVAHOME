@@ -1,7 +1,10 @@
 package br.com.javahome.model;
 
 import br.com.javahome.model.enums.TipoUsuario;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.context.WebApplicationContext;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -11,6 +14,7 @@ import java.util.List;
 
 
 @Entity
+@Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class Usuario {
 
 	@Id

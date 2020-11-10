@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java"
          pageEncoding="UTF-8"
 %>
@@ -60,13 +61,16 @@
                                         <img class="card-img-top" src="/produto/imagens/${produto.caminhoDaImagem}" alt=""></a>
                                     <div class="card-body">
                                         <h4 class="card-title">
-                                            <a href="/produto/detalhes/${produto.id}">${produto.nome}</a>
+                                            <a href="${s:mvcUrl('PC#detalhes').arg(0,produto.id).build()}">${produto.nome}</a>
                                         </h4>
                                         <h5>R$${produto.valor}</h5>
                                         <p class="card-text">${produto.descricao}</p>
                                     </div>
                                     <div class="card-footer">
-                                        <a type="button" class="btn btn-dark" href="/javaHome/adcionar-produto">Adicionar ao carrinho</a>
+                                        <form action="/javaHome/carrinho/add" method="post">
+                                            <input type="text" value="${produto.id}" name="id" hidden/>
+                                            <button type="submit" class="btn btn-dark">Adicionar ao carrinho</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

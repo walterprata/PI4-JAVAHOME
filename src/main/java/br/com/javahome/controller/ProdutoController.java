@@ -100,18 +100,18 @@ public class ProdutoController {
         return modelAndView;
     }
 
-    private void adicionaPerguntas(@RequestParam("respostas[]") String[] pergunta,
-                                   @RequestParam("respostas[]") String[] resposta,
-                                   @ModelAttribute Produto produto) {
-        if (pergunta.length > 0 || resposta.length > 0) {
-            int index = 0;
-            for (String p : pergunta) {
-                DuvidaProduto duvidaProduto = new DuvidaProduto();
-                duvidaProduto.setPergunta(p);
-                duvidaProduto.setResposta(resposta[index]);
-                duvidaProduto.setProduto(produto);
-                duvidaProdutoRepository.save(duvidaProduto);
-                index++;
+    private void adicionaPerguntas(String[] pergunta, String[] resposta, Produto produto) {
+        if (pergunta != null && resposta != null){
+            if (pergunta.length > 0 || resposta.length > 0) {
+                int index = 0;
+                for (String p : pergunta) {
+                    DuvidaProduto duvidaProduto = new DuvidaProduto();
+                    duvidaProduto.setPergunta(p);
+                    duvidaProduto.setResposta(resposta[index]);
+                    duvidaProduto.setProduto(produto);
+                    duvidaProdutoRepository.save(duvidaProduto);
+                    index++;
+                }
             }
         }
     }

@@ -25,13 +25,19 @@ public class HomeController {
     @Autowired
     private ProdutoUtils produtoUtils;
 
-    @GetMapping(value = {"/javaHome","/"})
+    @GetMapping("/")
     public ModelAndView index(){
-        ModelAndView modelAndView = new ModelAndView("index");
+        ModelAndView modelAndView = new ModelAndView("redirect:/javaHome");
+        return modelAndView;
+    }
+
+    @GetMapping("/javaHome")
+    public ModelAndView newIndex(){
+        ModelAndView mv = new ModelAndView("index");
         List<Produto> produtos = produtoRepository.findAll();
         produtoUtils.formataCaminhoDaImagenDosProdutos(produtos);
-        modelAndView.addObject("produtos",produtos);
-        return modelAndView;
+        mv.addObject("produtos",produtos);
+        return mv;
     }
 
     @GetMapping("/javaHome/login/estoque")

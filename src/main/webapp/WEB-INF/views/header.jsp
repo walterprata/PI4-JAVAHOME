@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="s" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <head>
@@ -37,31 +38,31 @@
                         <a class="nav-link" href="#">Contato</a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-secondary" href="/javaHome/carrinho"> 0 | Carrinho</a>
+                        <a class="btn btn-secondary" href="${s:mvcUrl('CC#carrinho').build()}"> ${carrinho.quantidade} | Carrinho</a>
                     </li>
-                    <c:if test="${empty sessionScope.get('cargo')}">
+                    <c:if test="${empty usuarioLogado.usuario.cargo}">
                         <li class="nav-item">
-                            <a class="nav-link" href="/javaHome/login">Entrar</a>
+                            <a class="nav-link" href="${s:mvcUrl('UC#login').build()}">Entrar</a>
                         </li>
                     </c:if>
-                    <c:if test="${not empty sessionScope.get('cargo')}">
+                    <c:if test="${not empty usuarioLogado.usuario.cargo}">
                         <li class="nav-item">
                             <div class="dropdown">
                                 <a class="nav-link" type="button" id="dropdownMenuButton"
                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        ${sessionScope.get("nome")}
+                                        ${usuarioLogado.usuario.nome}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <c:if test="${sessionScope.get('cargo') != 'Cliente'}">
-                                        <a class="dropdown-item" href="/produto/cadastrar">Produtos</a>
-                                        <c:if test="${sessionScope.get('cargo') != 'estoque' && sessionScope.get('cargo') != 'Cliente'}">
-                                            <a class="dropdown-item" href="/javaHome/login/cadastrar">Usuários</a>
+                                    <c:if test="${usuarioLogado.usuario.cargo != 'Cliente'}">
+                                        <a class="dropdown-item" href="${s:mvcUrl('PC#pegaTelaDeCadastro').build()}">Produtos</a>
+                                        <c:if test="${usuarioLogado.usuario.cargo != 'estoque' && usuarioLogado.usuario.cargo != 'Cliente'}">
+                                            <a class="dropdown-item" href="${s:mvcUrl('UC#cadastra').build()}">Usuários</a>
                                         </c:if>
                                     </c:if>
-                                    <c:if test="${sessionScope.get('cargo') eq 'Cliente'}">
-                                    <a class="dropdown-item" href="/javaHome/usuario/editar/cliente">Editar Perfil</a>
+                                    <c:if test="${usuarioLogado.usuario.cargo eq 'Cliente'}">
+                                    <a class="dropdown-item" href="${s:mvcUrl('UC#editarInfoDoCliente').build()}">Editar Perfil</a>
                                     </c:if>
-                                    <a class="dropdown-item" href="/javaHome/logon">Sair</a>
+                                    <a class="dropdown-item" href="${s:mvcUrl('HC#logon').build()}">Sair</a>
                                 </div>
                             </div>
                         </li>

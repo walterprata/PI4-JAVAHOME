@@ -3,13 +3,16 @@ package br.com.javahome.controller;
 import br.com.javahome.component.Utilidades;
 import br.com.javahome.model.Endereco;
 import br.com.javahome.model.Usuario;
+import br.com.javahome.model.usuario.UsuarioLogado;
 import br.com.javahome.repository.EnderecoRepository;
 import br.com.javahome.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
@@ -22,6 +25,7 @@ import static br.com.javahome.Constantes.*;
 
 @RestController
 @RequestMapping("/javaHome")
+@Scope(value = WebApplicationContext.SCOPE_REQUEST)
 public class UsuarioController {
 
     @Autowired
@@ -30,9 +34,10 @@ public class UsuarioController {
     private EnderecoRepository enderecoRepository;
     @Autowired
     private HttpSession session;
-
     @Autowired
     private Utilidades utilidades;
+    @Autowired
+    private UsuarioLogado usuarioLogado;
 
     private static final String SESSION_ATRIBUTE_EMAIL = "email";
     private static final String SESSION_ATRIBUTE_CARGO = "cargo";
@@ -85,6 +90,7 @@ public class UsuarioController {
         ModelAndView modelAndView = login();
         if (usuario != null && utilidades.validaSenha(senha, usuario.getSenha())) {
             if (usuario.getStatus()) {
+                usuarioLogado.setUsuario(usuario);
                 session.setAttribute(SESSION_ATRIBUTE_EMAIL, usuario.getEmail());
                 session.setAttribute(SESSION_ATRIBUTE_CARGO, usuario.getCargo());
                 session.setAttribute(SESSION_ATRIBUTE_USER_NAME, usuario.getNome());
