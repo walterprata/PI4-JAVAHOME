@@ -1,4 +1,4 @@
-package br.com.javahome.model;
+package br.com.javahome.model.produto;
 
 import javax.persistence.*;
 import java.util.ArrayList;

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.javahome.model.DuvidaProduto;
+import br.com.javahome.model.produto.DuvidaProduto;
 import br.com.javahome.repository.DuvidaProdutoRepository;
 
 @RestController

@@ -1,6 +1,6 @@
 package br.com.javahome.model.carrinho;
 
-import br.com.javahome.model.Produto;
+import br.com.javahome.model.produto.Produto;
 
 import java.math.BigDecimal;
 import java.util.Objects;

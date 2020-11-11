@@ -1,6 +1,6 @@
 package br.com.javahome.component;
 
-import br.com.javahome.model.Produto;
+import br.com.javahome.model.produto.Produto;
 import com.google.gson.Gson;
 import org.springframework.stereotype.Component;
 

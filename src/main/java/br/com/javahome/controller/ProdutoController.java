@@ -1,8 +1,8 @@
 package br.com.javahome.controller;
 
 import br.com.javahome.component.FileSaver;
-import br.com.javahome.model.DuvidaProduto;
-import br.com.javahome.model.Produto;
+import br.com.javahome.model.produto.DuvidaProduto;
+import br.com.javahome.model.produto.Produto;
 import br.com.javahome.repository.DuvidaProdutoRepository;
 import br.com.javahome.repository.ProdutoRepository;
 import br.com.javahome.repository.filter.ProdutoFilter;

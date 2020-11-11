@@ -1,5 +1,7 @@
 package br.com.javahome.model;
 
+import br.com.javahome.model.produto.Produto;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

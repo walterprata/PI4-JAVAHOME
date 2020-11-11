@@ -1,5 +1,7 @@
 package br.com.javahome.model.carrinho;
 
+import br.com.javahome.model.frete.Frete;
+import br.com.javahome.services.EnviaCepService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -8,19 +10,14 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 @Component
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class Carrinho implements Serializable {
     private Map<ItenCarrinho,Integer> items = new LinkedHashMap<>();
-
-    @Autowired
-    private LocalEntrega destino;
-
-    private boolean mostrarCep = false;
+    private List<Frete> fretes = new ArrayList<>();
+    private Frete freteSelecionado = new Frete();
 
     public void add(ItenCarrinho item) {
         items.put(item, getQuantidade(item) + 1);
@@ -58,7 +55,7 @@ public class Carrinho implements Serializable {
         for(ItenCarrinho item : items.keySet()){
             total = total.add(getTotal(item));
         }
-        return total.add(destino.getValor());
+        return total.add(freteSelecionado.getFreteValor());
     }
 
     public BigDecimal getTotal(ItenCarrinho item) {
@@ -73,19 +70,23 @@ public class Carrinho implements Serializable {
         return items.isEmpty();
     }
 
-    public LocalEntrega getDestino() {
-        return destino;
+    public List<Frete> getFretes() {
+        return fretes;
     }
 
-    public void setDestino(LocalEntrega destino) {
-        this.destino = destino;
+    public void setFretes(List<Frete> fretes) {
+        this.fretes = fretes;
     }
 
-    public boolean isMostrarCep() {
-        return mostrarCep;
+    public void clearFrestes(){
+        fretes.clear();
     }
 
-    public void setMostrarCep(boolean mostrarCep) {
-        this.mostrarCep = mostrarCep;
+    public Frete getFreteSelecionado() {
+        return freteSelecionado;
+    }
+
+    public void setFreteSelecionado(Frete freteSelecionado) {
+        this.freteSelecionado = freteSelecionado;
     }
 }

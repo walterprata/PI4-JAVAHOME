@@ -56,32 +56,45 @@
         </table>
     </div>
     <div class="container-cupom row">
-        <form:form action="${ s:mvcUrl('CC#buscaValores').build() }" method="post"
+        <form:form action="${ s:mvcUrl('CC#buscaCep').build() }" method="get"
                    cssClass="form-inline carrinho-form-cupom col-md-12">
             <label>Calcular valor do frete</label>
             <c:if test="${not empty usuarioLogado.getCep()}">
                 <input class="form-control mr-sm-2" type="search" placeholder="Digite seu CEP"
-                       aria-label="Search" value="${usuarioLogado.getCep()}">
+                       aria-label="Search" value="${usuarioLogado.getCep()}" name="cep" required>
             </c:if>
             <c:if test="${empty usuarioLogado.getCep()}">
                 <input class="form-control mr-sm-2" type="search" placeholder="Digite seu CEP"
-                       aria-label="Search">
+                       aria-label="Search" name="cep" required>
             </c:if>
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Aplicar</button>
         </form:form>
-        <c:if test="${carrinho.isMostrarCep()}">
-            <form:form action="${s:mvcUrl('CC#addCep').build()}" method="post">
-                <div class="form-group col-md-12 carrinho-container-frete">
-                    <c:forEach items="${carrinho.destino.getCeps()}" var="item">
-                        <div class="form-row">
-                            <label class="form-check-label">
-                                <input type="radio" class="form-check-input" name="cepValor" value="${item.value}">${item.key} - R$ ${item.value}
-                            </label>
+        <c:if test="${not empty carrinho.fretes}">
+
+            <div class="form-group carrinho-container-frete col-md-12">
+                <c:if test="${not empty carrinho.freteSelecionado.freteNome}">
+                    <form:form action="${s:mvcUrl('CC#addRemove').build()}" method="get">
+                        <input type="text" hidden name="${carrinho.freteSelecionado.freteId}">
+                        <div class="alert alert-success col-md-6" role="alert">
+                            Frete Selecionado: ${carrinho.freteSelecionado.freteNome} -
+                            R$ ${carrinho.freteSelecionado.freteValor} - ${carrinho.freteSelecionado.fretePrazo}
                         </div>
-                    </c:forEach>
-                    <button class="btn btn-success " type="submit">Aplicar Cep</button>
-                </div>
-            </form:form>
+                        <button class="btn btn-danger" type="submit">Remover Frete</button>
+                    </form:form>
+
+                </c:if>
+                <c:if test="${empty carrinho.freteSelecionado.freteNome}">
+                    <form:form action="${s:mvcUrl('CC#addCep').build()}" method="get">
+                        <select class="form-control col-md-3" id="fretes" name="freteid">
+                            <c:forEach items="${carrinho.fretes}" var="item">
+                                <option value="${item.freteId}">${item.freteNome} - R$ ${item.freteValor}
+                                    - ${item.fretePrazo}</option>
+                            </c:forEach>
+                        </select>
+                        <button class="btn btn-success " type="submit" id="carrinho-btn-add-frete">Aplicar Frete</button>
+                    </form:form>
+                </c:if>
+            </div>
         </c:if>
 
     </div>
@@ -91,7 +104,7 @@
             <div>
                 <ul class="list-group">
                     <li class="list-group-item">R$ ${carrinho.subTotal}</li>
-                    <li class="list-group-item">R$ ${carrinho.destino.valor}</li>
+                    <li class="list-group-item">R$ ${carrinho.freteSelecionado.freteValor}</li>
                     <li class="list-group-item">R$ ${carrinho.total}</li>
                 </ul>
             </div>

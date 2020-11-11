@@ -16,7 +16,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import org.springframework.util.StringUtils;
-import br.com.javahome.model.Produto;
+import br.com.javahome.model.produto.Produto;
 import br.com.javahome.repository.filter.ProdutoFilter;
 
 public class ProdutoRepositoryImpl implements ProdutoRepositoryQuery {
