@@ -10,6 +10,7 @@ import br.com.javahome.model.pedido.ItensPedido;
 import br.com.javahome.model.pedido.Pedido;
 import br.com.javahome.model.usuario.Usuario;
 import br.com.javahome.model.usuario.UsuarioLogado;
+import org.apache.juli.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,6 +24,8 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -35,7 +38,8 @@ public class PedidoController {
     public static final String NÃO_FOI_SELECIONADO_UM_ENDERECO_PARA_O_PEDIDO = "Não foi selecionado um Endereco para o pedido";
     public static final String NÃO_FOI_SELECIONADO_UMA_FORMA_DE_PAGAMENTO_VALIDA = "Não foi selecionado uma Forma de pagamento Valida";
 	public static final String REDIRECT_CARRINHO_INFORMACOES_COMPRA = "redirect:/javaHome/compra/informacoes-compra";
-	@Autowired
+    public static final String AGUARDANDO_PAGAMENTO = "aguardando pagamento";
+    @Autowired
     private PedidoService pedidoService;
 
     @Autowired
@@ -47,6 +51,9 @@ public class PedidoController {
     @RequestMapping("/informacoes-compra")
     public ModelAndView finalizar() {
         ModelAndView mv = new ModelAndView("compraInformacoes");
+        if (!carrinho.getTotal().equals(BigDecimal.ZERO)){
+            mv.addObject("parcelas",calculaParcelas());
+        }
         if (usuarioLogado.getUsuario() == null) {
             mv.setViewName("redirect:/javaHome/login");
         } else if (carrinho.getItens().isEmpty()) {
@@ -62,7 +69,10 @@ public class PedidoController {
         ModelAndView mv = new ModelAndView(REDIRECT_CARRINHO_INFORMACOES_COMPRA);
         if (cartao != null) {
             if (criaPedido(TipoPagamento.CARTAO_DE_CREDITO)) {
-                ;
+
+                List<BigDecimal> parcelas = calculaParcelas();
+                
+                carrinho.getPagamento().setCartao(cartao);
                 System.out.println("Redireciona para revisar Pedido!");
             } else {
                 redirectAttributes.addFlashAttribute("error", NÃO_FOI_SELECIONADO_UM_ENDERECO_PARA_O_PEDIDO);
@@ -71,6 +81,14 @@ public class PedidoController {
             redirectAttributes.addFlashAttribute("error", NÃO_FOI_SELECIONADO_UMA_FORMA_DE_PAGAMENTO_VALIDA);
         }
         return mv;
+    }
+
+    private List<BigDecimal>  calculaParcelas() {
+        List<BigDecimal> parcelas =  new ArrayList<>();
+        for (int i = 1;i<=12;i++){
+            parcelas.add(carrinho.getTotal().divide(BigDecimal.valueOf(i), 2, RoundingMode.HALF_EVEN));
+        }
+        return parcelas;
     }
 
     @RequestMapping("/finalizar-boleto")
@@ -88,7 +106,6 @@ public class PedidoController {
         LocalDate date = LocalDate.now();
         List<ItensPedido> itensPedidos = new ArrayList<>();
         carrinho.getItens().stream().forEach(produto -> {
-            //cria iten Pedido
             ItensPedido novoItenPedido = new ItensPedido();
             novoItenPedido.setProduto(produto.getProduto());
             novoItenPedido.setQuantidade(carrinho.getQuantidade(produto));
@@ -106,11 +123,10 @@ public class PedidoController {
             carrinho.getNovoPedido().setFreteNome(freteSelecionado.getFreteNome());
             carrinho.getNovoPedido().setFreteValor(freteSelecionado.getFreteValor());
             carrinho.getNovoPedido().setFretePrazo(freteSelecionado.getFretePrazo());
-            carrinho.getNovoPedido().setStatusCompra("ativo");
-//				pedidoService.salvar(carrinho.getNovoPedido());
+            carrinho.getNovoPedido().setStatusCompra(AGUARDANDO_PAGAMENTO);
 			carrinho.zeroed();
             //TODO REDIRECT PARA REVISAR INFORMAÇÕES DA COMPRA
-            System.out.println("Compra realizada com sucesso: " + tipoPagamento.toString());
+            System.out.println("Compra realizada com sucesso em " + date.toString());
             return true;
         }
         return false;

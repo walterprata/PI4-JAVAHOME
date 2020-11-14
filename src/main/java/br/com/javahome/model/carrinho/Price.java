@@ -1,41 +1,29 @@
 package br.com.javahome.model.carrinho;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.xml.bind.annotation.XmlRootElement;
+import br.com.javahome.model.Cartao;
+
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
-@Embeddable
-@XmlRootElement
 public class Price {
-
-    @Column(scale = 2)
-    //@NumberFormat(style=Style.CURRENCY)
+    private Cartao cartao;
+    List<BigDecimal> parcelas =  new ArrayList<>();
     private BigDecimal value;
-   //Forma de pagamento
 
+    public Cartao getCartao() {
+        return cartao;
+    }
+
+    public void setCartao(Cartao cartao) {
+        this.cartao = cartao;
+    }
 
     public BigDecimal getValue() {
         return value;
     }
 
-    public void setValue(BigDecimal valor) {
-        this.value = valor;
+    public void setValue(BigDecimal value) {
+        this.value = value;
     }
-
-//    public BookType getBookType() {
-//        return bookType;
-//    }
-//
-//    public void setBookType(BookType tipoLivro) {
-//        this.bookType = tipoLivro;
-//    }
-
-    @Override
-    public String toString() {
-        return "Price [value=" + value + "]";
-    }
-
-
-
 }

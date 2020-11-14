@@ -56,7 +56,8 @@
                     </label>
                 </div>
             </div>
-            <form:form action="${s:mvcUrl('PC#cartao').build()}" cssClass="form-group compra-informacoes-form-cartao" method="post">
+            <%--@elvariable id="parcelas" type="BigDecimal"--%>
+            <form:form action="${s:mvcUrl('PC#cartao').build()}" cssClass="form-group compra-informacoes-form-cartao" method="post" modelAttribute="parcelas">
                 <div class="form-group">
                     <div class="form-row">
                         <div class="form-group col-md">
@@ -84,7 +85,16 @@
                             <label for="validadeCartao">validade</label>
                             <input type="text" class="form-control" id="validadeCartao" name="validadeCartao" minlength="7" maxlength="7" placeholder="dd/aaaa" required>
                         </div>
-
+                        <div class="form-group col-md-4">
+                            <div class="form-group">
+                                <label for="parcelas">Parcelas</label>
+                                <select class="form-control" id="parcelas" name="parcelas">
+                                    <c:forEach var="valor" items="${parcelas}" varStatus="count">
+                                        <option value="${count.index+1}">${count.index+1} x R$${valor}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Finalizar Pagamento</button>

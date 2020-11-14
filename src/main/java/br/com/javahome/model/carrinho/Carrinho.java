@@ -20,12 +20,14 @@ public class Carrinho implements Serializable {
     private List<Frete> fretes = new ArrayList<>();
     private Frete freteSelecionado = new Frete();
     private Pedido novoPedido = new Pedido();
+    private Price pagamento = new Price();
 
     public void zeroed(){
         items = new LinkedHashMap<>();
         fretes = new ArrayList<>();
         freteSelecionado = new Frete();
         novoPedido = new Pedido();
+        pagamento = new Price();
     }
 
     public void add(ItenCarrinho item) {
@@ -105,5 +107,13 @@ public class Carrinho implements Serializable {
 
     public void setNovoPedido(Pedido novoPedido) {
         this.novoPedido = novoPedido;
+    }
+
+    public Price getPagamento() {
+        return pagamento;
+    }
+
+    public void setPagamento(Price pagamento) {
+        this.pagamento = pagamento;
     }
 }

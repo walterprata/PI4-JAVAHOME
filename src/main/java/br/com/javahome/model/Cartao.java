@@ -7,6 +7,7 @@ public class Cartao {
     private String numeroCartao;
     private String cpfTitular;
     private String csvCartao;
+    private Integer indexParcela;
 
     public String getNomeTitular() {
         return nomeTitular;
@@ -38,6 +39,14 @@ public class Cartao {
 
     public void setCsvCartao(String csvCartao) {
         this.csvCartao = csvCartao;
+    }
+
+    public Integer getIndexParcela() {
+        return indexParcela;
+    }
+
+    public void setIndexParcela(Integer indexParcela) {
+        this.indexParcela = indexParcela;
     }
 
     @Override
