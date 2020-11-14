@@ -31,7 +31,7 @@
                 </form:form>
             </c:forEach>
             <c:if test="${not empty message}">
-                <div class="alert alert-success col-md-6" role="alert">
+                <div class="alert alert-success col-md-6" role="alert" style="margin-top: 30px">
                         ${message}
                 </div>
             </c:if>

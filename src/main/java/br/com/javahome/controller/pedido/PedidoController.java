@@ -56,16 +56,19 @@ public class PedidoController {
     private UsuarioLogado usuarioLogado;
 
     @RequestMapping("/informacoes-compra")
-    public ModelAndView finalizar() {
+    public ModelAndView finalizar(RedirectAttributes redirectAttributes) {
         ModelAndView mv = new ModelAndView("compraInformacoes");
         if (!carrinho.getTotal().equals(BigDecimal.ZERO)) {
             mv.addObject("parcelas", calculaParcelas());
         }
         if (usuarioLogado.getUsuario() == null) {
+            redirectAttributes.addFlashAttribute("message","Entre para efetuar suas compras");
             mv.setViewName("redirect:/javaHome/login");
         } else if (carrinho.getItens().isEmpty()) {
-            mv.setViewName("redirect:/");
+            redirectAttributes.addFlashAttribute("error","Seu carrinho não pode estar vazio");
+            mv.setViewName("redirect:/javaHome");
         } else if (carrinho.getFreteSelecionado().getFreteId() == null) {
+            redirectAttributes.addFlashAttribute("error","Por favor selecione um tipo de envio");
             mv.setViewName("redirect:/javaHome/carrinho");
         }
         return mv;

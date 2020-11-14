@@ -13,6 +13,13 @@
             </div>
         </div>
     </c:if>
+    <c:if test="${not empty error}">
+        <div class="row">
+            <div class="alert alert-danger col-md" role="alert">
+                    ${error}
+            </div>
+        </div>
+    </c:if>
     <div class="row">
 
         <div class="col-lg-3">
