@@ -11,7 +11,9 @@ import java.util.Objects;
 @Component
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UsuarioLogado implements Serializable {
-    private Usuario usuario = null;
+
+	private static final long serialVersionUID = 1L;
+	private Usuario usuario = null;
 
     public Usuario getUsuario() {
         return usuario;

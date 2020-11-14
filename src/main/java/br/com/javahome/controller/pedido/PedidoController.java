@@ -3,12 +3,10 @@ package br.com.javahome.controller.pedido;
 import br.com.javahome.model.Cartao;
 import br.com.javahome.model.Endereco;
 import br.com.javahome.model.carrinho.Carrinho;
-import br.com.javahome.model.carrinho.ItenCarrinho;
 import br.com.javahome.model.enums.TipoPagamento;
 import br.com.javahome.model.frete.Frete;
 import br.com.javahome.model.pedido.ItensPedido;
 import br.com.javahome.model.pedido.Pedido;
-import br.com.javahome.model.usuario.Usuario;
 import br.com.javahome.model.usuario.UsuarioLogado;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -88,7 +86,7 @@ public class PedidoController {
         LocalDate date = LocalDate.now();
         List<ItensPedido> itensPedidos = new ArrayList<>();
         carrinho.getItens().stream().forEach(produto -> {
-            //cria iten Pedido
+            //cria item Pedido
             ItensPedido novoItenPedido = new ItensPedido();
             novoItenPedido.setProduto(produto.getProduto());
             novoItenPedido.setQuantidade(carrinho.getQuantidade(produto));

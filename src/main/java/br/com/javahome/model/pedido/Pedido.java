@@ -8,7 +8,6 @@ import javax.persistence.*;
 
 import br.com.javahome.model.Endereco;
 import br.com.javahome.model.usuario.Usuario;
-import br.com.javahome.model.enums.TipoPagamento;
 
 @Entity
 public class Pedido {
@@ -20,7 +19,7 @@ public class Pedido {
 	private BigDecimal valorTotal;
 
 	@OneToMany(cascade = CascadeType.ALL)
-    private List<ItensPedido> itensPedido = new ArrayList();
+    private List<ItensPedido> itensPedido = new ArrayList<>();
 	
 	@ManyToOne
 	private Usuario usuario;
