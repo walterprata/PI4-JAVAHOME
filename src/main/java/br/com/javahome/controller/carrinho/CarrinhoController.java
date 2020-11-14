@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import static br.com.javahome.Constantes.REDIRECT_JAVA_HOME_CARRINHO;
 
@@ -29,9 +30,17 @@ public class CarrinhoController {
     }
 
     @RequestMapping("/add")
-    public ModelAndView add(Integer id) {
+    public ModelAndView add(Integer id, RedirectAttributes redirectAttributes) {
         ModelAndView mv = new ModelAndView(REDIRECT_JAVA_HOME_CARRINHO);
-        carrinho.add(criaItem(id));
+        produtoRepository.findById(id).ifPresent(produto -> {
+            ProdutoUtils.formataCaminhoDaImagenDosProdutos(produto);
+            ItenCarrinho itenCarrinho = new ItenCarrinho(produto);
+            if (carrinho.getQuantidade(itenCarrinho)+1 <= produto.getQuantidade()){
+                carrinho.add(itenCarrinho);
+            }else{
+                redirectAttributes.addFlashAttribute("error","Não tem mais produto em estoque!");
+            }
+        });
         return mv;
     }
 

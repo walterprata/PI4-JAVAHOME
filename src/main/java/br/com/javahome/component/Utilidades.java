@@ -13,4 +13,5 @@ public class Utilidades {
     public Boolean validaSenha(String senha,String encryptSenha){
         return new BCryptPasswordEncoder().matches(senha,encryptSenha);
     }
+
 }

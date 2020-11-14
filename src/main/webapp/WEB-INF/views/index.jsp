@@ -6,7 +6,13 @@
 <jsp:include page="${'header.jsp'}"/>
 <!-- Page Content -->
 <div class="container">
-
+    <c:if test="${not empty message}">
+        <div class="row">
+            <div class="alert alert-success col-md" role="alert">
+                    ${message}
+            </div>
+        </div>
+    </c:if>
     <div class="row">
 
         <div class="col-lg-3">
@@ -54,7 +60,7 @@
             <div class="row" id="vitrine">
                 <c:if test="${not empty produtos}">
                     <c:forEach var="produto" items="${produtos}">
-                        <c:if test="${produto.ativo}">
+                        <c:if test="${produto.ativo && produto.quantidade >=1 }">
                             <div class="col-lg-4 col-md-6 mb-4">
                                 <div class="card h-100">
                                     <a href="/produto/detalhes/${produto.id}">

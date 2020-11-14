@@ -7,11 +7,10 @@
 <jsp:include page="${'header.jsp'}"/>
 <div class="container">
     <div class="row">
-        Status pedido
         <h1>Cliente:${usuarioLogado.usuario.nome}</h1>
     </div>
     <c:if test="${not empty error}">
-        <div class="alert alert-danger" role="alert">
+        <div class="alert alert-danger col-md" role="alert">
                 ${error}
         </div>
     </c:if>
@@ -36,8 +35,11 @@
                         ${message}
                 </div>
             </c:if>
-            <h3>Envia para um novo endereço</h3>
-            <a href="${s:mvcUrl('UC#editarInfoDoCliente').build()}">Adicionar um novo endereço</a>
+            <div style="margin-top: 30px">
+                <h3>Envia para um novo endereço</h3>
+                <a href="${s:mvcUrl('UC#editarInfoDoCliente').build()}">Adicionar um novo endereço</a>
+            </div>
+
         </div>
         <div class="col-md-6 pedido-box">
             <h3>Forma de pagamento</h3>
@@ -57,18 +59,18 @@
                 </div>
             </div>
             <%--@elvariable id="parcelas" type="BigDecimal"--%>
-            <form:form action="${s:mvcUrl('PC#cartao').build()}" cssClass="form-group compra-informacoes-form-cartao" method="post" modelAttribute="parcelas">
+            <form:form action="${s:mvcUrl('PC#cartao').build()}" cssClass="form-group compra-informacoes-form-cartao" modelAttribute="parcelas" method="post" >
                 <div class="form-group">
                     <div class="form-row">
-                        <div class="form-group col-md">
-                            <label for="nomeTitular">Nome Impresso no cartão</label>
-                            <input type="text" class="form-control" id="nomeTitular" placeholder="Nome do Titular" name="nomeTitular" required >
-                        </div>
+                    <div class="form-group col-md">
+                        <label for="nomeTitular">Nome Impresso no cartão</label>
+                        <input type="text" class="form-control" id="nomeTitular" placeholder="Nome do Titular" name="nomeTitular" required >
                     </div>
+                </div>
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="numeroCartao">Digitos</label>
-                            <input type="text" class="form-control" id="numeroCartao" name="numeroCartao" required>
+                            <input type="text" class="form-control" id="numeroCartao" name="numeroCartao" minlength="19" maxlength="19" required placeholder="Ex: 5580 9852 7361 1193">
                         </div>
                         <div class="form-group col-md-4">
                             <label for="cpfTitular">CPF do titular</label>
@@ -76,8 +78,8 @@
                                    maxlength="14" required>
                         </div>
                         <div class="form-group col-md-4">
-                            <label for="csvCartao">CSV</label>
-                            <input type="text" class="form-control" id="csvCartao" name="csvCartao" minlength="3" maxlength="3" required>
+                            <label for="cvvCartao">CVV</label>
+                            <input type="text" class="form-control" id="cvvCartao" name="cvvCartao" minlength="3" maxlength="3" required >
                         </div>
                     </div>
                     <div class="form-row">
@@ -87,8 +89,8 @@
                         </div>
                         <div class="form-group col-md-4">
                             <div class="form-group">
-                                <label for="parcelas">Parcelas</label>
-                                <select class="form-control" id="parcelas" name="parcelas">
+                                <label for="indexParcela">Parcelas</label>
+                                <select class="form-control" id="indexParcela" name="indexParcela">
                                     <c:forEach var="valor" items="${parcelas}" varStatus="count">
                                         <option value="${count.index+1}">${count.index+1} x R$${valor}</option>
                                     </c:forEach>
@@ -100,7 +102,7 @@
                 <button type="submit" class="btn btn-primary">Finalizar Pagamento</button>
             </form:form>
             <form:form action="${s:mvcUrl('PC#boleto').build()}" cssClass="form-group compra-informacoes-form-boleto" method="get">
-                <button type="submit" class="btn btn-primary">Gerar Boleto</button>
+                <button type="submit" class="btn btn-primary">Finalizar Pagamento</button>
             </form:form>
         </div>
     </div>

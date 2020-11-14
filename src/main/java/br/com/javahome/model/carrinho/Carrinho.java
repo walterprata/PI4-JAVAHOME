@@ -11,6 +11,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 @Component
@@ -61,6 +62,19 @@ public class Carrinho implements Serializable {
         return total;
     }
 
+    public BigDecimal getSubTotalPedido(){
+        if (novoPedido.getValorTotal() != null){
+            return novoPedido.getValorTotal().subtract(novoPedido.getFreteValor());
+        }
+        return BigDecimal.ZERO;
+    }
+
+    public BigDecimal getValorParcelas(){
+        if (pagamento.getCartao() != null){
+            return getTotal().divide(BigDecimal.valueOf(pagamento.getCartao().getIndexParcela()), 2, RoundingMode.HALF_EVEN);
+        }
+        return BigDecimal.ZERO;
+    }
     public BigDecimal getTotal(){
         BigDecimal total = BigDecimal.ZERO;
         for(ItenCarrinho item : items.keySet()){

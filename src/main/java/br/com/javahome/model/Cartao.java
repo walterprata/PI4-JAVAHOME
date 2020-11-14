@@ -6,7 +6,7 @@ public class Cartao {
     private String nomeTitular;
     private String numeroCartao;
     private String cpfTitular;
-    private String csvCartao;
+    private String cvvCartao;
     private Integer indexParcela;
 
     public String getNomeTitular() {
@@ -33,12 +33,12 @@ public class Cartao {
         this.cpfTitular = cpfTitular;
     }
 
-    public String getCsvCartao() {
-        return csvCartao;
+    public String getCvvCartao() {
+        return cvvCartao;
     }
 
-    public void setCsvCartao(String csvCartao) {
-        this.csvCartao = csvCartao;
+    public void setCvvCartao(String cvvCartao) {
+        this.cvvCartao = cvvCartao;
     }
 
     public Integer getIndexParcela() {
@@ -61,5 +61,16 @@ public class Cartao {
     @Override
     public int hashCode() {
         return Objects.hash(numeroCartao, cpfTitular);
+    }
+
+    @Override
+    public String toString() {
+        return "Cartao{" +
+                "nomeTitular='" + nomeTitular + '\'' +
+                ", numeroCartao='" + numeroCartao + '\'' +
+                ", cpfTitular='" + cpfTitular + '\'' +
+                ", csvCartao='" + cvvCartao + '\'' +
+                ", indexParcela=" + indexParcela +
+                '}';
     }
 }

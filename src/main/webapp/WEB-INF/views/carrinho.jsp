@@ -6,6 +6,14 @@
 <jsp:include page="${'header.jsp'}"/>
 <div class="container">
     <div class="row">
+        <c:if test="${not empty error}">
+            <div class="alert alert-danger col-md" role="alert">
+                    ${error}
+            </div>
+        </c:if>
+    </div>
+    <div class="row">
+
         <h1>Meu Carrinho</h1>
         <table class="table table-striped col-md-12">
             <thead>

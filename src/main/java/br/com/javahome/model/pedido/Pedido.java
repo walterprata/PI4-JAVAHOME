@@ -24,7 +24,10 @@ public class Pedido {
 	
 	@ManyToOne
 	private Usuario usuario;
-	
+
+	@Column(unique = true)
+	private String numeroIdPedido;
+
 	private String dataCompra;
 	
 	private String tipoPagamento;
@@ -130,6 +133,14 @@ public class Pedido {
 
 	public void setStatusCompra(String statusCompra) {
 		this.statusCompra = statusCompra;
+	}
+
+	public String getNumeroIdPedido() {
+		return numeroIdPedido;
+	}
+
+	public void setNumeroIdPedido(String numeroIdPedido) {
+		this.numeroIdPedido = numeroIdPedido;
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 $(document).ready(function () {
     $('#cpfTitular').mask("###.###.###-##", {reverse: true});
     $('#validadeCartao').mask("##/####");
+    $('#numeroCartao').mask("#### #### #### ####");
 });
 $('#boleto').click(function () {
     if ($('#boleto').prop('checked')){
