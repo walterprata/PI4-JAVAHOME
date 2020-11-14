@@ -13,9 +13,13 @@ import br.com.javahome.repository.ItensPedidoRepository;
 @Service
 public class ItensPedidoServiceImpl implements ItensPedidoService {
 
-	@Autowired
+
 	private ItensPedidoRepository repository;
-	
+
+	@Autowired
+	public ItensPedidoServiceImpl(ItensPedidoRepository repository){
+		this.repository = repository;
+	}
 	@Override
 	public List<ItensPedido> salvarProdutos(List<ItensPedido> listaProduto, Pedido pedido) {
 			
