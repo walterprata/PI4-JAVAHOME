@@ -6,9 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.javahome.model.ItensPedido;
-import br.com.javahome.model.Pedido;
-import br.com.javahome.model.Usuario;
+import br.com.javahome.model.pedido.ItensPedido;
+import br.com.javahome.model.pedido.Pedido;
 import br.com.javahome.repository.ItensPedidoRepository;
 
 @Service
@@ -26,7 +25,7 @@ public class ItensPedidoServiceImpl implements ItensPedidoService {
 		
 			for(int i = 0; i < listaProduto.size(); i++) {
 				
-				listaProduto.get(i).setPedido(pedido);
+				//listaProduto.get(i).setPedido(pedido);
 				
 				ItensPedido novoItensPedido = repository.save(listaProduto.get(i));
 				

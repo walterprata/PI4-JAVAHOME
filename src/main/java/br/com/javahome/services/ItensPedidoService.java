@@ -2,10 +2,8 @@ package br.com.javahome.services;
 
 import java.util.List;
 
-import org.springframework.data.jpa.repository.Query;
-
-import br.com.javahome.model.ItensPedido;
-import br.com.javahome.model.Pedido;
+import br.com.javahome.model.pedido.ItensPedido;
+import br.com.javahome.model.pedido.Pedido;
 
 public interface ItensPedidoService {
 

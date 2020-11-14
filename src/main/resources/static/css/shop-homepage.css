@@ -99,3 +99,19 @@ body{
   margin-left: 30px;
   padding: 15px;
 }
+
+#fretes{
+  margin-bottom: 5px;
+}
+.pedido-box{
+  padding: 30px;
+}
+.compra-informacoes-btn-indereco{
+  border: none;
+}
+.compra-informacoes-btn-indereco:hover{
+  background: #c7daf1;
+}
+.compra-informacoes-form-boleto{
+  display: none;
+}

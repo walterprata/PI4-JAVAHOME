@@ -1,12 +1,9 @@
-package br.com.javahome.model;
+package br.com.javahome.model.pedido;
 
 import br.com.javahome.model.produto.Produto;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 public class ItensPedido {
@@ -16,14 +13,11 @@ public class ItensPedido {
 	private int id;
 	
 	private int quantidade;
-	
-	@ManyToOne
+
+	@OneToOne
 	private Produto produto;
 	
-	@ManyToOne
-    private Pedido pedido;
-	
-	private Double total;
+	private BigDecimal total;
 
 	public ItensPedido() {
 		super();
@@ -53,19 +47,11 @@ public class ItensPedido {
 		this.produto = produto;
 	}
 
-	public Pedido getPedido() {
-		return pedido;
-	}
-
-	public void setPedido(Pedido pedido) {
-		this.pedido = pedido;
-	}
-
-	public Double getTotal() {
+	public BigDecimal getTotal() {
 		return total;
 	}
 
-	public void setTotal(Double total) {
+	public void setTotal(BigDecimal total) {
 		this.total = total;
 	}
 }

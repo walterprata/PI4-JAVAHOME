@@ -1,4 +1,4 @@
-package br.com.javahome.controller;
+package br.com.javahome.controller.home;
 
 import br.com.javahome.component.ProdutoUtils;
 import br.com.javahome.model.produto.Produto;

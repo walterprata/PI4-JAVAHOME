@@ -1,6 +1,7 @@
 package br.com.javahome.model.carrinho;
 
 import br.com.javahome.model.frete.Frete;
+import br.com.javahome.model.pedido.Pedido;
 import br.com.javahome.services.EnviaCepService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -18,6 +19,14 @@ public class Carrinho implements Serializable {
     private Map<ItenCarrinho,Integer> items = new LinkedHashMap<>();
     private List<Frete> fretes = new ArrayList<>();
     private Frete freteSelecionado = new Frete();
+    private Pedido novoPedido = new Pedido();
+
+    public void zeroed(){
+        items = new LinkedHashMap<>();
+        fretes = new ArrayList<>();
+        freteSelecionado = new Frete();
+        novoPedido = new Pedido();
+    }
 
     public void add(ItenCarrinho item) {
         items.put(item, getQuantidade(item) + 1);
@@ -88,5 +97,13 @@ public class Carrinho implements Serializable {
 
     public void setFreteSelecionado(Frete freteSelecionado) {
         this.freteSelecionado = freteSelecionado;
+    }
+
+    public Pedido getNovoPedido() {
+        return novoPedido;
+    }
+
+    public void setNovoPedido(Pedido novoPedido) {
+        this.novoPedido = novoPedido;
     }
 }

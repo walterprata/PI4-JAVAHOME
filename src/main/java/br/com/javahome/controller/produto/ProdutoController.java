@@ -1,4 +1,4 @@
-package br.com.javahome.controller;
+package br.com.javahome.controller.produto;
 
 import br.com.javahome.component.FileSaver;
 import br.com.javahome.model.produto.DuvidaProduto;

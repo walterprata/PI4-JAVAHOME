@@ -1,4 +1,4 @@
-package br.com.javahome.controller;
+package br.com.javahome.controller.usuario;
 
 import br.com.javahome.model.Endereco;
 import br.com.javahome.repository.EnderecoRepository;

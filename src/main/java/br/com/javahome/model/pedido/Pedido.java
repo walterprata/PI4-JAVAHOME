@@ -1,16 +1,13 @@
-package br.com.javahome.model;
+package br.com.javahome.model.pedido;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
+import br.com.javahome.model.Endereco;
+import br.com.javahome.model.usuario.Usuario;
 import br.com.javahome.model.enums.TipoPagamento;
 
 @Entity
@@ -20,9 +17,9 @@ public class Pedido {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	
-	private Double valorTotal;
+	private BigDecimal valorTotal;
 
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
     private List<ItensPedido> itensPedido = new ArrayList();
 	
 	@ManyToOne
@@ -30,11 +27,11 @@ public class Pedido {
 	
 	private String dataCompra;
 	
-	private TipoPagamento tipoPagamento;
+	private String tipoPagamento;
 	
 	private String freteNome;
 	
-	private Double freteValor;
+	private BigDecimal freteValor;
 	
 	private String fretePrazo;
 	
@@ -55,11 +52,11 @@ public class Pedido {
 		this.id = id;
 	}
 
-	public Double getValorTotal() {
+	public BigDecimal getValorTotal() {
 		return valorTotal;
 	}
 
-	public void setValorTotal(Double valorTotal) {
+	public void setValorTotal(BigDecimal valorTotal) {
 		this.valorTotal = valorTotal;
 	}
 
@@ -87,11 +84,11 @@ public class Pedido {
 		this.dataCompra = dataCompra;
 	}
 
-	public TipoPagamento getTipoPagamento() {
+	public String getTipoPagamento() {
 		return tipoPagamento;
 	}
 
-	public void setTipoPagamento(TipoPagamento tipoPagamento) {
+	public void setTipoPagamento(String tipoPagamento) {
 		this.tipoPagamento = tipoPagamento;
 	}
 
@@ -103,11 +100,11 @@ public class Pedido {
 		this.freteNome = freteNome;
 	}
 
-	public Double getFreteValor() {
+	public BigDecimal getFreteValor() {
 		return freteValor;
 	}
 
-	public void setFreteValor(Double freteValor) {
+	public void setFreteValor(BigDecimal freteValor) {
 		this.freteValor = freteValor;
 	}
 

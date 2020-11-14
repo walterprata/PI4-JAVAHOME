@@ -1,7 +1,3 @@
 package br.com.javahome.model.enums;
 
-public enum TipoPagamento {
-
-	CARTAO_DE_CREDITO,
-	BOLETO
-}
+public enum TipoPagamento {CARTAO_DE_CREDITO, BOLETO}

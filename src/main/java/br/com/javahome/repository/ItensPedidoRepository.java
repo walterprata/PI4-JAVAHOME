@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import br.com.javahome.model.ItensPedido;
+import br.com.javahome.model.pedido.ItensPedido;
 
 @Repository
 public interface ItensPedidoRepository extends JpaRepository<ItensPedido, Integer>{

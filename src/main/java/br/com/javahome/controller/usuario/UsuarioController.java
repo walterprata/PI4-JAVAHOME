@@ -1,8 +1,8 @@
-package br.com.javahome.controller;
+package br.com.javahome.controller.usuario;
 
 import br.com.javahome.component.Utilidades;
 import br.com.javahome.model.Endereco;
-import br.com.javahome.model.Usuario;
+import br.com.javahome.model.usuario.Usuario;
 import br.com.javahome.model.usuario.UsuarioLogado;
 import br.com.javahome.repository.EnderecoRepository;
 import br.com.javahome.repository.UsuarioRepository;
@@ -212,6 +212,7 @@ public class UsuarioController {
                     usuario.setSenha(utilidades.encryptaSenha(usuario.getSenha()));
                     inserirEnderecos(usuario, enderecos);
                     usuarioRepository.save(usuario);
+                    usuarioLogado.setUsuario(usuario);
                     modelAndView.addObject(MESSAGE_SUCCES, USUÁRIO_FOI_SALVO);
                 } else {
                     throw new RuntimeException(O_USUÁRIO_NÃO_FOI_ENCONTRADO_NA_BASE_DE_DADOS);

@@ -79,8 +79,11 @@
             </c:if>
 
             <div class="form-row" id="campo-cliente">
-                <c:if test="${not empty cliente}">
+                <c:if test="${empty cliente}">
                     <input type="text" name="cargo" value="Cliente" readonly hidden>
+                </c:if>
+                <c:if test="${not empty cliente}">
+                    <input type="text" name="cargo" value="${cliente.cargo}" readonly hidden>
                     <input type="text" name="id" value="${id}" readonly hidden>
                 </c:if>
                 <div class="form-group col-md-12">
@@ -137,7 +140,7 @@
                             <tbody id="lista-endereco">
                             <c:forEach var="enderecos" items="${cliente.endereco}">
                                 <tr id="${enderecos.id}">
-                                    <td><input  name="enderecos[]" hidden/> ${enderecos.cep}</td>
+                                    <td><input  name="enderecos[]" value="${enderecos.cep};${enderecos.bairro};${enderecos.localidade};${enderecos.logradouro };${enderecos.uf};${enderecos.complemento};" hidden/>${enderecos.cep}</td>
                                     <td>${enderecos.bairro}</td>
                                     <td>${enderecos.localidade}</td>
                                     <td>${enderecos.logradouro}</td>

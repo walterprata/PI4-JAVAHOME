@@ -2,7 +2,7 @@ package br.com.javahome.services;
 
 import java.util.List;
 
-import br.com.javahome.model.Pedido;
+import br.com.javahome.model.pedido.Pedido;
 
 public interface PedidoService {
 

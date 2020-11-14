@@ -1,5 +1,6 @@
-package br.com.javahome.model;
+package br.com.javahome.model.usuario;
 
+import br.com.javahome.model.Endereco;
 import br.com.javahome.model.enums.TipoUsuario;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -11,10 +12,10 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Objects;
 
 
 @Entity
-@Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class Usuario {
 
 	@Id
@@ -126,5 +127,19 @@ public class Usuario {
 
 	public boolean isStatus() {
 		return status;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Usuario usuario = (Usuario) o;
+		return id == usuario.id &&
+				Objects.equals(cpf, usuario.cpf);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, cpf);
 	}
 }
