@@ -5,7 +5,10 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Frete implements Serializable {
-    private Integer freteId;
+
+	private static final long serialVersionUID = 1L;
+
+	private Integer freteId;
 
     private String freteNome;
 

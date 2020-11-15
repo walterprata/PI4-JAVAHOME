@@ -2,8 +2,7 @@ package br.com.javahome.model.carrinho;
 
 import br.com.javahome.model.frete.Frete;
 import br.com.javahome.model.pedido.Pedido;
-import br.com.javahome.services.EnviaCepService;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
@@ -17,7 +16,9 @@ import java.util.*;
 @Component
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class Carrinho implements Serializable {
-    private Map<ItenCarrinho,Integer> items = new LinkedHashMap<>();
+
+	private static final long serialVersionUID = 1L;
+	private Map<ItenCarrinho,Integer> items = new LinkedHashMap<>();
     private List<Frete> fretes = new ArrayList<>();
     private Frete freteSelecionado = new Frete();
     private Pedido novoPedido = new Pedido();

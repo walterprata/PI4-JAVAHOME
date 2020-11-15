@@ -129,7 +129,8 @@ public class ProdutoController {
             Produto produtoSalvo = produtoRepository.findById(id).orElse(null);
             if (!session.getAttribute("cargo").equals("estoque") && produtoSalvo != null) {
                 String caminhoDaImagen = fileSaver.write(file, id);
-                ArrayList<String> img = (ArrayList<String>) new Gson().fromJson(caminhoDaImagen, ArrayList.class);
+                @SuppressWarnings("unchecked")
+				ArrayList<String> img = (ArrayList<String>) new Gson().fromJson(caminhoDaImagen, ArrayList.class);
                 if (img.isEmpty()) {
                     produto.setCaminhoDaImagem(produtoSalvo.getCaminhoDaImagem());
                 } else {
@@ -163,7 +164,8 @@ public class ProdutoController {
     public ModelAndView detalhes(@PathVariable Integer id) {
         Produto produtoEncontrado = produtoRepository.findById(id).get();
         List<DuvidaProduto> duvidaProdutos = duvidaProdutoRepository.duvidaProduto(id);
-        ArrayList<String> img = (ArrayList<String>) new Gson().fromJson(produtoEncontrado.getCaminhoDaImagem(), ArrayList.class);
+        @SuppressWarnings("unchecked")
+		ArrayList<String> img = (ArrayList<String>) new Gson().fromJson(produtoEncontrado.getCaminhoDaImagem(), ArrayList.class);
         if (img != null && !img.isEmpty()) {
             produtoEncontrado.setCaminhoImagensLista(img);
         }

@@ -4,7 +4,6 @@ import br.com.javahome.component.ProdutoUtils;
 import br.com.javahome.model.Cartao;
 import br.com.javahome.model.Endereco;
 import br.com.javahome.model.carrinho.Carrinho;
-import br.com.javahome.model.carrinho.ItenCarrinho;
 import br.com.javahome.model.enums.TipoPagamento;
 import br.com.javahome.model.frete.Frete;
 import br.com.javahome.model.pedido.ItensPedido;
@@ -125,6 +124,7 @@ public class PedidoController {
         LocalDate date = LocalDate.now();
         List<ItensPedido> itensPedidos = new ArrayList<>();
         carrinho.getItens().stream().forEach(produto -> {
+            //cria item Pedido
             ItensPedido novoItenPedido = new ItensPedido();
             novoItenPedido.setProduto(produto.getProduto());
             novoItenPedido.setQuantidade(carrinho.getQuantidade(produto));

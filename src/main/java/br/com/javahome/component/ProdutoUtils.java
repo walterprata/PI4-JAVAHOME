@@ -11,7 +11,8 @@ import java.util.List;
 public class ProdutoUtils {
     public static void formataCaminhoDaImagenDosProdutos(List<Produto> produtos) {
         for(Produto p: produtos){
-            ArrayList<String> img = (ArrayList<String>) new Gson().fromJson(p.getCaminhoDaImagem(), ArrayList.class);
+            @SuppressWarnings("unchecked")
+			ArrayList<String> img = (ArrayList<String>) new Gson().fromJson(p.getCaminhoDaImagem(), ArrayList.class);
             if (img != null && !img.isEmpty()) {
                 p.setCaminhoDaImagem(img.get(0));
             }
@@ -20,7 +21,8 @@ public class ProdutoUtils {
 
     public static void formataCaminhoDaImagenDosProdutos(Produto produto) {
         if(produto != null){
-            ArrayList<String> img = (ArrayList<String>) new Gson().fromJson(produto.getCaminhoDaImagem(), ArrayList.class);
+            @SuppressWarnings("unchecked")
+			ArrayList<String> img = (ArrayList<String>) new Gson().fromJson(produto.getCaminhoDaImagem(), ArrayList.class);
             if (img != null && !img.isEmpty()) {
                 produto.setCaminhoDaImagem(img.get(0));
             }

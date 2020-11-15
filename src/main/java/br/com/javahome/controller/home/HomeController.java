@@ -19,8 +19,6 @@ import java.util.List;
 public class HomeController {
     @Autowired
     private ProdutoRepository produtoRepository;
-    @Autowired
-    private ProdutoUtils produtoUtils;
 
     @GetMapping("/")
     public ModelAndView index(){
@@ -32,7 +30,7 @@ public class HomeController {
     public ModelAndView newIndex(){
         ModelAndView mv = new ModelAndView("index");
         List<Produto> produtos = produtoRepository.findAll();
-        produtoUtils.formataCaminhoDaImagenDosProdutos(produtos);
+        ProdutoUtils.formataCaminhoDaImagenDosProdutos(produtos);
         mv.addObject("produtos",produtos);
         return mv;
     }
