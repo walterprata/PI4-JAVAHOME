@@ -94,6 +94,7 @@
 <div class="container" style="margin-bottom: 30px">
     <div class="row">
         <a href="${s:mvcUrl('PC#finalizaCompra').build()}" class="btn btn-success right">Finalizar Compra</a>
+        <a href="${s:mvcUrl('PC#finalizar').build()}" class="btn btn-primary right" style="margin-left: 5px">Mudar forma de pagamento</a>
     </div>
 </div>
 <jsp:include page="${'footer.jsp'}"/>
