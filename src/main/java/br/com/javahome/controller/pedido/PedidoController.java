@@ -11,11 +11,15 @@ import br.com.javahome.model.pedido.Pedido;
 import br.com.javahome.model.produto.Produto;
 import br.com.javahome.model.usuario.Usuario;
 import br.com.javahome.model.usuario.UsuarioLogado;
+import br.com.javahome.repository.PedidoRepository;
 import br.com.javahome.repository.ProdutoRepository;
+import br.com.javahome.repository.UsuarioRepository;
+
 import com.google.gson.Gson;
 import org.apache.juli.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -42,6 +46,7 @@ public class PedidoController {
     public static final String NÃO_FOI_ENCONTRADA_A_PARCELA_SELECIONADA = "Não foi encontrada a parcela selecionada";
     public static final String REDIRECT_JAVA_HOME_COMPRA_REVISA_PEDIDO = "redirect:/javaHome/compra/revisa-pedido";
     public static final String REDIRECT_JAVA_HOME_INDEX = "redirect:/javaHome";
+    
     @Autowired
     private PedidoService pedidoService;
 
@@ -53,7 +58,12 @@ public class PedidoController {
 
     @Autowired
     private UsuarioLogado usuarioLogado;
-
+    
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+    @Autowired
+    private PedidoRepository pedidoRepository;
+    
     @RequestMapping("/informacoes-compra")
     public ModelAndView finalizar(RedirectAttributes redirectAttributes) {
         ModelAndView mv = new ModelAndView("compraInformacoes");
@@ -172,7 +182,33 @@ public class PedidoController {
     public ModelAndView imprimirBoleto() {
         return new ModelAndView("boleto");
     }
-
+    
+    @RequestMapping("/rest/buscaPedidos/{id}")
+    public List<Pedido> buscaPedidosDoCliente(@PathVariable Integer id) {
+    	Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
+    	return pedidoRepository.findByUsuario(usuarioOptional.get());
+    }
+    
+    @RequestMapping("/buscaPedidos")
+    public ModelAndView buscaPedidosDoClienteLogado() {
+    	ModelAndView mv = new ModelAndView("compraConsultaPedidos");
+    	mv.addObject("pedidos", pedidoRepository.findByUsuario(usuarioLogado.getUsuario()));
+    	return mv;
+    }
+    
+    @RequestMapping("/buscaPedido/{id}")
+    public ModelAndView buscaPedidoDoCliente(@PathVariable Integer id,RedirectAttributes redirectAttributes) {
+    	ModelAndView mv = new ModelAndView("compraConsultaPedidoRevisao");
+    	Pedido pedido = pedidoRepository.findFirstByUsuarioAndId(usuarioLogado.getUsuario(), id);
+    	if(pedido != null) {
+        			mv.addObject("pedido",pedido);
+    	}else {
+    		redirectAttributes.addFlashAttribute("error", "Pedido não encontrado");
+    		mv.setViewName(REDIRECT_JAVA_HOME_INDEX);
+    	}
+    	return mv;
+    }
+    
     @RequestMapping("/finalizar-crompa")
     public ModelAndView finalizaCompra(RedirectAttributes redirectAttributes) {
         if (usuarioLogado.getUsuario() != null) {
@@ -200,7 +236,7 @@ public class PedidoController {
             }
             redirectAttributes.addFlashAttribute("message",
                     "<p>Compra Realizada com sucesso." +
-                            "<a href=\"#\" class=\"alert-link\"> Código da compra:"+ pedidoEfetuado.getId() + "</a></p>" +
+                            "<a href=\"/javaHome/compra/buscaPedido/"+pedidoEfetuado.getId()+"\"> Código da compra:"+ pedidoEfetuado.getId() + "</a></p>" +
                             "<p>Valor da compra: <a href=\"#\" class=\"alert-link\">R$"+pedidoEfetuado.getValorTotal()+"</a></p>");
             carrinho.zeroed();
         }

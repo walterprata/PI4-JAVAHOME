@@ -6,9 +6,6 @@
     <h3>Informações do pedido</h3>
     <div class="row ">
         <div class="form-group col-md border-custom">
-            <label> Numero do pedido: 121212</label>
-        </div>
-        <div class="form-group col-md border-custom">
             <label>Valor do pedido: R$ ${carrinho.novoPedido.valorTotal}</label>
         </div>
         <div class="form-group col-md border-custom">

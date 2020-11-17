@@ -61,6 +61,7 @@
                                     </c:if>
                                     <c:if test="${usuarioLogado.usuario.cargo eq 'Cliente'}">
                                     <a class="dropdown-item" href="${s:mvcUrl('UC#editarInfoDoCliente').build()}">Editar Perfil</a>
+                                    <a class="dropdown-item" href="${s:mvcUrl('PC#buscaPedidosDoClienteLogado').build()}">Meus Pedidos</a>
                                     </c:if>
                                     <a class="dropdown-item" href="${s:mvcUrl('HC#logon').build()}">Sair</a>
                                 </div>
