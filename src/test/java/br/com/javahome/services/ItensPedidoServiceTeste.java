@@ -4,16 +4,13 @@ import br.com.javahome.model.pedido.ItensPedido;
 import br.com.javahome.model.pedido.Pedido;
 import br.com.javahome.model.produto.Produto;
 import br.com.javahome.repository.ItensPedidoRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
-import static java.util.Optional.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -81,5 +78,5 @@ public class ItensPedidoServiceTeste {
         //Então
         assertEquals(listaEsperada, lista);
     }
-    
+
 }
