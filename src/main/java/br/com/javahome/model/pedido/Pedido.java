@@ -2,6 +2,7 @@ package br.com.javahome.model.pedido;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.*;
@@ -26,7 +27,7 @@ public class Pedido {
 
 	@Column(unique = true)
 	private String numeroIdPedido;
-
+	@Column(columnDefinition = "DATE")
 	private String dataCompra;
 	
 	private String tipoPagamento;

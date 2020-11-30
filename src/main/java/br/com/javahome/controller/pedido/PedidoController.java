@@ -64,7 +64,7 @@ public class PedidoController {
     @Autowired
     private PedidoRepository pedidoRepository;
     
-    @RequestMapping("/informacoes-compra")
+    @GetMapping("/informacoes-compra")
     public ModelAndView finalizar(RedirectAttributes redirectAttributes) {
         ModelAndView mv = new ModelAndView("compraInformacoes");
         if (!carrinho.getTotal().equals(BigDecimal.ZERO)) {
@@ -106,7 +106,7 @@ public class PedidoController {
         return mv;
     }
 
-    @RequestMapping("/revisa-pedido")
+    @GetMapping("/revisa-pedido")
     private ModelAndView revisaPedido() {
         return new ModelAndView("compraRevisao");
     }
@@ -119,7 +119,7 @@ public class PedidoController {
         return parcelas;
     }
 
-    @RequestMapping("/finalizar-boleto")
+    @GetMapping("/finalizar-boleto")
     public ModelAndView boleto(RedirectAttributes redirectAttributes) {
         ModelAndView mv = new ModelAndView(REDIRECT_CARRINHO_INFORMACOES_COMPRA);
         if (criaPedido(TipoPagamento.BOLETO)) {
@@ -160,7 +160,7 @@ public class PedidoController {
         return false;
     }
 
-    @RequestMapping("/adicionar-endereco")
+    @PostMapping("/adicionar-endereco")
     public ModelAndView addEndereco(Integer enderecoId, RedirectAttributes redirectAttributes) {
         ModelAndView mv = new ModelAndView("redirect:/javaHome/compra/informacoes-compra");
         Optional<Endereco> enderecoEncontrado = usuarioLogado.getUsuario().getEndereco().stream().filter(endereco -> endereco.getId().equals(enderecoId)).findFirst();
@@ -173,30 +173,30 @@ public class PedidoController {
         return mv;
     }
 
-    @RequestMapping("/ListarPedidos")
+    @GetMapping("/ListarPedidos")
     public List<Pedido> pedidos() {
         return pedidoService.getTodosPedidos();
     }
 
-    @RequestMapping("/imprimir-boleto")
+    @GetMapping("/imprimir-boleto")
     public ModelAndView imprimirBoleto() {
         return new ModelAndView("boleto");
     }
     
-    @RequestMapping("/rest/buscaPedidos/{id}")
+    @GetMapping("/rest/buscaPedidos/{id}")
     public List<Pedido> buscaPedidosDoCliente(@PathVariable Integer id) {
     	Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
-    	return pedidoRepository.findByUsuario(usuarioOptional.get());
+    	return pedidoRepository.findByUsuarioOrderByDataCompraDesc(usuarioOptional.get());
     }
     
-    @RequestMapping("/buscaPedidos")
+    @GetMapping("/buscaPedidos")
     public ModelAndView buscaPedidosDoClienteLogado() {
     	ModelAndView mv = new ModelAndView("compraConsultaPedidos");
-    	mv.addObject("pedidos", pedidoRepository.findByUsuario(usuarioLogado.getUsuario()));
+    	mv.addObject("pedidos", pedidoRepository.findByUsuarioOrderByDataCompraDesc(usuarioLogado.getUsuario()));
     	return mv;
     }
     
-    @RequestMapping("/buscaPedido/{id}")
+    @GetMapping("/buscaPedido/{id}")
     public ModelAndView buscaPedidoDoCliente(@PathVariable Integer id,RedirectAttributes redirectAttributes) {
     	ModelAndView mv = new ModelAndView("compraConsultaPedidoRevisao");
     	Pedido pedido = pedidoRepository.findFirstByUsuarioAndId(usuarioLogado.getUsuario(), id);
@@ -209,7 +209,7 @@ public class PedidoController {
     	return mv;
     }
     
-    @RequestMapping("/finalizar-crompa")
+    @GetMapping("/finalizar-crompa")
     public ModelAndView finalizaCompra(RedirectAttributes redirectAttributes) {
         if (usuarioLogado.getUsuario() != null) {
             Pedido pedidoEfetuado;

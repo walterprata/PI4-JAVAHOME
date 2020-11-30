@@ -11,12 +11,16 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -103,6 +107,28 @@ public class UsuarioController {
             modelAndView.addObject(MESSAGE, USUÁRIO_NÃO_ENCONTRADO);
         }
         return modelAndView;
+    }
+    // CANAL MOBILE API
+    @PostMapping("/auth/mobile/login")
+    public Usuario  authUsuarioMobile(@RequestBody  Usuario usuario, HttpServletResponse response) {
+        //VALIDA USUARIO NO BANCO DE DADOS
+        Usuario usuarioEncontrado = usuarioRepository.validaUsuario(usuario.getEmail());
+        ModelAndView modelAndView = login();
+        if (usuario != null && utilidades.validaSenha(usuario.getSenha(), usuarioEncontrado.getSenha())) {
+            if (usuario.getStatus()) {
+                usuarioLogado.setUsuario(usuario);
+                session.setAttribute(SESSION_ATRIBUTE_EMAIL, usuarioEncontrado.getEmail());
+                session.setAttribute(SESSION_ATRIBUTE_CARGO, usuarioEncontrado.getCargo());
+                session.setAttribute(SESSION_ATRIBUTE_USER_NAME, usuarioEncontrado.getNome());
+                session.setAttribute(SESSION_ATRIBUTE_USER_ID, usuarioEncontrado.getId());
+                return usuarioEncontrado;
+            } else {
+               response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            }
+        } else {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        }
+        return null;
     }
 
     //LISTAR TODOS ATIVOS E INATIVOS
