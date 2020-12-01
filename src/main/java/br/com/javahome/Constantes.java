@@ -22,6 +22,17 @@ public class Constantes {
     public static final String REDIRECT_JAVA_HOME_CARRINHO = "redirect:/javaHome/carrinho";
     //Redirecionamento
     public static final String REDIRECT_JAVA_HOME = "redirect:/javaHome/";
+    //Cargos
+    public static final String CARGO_ESTOQUE = "estoque";
+    public static final String CARGO_ADMIN = "admin";
+    public static final String CARGO_CLIENTE = "Cliente";
+    //status pedido
+    public static final String STATUS_AGUARDANDO_PAGAMENTO = "aguardando pagamento";
+    public static final String STATUS_REJEITADO = "pagamento rejeitado";
+    public static final String STATUS_PAGAMNETO_SUCESSO = "pagamento com sucesso";
+    public static final String STATUS_AGUARDANDO_RETIRADA = "aguardando retirada";
+    public static final String STATUS_EM_TRANSITO = "em transito";
+    public static final String STATUS_ENTREGUE = "entregue";
 
 
 }

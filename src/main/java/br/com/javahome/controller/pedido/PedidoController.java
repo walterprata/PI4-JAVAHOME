@@ -8,13 +8,16 @@ import br.com.javahome.model.enums.TipoPagamento;
 import br.com.javahome.model.frete.Frete;
 import br.com.javahome.model.pedido.ItensPedido;
 import br.com.javahome.model.pedido.Pedido;
+import br.com.javahome.model.pedido.PedidoStatus;
 import br.com.javahome.model.produto.Produto;
 import br.com.javahome.model.usuario.Usuario;
 import br.com.javahome.model.usuario.UsuarioLogado;
 import br.com.javahome.repository.PedidoRepository;
+import br.com.javahome.repository.PedidoStatusRepository;
 import br.com.javahome.repository.ProdutoRepository;
 import br.com.javahome.repository.UsuarioRepository;
-
+import br.com.javahome.Constantes;
+import br.com.javahome.Constantes.*;
 import com.google.gson.Gson;
 import org.apache.juli.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +52,10 @@ public class PedidoController {
     
     @Autowired
     private PedidoService pedidoService;
-
+    
+    @Autowired
+    private PedidoStatusRepository pedidoStatusRepository;
+    
     @Autowired
     private ProdutoRepository produtoRepository;
 
@@ -152,7 +158,7 @@ public class PedidoController {
             carrinho.getNovoPedido().setFreteNome(freteSelecionado.getFreteNome());
             carrinho.getNovoPedido().setFreteValor(freteSelecionado.getFreteValor());
             carrinho.getNovoPedido().setFretePrazo(freteSelecionado.getFretePrazo());
-            carrinho.getNovoPedido().setStatusCompra(AGUARDANDO_PAGAMENTO);
+            carrinho.getNovoPedido().setStatusCompra(pedidoStatusRepository.findByStatus(Constantes.STATUS_AGUARDANDO_PAGAMENTO));
             //TODO REDIRECT PARA REVISAR INFORMAÇÕES DA COMPRA
             System.out.println("Compra realizada com sucesso em " + date.toString());
             return true;
@@ -174,8 +180,10 @@ public class PedidoController {
     }
 
     @GetMapping("/ListarPedidos")
-    public List<Pedido> pedidos() {
-        return pedidoService.getTodosPedidos();
+    public ModelAndView pedidos() {
+    	ModelAndView mv = new ModelAndView("compraConsultaPedidos");
+    	mv.addObject("pedidos",  pedidoService.getTodosPedidos());
+    	return mv;
     }
 
     @GetMapping("/imprimir-boleto")
@@ -199,14 +207,42 @@ public class PedidoController {
     @GetMapping("/buscaPedido/{id}")
     public ModelAndView buscaPedidoDoCliente(@PathVariable Integer id,RedirectAttributes redirectAttributes) {
     	ModelAndView mv = new ModelAndView("compraConsultaPedidoRevisao");
-    	Pedido pedido = pedidoRepository.findFirstByUsuarioAndId(usuarioLogado.getUsuario(), id);
-    	if(pedido != null) {
-        			mv.addObject("pedido",pedido);
-    	}else {
-    		redirectAttributes.addFlashAttribute("error", "Pedido não encontrado");
-    		mv.setViewName(REDIRECT_JAVA_HOME_INDEX);
+    	Usuario usuario = usuarioLogado.getUsuario();
+    	Pedido pedido;
+    	if(usuario != null) {
+    		if(usuario.getCargo().equals(Constantes.CARGO_ESTOQUE) || usuario.getCargo().equals(Constantes.CARGO_ADMIN)) {
+        		pedido = pedidoRepository.findById(id).get();
+        		mv.addObject("status",pedidoStatusRepository.findAll());
+        	}else {
+        		pedido = pedidoRepository.findFirstByUsuarioAndId(usuario, id);
+        	}
+        	if(pedido != null) {
+            	mv.addObject("pedido",pedido);
+        	}else {
+        		redirectAttributes.addFlashAttribute("error", "Pedido não encontrado");
+        		mv.setViewName(REDIRECT_JAVA_HOME_INDEX);
+        	}
     	}
-    	return mv;
+    	return mv;	
+    }
+    
+    @PostMapping("/atualiza-status")
+    public ModelAndView atualizaStatus(@ModelAttribute("pedidoId") Integer pedidoId,@ModelAttribute("status") Integer status,RedirectAttributes redirectAttributes) {
+    	ModelAndView mv = new ModelAndView("compraConsultaPedidoRevisao");
+    	Usuario usuario = usuarioLogado.getUsuario();
+    	if(usuario != null) {
+    			Pedido pedido = pedidoRepository.findById(pedidoId).get();
+        	if(pedido != null) {
+        		PedidoStatus statusEncontrado = pedidoStatusRepository.findById(status).get();
+        		pedido.setStatusCompra(statusEncontrado);
+        		mv.addObject("status",pedidoStatusRepository.findAll());
+            	mv.addObject("pedido",pedidoRepository.save(pedido));
+            	redirectAttributes.addFlashAttribute("message", "Pedido atualizado com sucesso!");
+        	}else {
+        		redirectAttributes.addFlashAttribute("error", "Pedido não encontrado");
+        	}
+    	}
+    	return mv;	
     }
     
     @GetMapping("/finalizar-crompa")

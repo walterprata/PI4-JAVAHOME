@@ -41,7 +41,8 @@ public class Pedido {
 	@OneToOne
 	private Endereco endereco;
 	
-	private String statusCompra;
+	@OneToOne
+	private PedidoStatus statusCompra;
 
 	public Pedido() {
 		super();
@@ -127,11 +128,11 @@ public class Pedido {
 		this.endereco = endereco;
 	}
 
-	public String getStatusCompra() {
+	public PedidoStatus getStatusCompra() {
 		return statusCompra;
 	}
 
-	public void setStatusCompra(String statusCompra) {
+	public void setStatusCompra(PedidoStatus statusCompra) {
 		this.statusCompra = statusCompra;
 	}
 

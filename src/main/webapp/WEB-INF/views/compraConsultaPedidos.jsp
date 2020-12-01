@@ -12,8 +12,11 @@
 			<a href="${s:mvcUrl('PC#buscaPedidoDoCliente').arg(0,pedido.id).build()}" class="list-group-item list-group-item-action list-group-item-secondary">
 			<b>numero:</b> ${pedido.id} | 
 			<b>data:</b> ${pedido.dataCompra} | 
-			<b>status:</b> ${pedido.statusCompra} | 
+			<b>status:</b> ${pedido.statusCompra.status} | 
 			<b>valor total:</b> R$ ${pedido.valorTotal }
+			<c:if test="${usuarioLogado.usuario.cargo eq 'estoque' }">
+			<b> | Você pode mudar o status desse pedido</b>
+			</c:if>
 			</a>
 		</c:forEach>
 	</ul>
