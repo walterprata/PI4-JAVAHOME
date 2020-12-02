@@ -17,12 +17,8 @@ import br.com.javahome.repository.PedidoStatusRepository;
 import br.com.javahome.repository.ProdutoRepository;
 import br.com.javahome.repository.UsuarioRepository;
 import br.com.javahome.Constantes;
-import br.com.javahome.Constantes.*;
-import com.google.gson.Gson;
-import org.apache.juli.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -182,7 +178,7 @@ public class PedidoController {
     @GetMapping("/ListarPedidos")
     public ModelAndView pedidos() {
     	ModelAndView mv = new ModelAndView("compraConsultaPedidos");
-    	mv.addObject("pedidos",  pedidoService.getTodosPedidos());
+    	mv.addObject("pedidos",  pedidoRepository.findAllByOrderByDataCompraDesc());
     	return mv;
     }
 
@@ -234,12 +230,17 @@ public class PedidoController {
     			Pedido pedido = pedidoRepository.findById(pedidoId).get();
         	if(pedido != null) {
         		PedidoStatus statusEncontrado = pedidoStatusRepository.findById(status).get();
-        		pedido.setStatusCompra(statusEncontrado);
-        		mv.addObject("status",pedidoStatusRepository.findAll());
-            	mv.addObject("pedido",pedidoRepository.save(pedido));
-            	redirectAttributes.addFlashAttribute("message", "Pedido atualizado com sucesso!");
+        		if(statusEncontrado != null) {
+        			pedido.setStatusCompra(statusEncontrado);
+            		mv.addObject("status",pedidoStatusRepository.findAll());
+                	mv.addObject("pedido",pedidoRepository.save(pedido));
+                	redirectAttributes.addFlashAttribute("message", "Pedido atualizado com sucesso!");
+        		}else {
+        			redirectAttributes.addFlashAttribute("error", "Status não encontrado");
+        		}
+        		
         	}else {
-        		redirectAttributes.addFlashAttribute("error", "Pedido não encontrado");
+        		redirectAttributes.addFlashAttribute("error", "Pedido não encontrado!");
         	}
     	}
     	return mv;	

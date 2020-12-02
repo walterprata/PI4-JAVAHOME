@@ -30,7 +30,7 @@ public class JavahomeApplication{
 		resolver.setPrefix("/WEB-INF/views/");
 		resolver.setSuffix(".jsp");
 		//Expondo atributos
-		resolver.setExposedContextBeanNames("carrinho","usuarioLogado");
+		resolver.setExposedContextBeanNames("carrinho","usuarioLogado","duvidas");
 		return resolver;
 	}
 	

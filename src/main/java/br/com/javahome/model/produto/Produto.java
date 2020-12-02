@@ -2,6 +2,7 @@ package br.com.javahome.model.produto;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 
@@ -39,6 +40,10 @@ public class Produto {
 
 	@Transient
 	private ArrayList<String> caminhoImagensLista;
+	
+	@OneToMany
+	private List<DuvidaProduto> duvidas;
+	
 	public Produto() {
 
 	}
@@ -123,6 +128,16 @@ public class Produto {
 
 	public void setAtivo(Boolean ativo) {
 		this.ativo = ativo;
+	}
+	
+	
+	
+	public List<DuvidaProduto> getDuvidas() {
+		return duvidas;
+	}
+
+	public void setDuvidas(List<DuvidaProduto> duvidas) {
+		this.duvidas = duvidas;
 	}
 
 	@Override

@@ -19,9 +19,6 @@ public class DuvidaProduto {
 	
 	private String resposta;
 	
-	@ManyToOne
-	private Produto produto;
-	
 	public DuvidaProduto() {
 		
 	}
@@ -50,13 +47,11 @@ public class DuvidaProduto {
 		this.resposta = resposta;
 	}
 	
-
-	public Produto getProduto() {
-		return produto;
-	}
-
-	public void setProduto(Produto produto) {
-		this.produto = produto;
+	
+	
+	@Override
+	public String toString() {
+		return "DuvidaProduto [id=" + id + ", pergunta=" + pergunta + ", resposta=" + resposta + "]";
 	}
 
 	@Override

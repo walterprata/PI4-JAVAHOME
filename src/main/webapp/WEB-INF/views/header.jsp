@@ -55,7 +55,7 @@
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <c:if test="${usuarioLogado.usuario.cargo != 'Cliente'}">
                                         <a class="dropdown-item" href="${s:mvcUrl('PC#pegaTelaDeCadastro').build()}">Produtos</a>
-                                        <c:if test="${usuarioLogado.usuario.cargo eq 'estoque' }">
+                                        <c:if test="${usuarioLogado.usuario.cargo eq 'estoque' or usuarioLogado.usuario.cargo eq 'admin' }">
 											<a class="dropdown-item" href="${s:mvcUrl('PC#pedidos').build()}">Pedidos</a>
 										</c:if>
 										</a>

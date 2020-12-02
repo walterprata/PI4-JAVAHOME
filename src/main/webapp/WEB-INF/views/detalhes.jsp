@@ -84,8 +84,8 @@
             <div class="col-md">
                 <h2 class="list-group-item" style="background-color: #343a40;color: white">Duvidas</h2>
                 <ul class="list-group">
-                    <c:if test="${not empty perguntas}">
-                        <c:forEach var="pergunta" items="${perguntas}">
+                    <c:if test="${not empty produto.duvidas}">
+                        <c:forEach var="pergunta" items="${produto.duvidas}">
                             <li class="list-group-item">
                                 <p style="margin: 0;"><b>Pergunta:</b> ${pergunta.pergunta}</p>
                                 <p style="margin: 0;"><b>Resposta:</b> ${pergunta.resposta}</p>

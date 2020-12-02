@@ -158,13 +158,15 @@ function resetBtnStatusUsuarios() {
     $('#btn-listar-todos').removeClass("active");
 }
 
-function addPerguntasNoHtmnl(pergunta, resposta) {
+function addPerguntasNoHtmnl(id,pergunta, resposta) {
     if (pergunta !== "" || resposta !== "") {
         $('#lista-pergunta').append("<li class='list-group-item perguntas-class' id='pergunta" + idPergunta + "'>" +
-            "<input type='hidden' name='perguntas[]' value='" + pergunta + "'>" +
-            "<input type='hidden' name='respostas[]' value='" + resposta + "'>" +
             "<p><b>Pergunta:</b> " + pergunta + "</p><p><b>Resposta:</b> " + resposta + "</p>" +
-            " <a type='button' class='btn btn-danger float-right' onclick='removerPergunta(" + idPergunta + ")'>Remover</a></li>")
+            "<form action='/produto/remove/pergunta' method='post'>"+
+            "<input type='hidden' name='idProduto' value='" + id + "'>" +
+            "<input type='hidden' name='idPergunta' value='" + idPergunta + "'>" +
+            "<button type='submit' class='btn btn-danger float-right'>Remover</button>"+
+            "</form:form>") 
     }
     idPergunta++;
 }
@@ -413,13 +415,13 @@ function editarProduto(id) {
         for (i in urlDasImagens) {
             $('#img1').append("<img src='/produto/imagens/" + urlDasImagens[i] + "' class='img-fluid img-thumbnail img-pergunta' alt='' width='90'>");
         }
-        let perguntasDoProduto = Array.from(buscarPerguntasDoProduto(id));
+        let perguntasDoProduto = Array.from(produto.duvidas);
         if (perguntasDoProduto.length === 0) {
             $('#lista-pergunta').append("<li class='list-group-item sem-pergunta'><h4>Este produto não comtem perguntas.</h4></li>");
         } else {
             for (i in perguntasDoProduto) {
                 let p = perguntasDoProduto[i];
-                addPerguntasNoHtmnl(p.pergunta, p.resposta);
+                addPerguntasNoHtmnl(produto.id,p.pergunta, p.resposta);
             }
         }
     }

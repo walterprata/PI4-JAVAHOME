@@ -44,6 +44,7 @@ public class DuvidaProdutoController {
 
 	@GetMapping("/filtrar-pergunta/{id}")
 	public List<DuvidaProduto> teste(@PathVariable Integer id) {
-		return duvidaProdutoRepository.duvidaProduto(id);
+		//return duvidaProdutoRepository.duvidaProduto(id);
+		return null;
 	}
 }

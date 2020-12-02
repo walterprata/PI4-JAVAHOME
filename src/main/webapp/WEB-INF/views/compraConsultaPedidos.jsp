@@ -14,7 +14,7 @@
 			<b>data:</b> ${pedido.dataCompra} | 
 			<b>status:</b> ${pedido.statusCompra.status} | 
 			<b>valor total:</b> R$ ${pedido.valorTotal }
-			<c:if test="${usuarioLogado.usuario.cargo eq 'estoque' }">
+			 <c:if test="${usuarioLogado.usuario.cargo eq 'estoque' or usuarioLogado.usuario.cargo eq 'admin' }">
 			<b> | Você pode mudar o status desse pedido</b>
 			</c:if>
 			</a>

@@ -26,7 +26,7 @@
         <div class="form-group col-md border-custom">
             <label> <b>Status:</b> ${pedido.statusCompra.status}</label>
             <c:if test="${not empty status}">
-             	<c:if test="${usuarioLogado.usuario.cargo eq 'estoque' }">
+             	 <c:if test="${usuarioLogado.usuario.cargo eq 'estoque' or usuarioLogado.usuario.cargo eq 'admin' }">
              	 <form:form action="${s:mvcUrl('PC#atualizaStatus').build()}" method="post">
              	 <input type="hidden" name="pedidoId" value="${pedido.id}"/>
              		<div class="form-group">
